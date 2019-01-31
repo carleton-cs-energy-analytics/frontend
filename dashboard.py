@@ -10,6 +10,10 @@ app = flask.Flask(__name__, static_folder='static', template_folder='templates')
 def get_main_page():
     return flask.render_template('index.html')
 
+@app.route('/api-test')
+def get_api_page():
+    return flask.render_template('api-test.html')
+
 
 
 
