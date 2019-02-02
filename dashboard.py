@@ -14,6 +14,10 @@ def get_main_page():
 def get_api_page():
     return flask.render_template('api-test.html')
 
+@app.route('/points')
+def get_points_page():
+    return flask.render_template('points.html')
+
 
 
 

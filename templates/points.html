@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <title>title</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="../static/js/api_test.js"></script>
+        <script src="../static/js/points.js"></script>
         <link rel="stylesheet" href="../static/css/styles.css">
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -43,13 +43,13 @@
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link" href="/points">
+                        <a class="nav-link active" href="/points">
                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                           Points
                         </a>
                       </li>
                       <li class="nav-item">
-                        <a class="nav-link active" href="/api-test">
+                        <a class="nav-link" href="http://localhost:8080/api-test">
                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
                           API Test
                         </a>
@@ -58,16 +58,27 @@
                   </div>
                 </nav>
                 <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-                    <h1 style="text-align:center;"> API Test </h1>
+                    <h1 style="text-align:center;"> Points </h1>
                     <div class="row">
                         <div class="input-group" style="width:400px; display:block; margin-right:auto; margin-left:auto">
                             <input id="query" class="form-control" type="text" placeholder="Search" aria-label="Search" style="width:300px;">
                             <span class="input-group-btn">
-                                <button type="button" onclick="test_api()" name="button" class="btn btn-primary form-control" style="width:75px">Search</button>
+                                <button type="button" onclick="get_points()" name="button" class="btn btn-primary form-control" style="width:75px">Search</button>
                             </span>
                         </div>
                     </div>
-                    <div id="results"> </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h4> Point Results </h4>
+                            <hr>
+                            <div id="results" style="width:80%;">
+                            </div>
+                        </div>
+                        <div id="point-data" class="col-md-8">
+                            <h4 id="point-title"> Visualization </h4>
+                            <hr>
+                        </div>
+                    </div>
                 </main>
             </div>
         </div>
