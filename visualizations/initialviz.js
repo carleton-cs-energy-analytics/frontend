@@ -175,8 +175,7 @@ function highlightLine(selectedLineData, isMouseOver) {
 
 
 // loads csv data and calls create axes and create line functions
-d3.csv('dummyvalues1.csv', function(csvData) {
-    var data = csvData;
-    drawLines(data);
+d3.json('dummy-json-values.json', function(jsonData) {
+    drawLines(jsonData);
     drawAxis();
 });
