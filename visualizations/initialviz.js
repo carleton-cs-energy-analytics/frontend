@@ -13,23 +13,28 @@ vals = ['point_id','point_name','1','2','3','4','5','6','7','8','9','10'] // dat
 mouseOverColor = '#565556'
 colors = ["#b2746b", "#7a91c1", "#86b265"]
 
-xScale = d3.scale.linear()
-				.domain([1,10])
-				.range([yOffset + margin, w - margin]);
-
-yScale = d3.scale.linear()
-				.domain([0,90])
-				.range([h - xOffset - margin, margin]);
-
 // create svg element at linegraph id
 var svg = d3.select('#linegraph')
   .append('svg:svg')
   .attr('width', w)
   .attr('height', h);
 
+function getScales(data) {
+    xScale = d3.scale.linear()
+				.domain([d3.min(data, function(d) { return parseFloat(d.timestamp); })-1,
+						 d3.max(data, function(d) { return parseFloat(d.timestamp); })+1])
+				.range([yOffset + margin, w - margin]);
+
+    yScale = d3.scale.linear()
+				.domain([d3.min(data, function(d) { return parseFloat(d.value); })-1,
+						 d3.max(data, function(d) { return parseFloat(d.value); })+1])
+				.range([h - xOffset - margin, margin]);
+    return [xScale, yScale];
+}
+
 
 // draws the axis for each year
-function drawAxis(year) {
+function drawAxis(xScale, yScale) {
     xAxis = d3.svg.axis()
                .scale(xScale)
                .orient('bottom')
@@ -65,7 +70,7 @@ function drawAxis(year) {
 
 
 // draws all the lines
-function drawLines(data) {
+function drawLines(data, xScale, yScale) {
     // displays the state when a line is hovered over
     tooltip = d3.select('body').append('div')
                 .attr('class', 'tooltip')
@@ -76,7 +81,7 @@ function drawLines(data) {
 
     line.enter().append('polyline')
                 .attr('class', 'line')
-                .attr('points', function(d) { return getPolylinePoints(d); })
+                .attr('points', function(d) { return getPolylinePoints(d, xScale, yScale); })
                 .style('stroke', function(d) { return getStroke(d); })
                 .style('stroke-width', function(d) { return getStrokeWidth(d); })
                 .style('fill','none')
@@ -111,7 +116,7 @@ function showTooltip(d) {
     tooltip.transition()
             .duration(200)
             .style('opacity', .9); // makes it visible
-    tooltip.html('<p>' + d['point_name'] + '</p>') // shows the point name
+    tooltip.html('<p>' + d.values[0].point_name + '</p>') // shows the point name
             .style('left', (d3.event.pageX) + 'px')
             .style('top', (d3.event.pageY - 28) + 'px');
 }
@@ -119,7 +124,7 @@ function showTooltip(d) {
 
 // gets the color for a given line
 function getStroke(d) {
-    return colors[d['point_id']];
+    return colors[d.key];
 }
 
 
@@ -130,11 +135,11 @@ function getStrokeWidth(d) {
 
 
 // gets the point string for where the polyline should be drawn
-function getPolylinePoints(d) {
+function getPolylinePoints(d, xScale, yScale) {
     var points ='';
-    for (var i = 2; i < vals.length; i++) {
-        x = xScale(Number(vals[i]));
-        y = yScale(Number(d[vals[i]]));
+    for (var i = 0; i < d.values.length; i++) {
+        x = xScale(d.values[i].timestamp);
+        y = yScale(d.values[i].value);
         points += x + ',' + y + ', ';
     }
     return points.slice(0, -2);
@@ -146,7 +151,7 @@ function toggleLine(selectedLineData, clickedOn, newThickness) {
     lines = d3.selectAll('polyline')
     for (i = 0; i < lines.length; i++) {
         for (j = 0; j < lines[i].length; j++) {
-            if (lines[i][j].__data__['point_name'] == selectedLineData['point_name']) {
+            if (lines[i][j].__data__.key == selectedLineData.key) {
                 if (clickedOn) {
                     lines[i][j].style.stroke = mouseOverColor
                 } else {
@@ -164,18 +169,27 @@ function highlightLine(selectedLineData, isMouseOver) {
   lines = d3.selectAll('polyline')
 	for (i = 0; i < lines.length; i++) {
 		for (j = 0; j < lines[i].length; j++) {
-			if (lines[i][j].__data__['point_name'] == selectedLineData['point_name'] && lines[i][j].style.strokeWidth != '5px' && !isMouseOver) {
+			if (lines[i][j].__data__.key == selectedLineData.key && lines[i][j].style.strokeWidth != '5px' && !isMouseOver) {
 				lines[i][j].style.stroke = getStroke(lines[i][j].__data__)
-			} else if (lines[i][j].__data__['point_name'] == selectedLineData['point_name'] && lines[i][j].style.strokeWidth != '5px' && isMouseOver) {
+			} else if (lines[i][j].__data__.key == selectedLineData.key && lines[i][j].style.strokeWidth != '5px' && isMouseOver) {
 				lines[i][j].style.stroke = mouseOverColor
 			}
 		}
 	}
 }
 
-
 // loads csv data and calls create axes and create line functions
 d3.json('dummy-json-values.json', function(jsonData) {
-    drawLines(jsonData);
-    drawAxis();
+    var data = jsonData;
+    
+    scales = getScales(data);
+    xScale = scales[0];
+    yScale = scales[1];
+    
+    dataByPoint = d3.nest()
+        .key(function(d) { return d.value_id; })
+        .entries(data);
+    
+    drawLines(dataByPoint, xScale, yScale);
+    drawAxis(xScale, yScale);
 });
