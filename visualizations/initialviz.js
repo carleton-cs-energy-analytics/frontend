@@ -10,7 +10,7 @@ yOffset = 100;		// Space for y-axis labels
 margin = 10;		// Margin around visualization
 transDur = 1500;	// Duration of transitions (in milliseconds)
 vals = ['point_id','point_name','1','2','3','4','5','6','7','8','9','10'] // data columns for the line data
-mouseOverColor = '#565556'
+mouseOverColor = '#9e9fa3'
 colors = ["#b2746b", "#7a91c1", "#86b265"]
 
 // create svg element at linegraph id
@@ -87,17 +87,17 @@ function drawLines(data, xScale, yScale) {
                 .style('fill','none')
                 .on('mouseover', function(d) {
                     showTooltip(d);
-                    highlightLine(d, true);
+                    greyoutOtherLines(d);
                 })
                 .on('mouseout', function(d) {
+                    bringBackColor(d);
                     hideTooltip();
-                    highlightLine(d, false);
                 })
                 .on('click', function(d) {
-                    if (d3.select(this).style('stroke-width') == '1px') { // Clicked on
+                    if (d3.select(this).style('stroke-width') == '2.5px') { // Clicked on
                         toggleLine(d, true, '5px');
-                    } else { // Clicked off (can't click on US)
-                        toggleLine(d, false, '1px');
+                    } else {
+                        toggleLine(d, false, '2.5px');
                     }
                 });
 }
@@ -146,17 +146,12 @@ function getPolylinePoints(d, xScale, yScale) {
 }
 
 
-// changes the thickness and color of a line when clicked
+// changes the thickness of a line when clicked
 function toggleLine(selectedLineData, clickedOn, newThickness) {
     lines = d3.selectAll('polyline')
     for (i = 0; i < lines.length; i++) {
         for (j = 0; j < lines[i].length; j++) {
             if (lines[i][j].__data__.key == selectedLineData.key) {
-                if (clickedOn) {
-                    lines[i][j].style.stroke = mouseOverColor
-                } else {
-                    lines[i][j].style.stroke = getStroke(lines[i][j].__data__)
-                }
                 lines[i][j].style.strokeWidth = newThickness
             }
         }
@@ -164,19 +159,30 @@ function toggleLine(selectedLineData, clickedOn, newThickness) {
 }
 
 
-// changes the color of a line when hovered over and moused out
-function highlightLine(selectedLineData, isMouseOver) {
-  lines = d3.selectAll('polyline')
-	for (i = 0; i < lines.length; i++) {
-		for (j = 0; j < lines[i].length; j++) {
-			if (lines[i][j].__data__.key == selectedLineData.key && lines[i][j].style.strokeWidth != '5px' && !isMouseOver) {
-				lines[i][j].style.stroke = getStroke(lines[i][j].__data__)
-			} else if (lines[i][j].__data__.key == selectedLineData.key && lines[i][j].style.strokeWidth != '5px' && isMouseOver) {
-				lines[i][j].style.stroke = mouseOverColor
-			}
-		}
-	}
+function greyoutOtherLines(selectedLineData) {
+    lines = d3.selectAll('polyline')
+    for (var i = 0; i < lines.length; i++) {
+        for (var j = 0; j < lines[i].length; j++) {
+            if (lines[i][j].__data__.key != selectedLineData.key) {
+                lines[i][j].style.stroke = mouseOverColor;
+            }
+        }
+    }
 }
+
+
+function bringBackColor(selectedLineData) {
+    lines = d3.selectAll('polyline')
+    for (var i = 0; i < lines.length; i++) {
+        for (var j = 0; j < lines[i].length; j++) {
+            if (lines[i][j].__data__.key != selectedLineData.key) {
+                console.log(lines[i][j].__data__);
+                lines[i][j].style.stroke = getStroke(lines[i][j].__data__);
+            }
+        }
+    }
+}
+
 
 // loads csv data and calls create axes and create line functions
 d3.json('dummy-json-values.json', function(jsonData) {
