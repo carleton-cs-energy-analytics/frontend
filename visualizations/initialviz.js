@@ -176,7 +176,6 @@ function bringBackColor(selectedLineData) {
     for (var i = 0; i < lines.length; i++) {
         for (var j = 0; j < lines[i].length; j++) {
             if (lines[i][j].__data__.key != selectedLineData.key) {
-                console.log(lines[i][j].__data__);
                 lines[i][j].style.stroke = getStroke(lines[i][j].__data__);
             }
         }
