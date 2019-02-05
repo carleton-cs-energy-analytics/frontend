@@ -6,6 +6,10 @@ $(document).ready(function () {
     $('#addSeriesBtn').click(function () {
         generateNextSeries().hide().appendTo('#series-block').slideDown('slow');
     })
+    $('.addLineBtn').click(function () {
+        var seriesId = '#' + $(this).attr('id').split('-')[0];
+        generateNewLine().hide().appendTo(seriesId).slideDown('slow');
+    })
 });
 
 $(document).on('click', '.delete', function () {
@@ -13,6 +17,50 @@ $(document).on('click', '.delete', function () {
         $(this).closest('.series').remove();
     })
 })
+
+$(document).on('change','.argType',function(){
+   update_dropdown($(this).attr('id'), $(this).val());
+});
+
+function generateNewLine() {
+    var seriesIndex = $('.series').length - 1;
+    //select logical operator
+    var logicalOperator = $('<select />', {type: 'text',
+        class:'series-'+seriesIndex + ' form-control',
+        value:''});
+    $(logicalOperator).append('<option value="and">AND</option>'+
+                       '<option value="or">OR</option>' +
+                       '<option value="not">NOT</option>');
+
+    var logicOpGrp = $('<div />', {class:'col-md-1',
+        html: logicalOperator});
+    //select argument type
+    var argType = $('<select />', {type: 'text',
+        class:'series-'+seriesIndex + ' form-control',
+        value:''});
+    $(argType).append('<option value="building">Building</option>'+
+                       '<option value="device">Device</option>' +
+                       '<option value="floor">Floor</option>');
+
+    var argTypeGrp = $('<div />', {class:'col-md-2',
+        html: argType});
+    //select argument value
+    var argValue = $('<select />', {type: 'text',
+        class:'series-'+seriesIndex + ' form-control',
+        value:''});
+    /*$(argValue).append('<option value="building">Building</option>'+
+                       '<option value="device">Device</option>' +
+                       '<option value="floor">Floor</option>');*/
+
+    var argValueGrp = $('<div />', {class:'col-md-2',
+        html: argValue});
+    //line grouping
+    var newLine = $('<div />', {class:'form-group row',
+        html: $(logicOpGrp).add(argTypeGrp).add(argValueGrp)});
+
+    return newLine;
+
+}
 
 function generateNextSeries() {
     var newIndex = $('.series').length;
@@ -22,7 +70,6 @@ function generateNextSeries() {
         id:'building'+newIndex,
         class:'building form-control',
         value:''});
-
     $(building).append('<option value="@2">Evans</option>')
 
     var buildingGrp = $('<div />', {class:'form-group col-md-2',
@@ -72,30 +119,62 @@ function generateNextSeries() {
 /*
  * Updates dropdowns based on previous dropdown values
 */
-function update_dropdown() {
+function update_dropdown(id, value) {
+    argValueId = '#' + id.replace('argType', 'argValue');
+    console.log("id: " + id + "| value: " + value);
 
+    query = '';
+    switch (value) {
+        case 'building':
+            query = '/buildings';
+            break;
+        case 'device':
+            query = '/devices';
+        case 'room':
+            query = '/rooms';
+    }
+
+    queryString = api_base_url + query;
+    response = query_api(queryString);
+    console.log("this is the response: " + response);
+
+
+
+    var newOptions = {"Evans": "@2",
+  "Option 2": "value2",
+  "Option 3": "value3"
+};
+
+var $el = $(argValueId);
+$el.empty(); // remove old options
+$.each(newOptions, function(key,value) {
+  $el.append($("<option></option>")
+     .attr("value", value).text(key));
+});
+
+}
+
+
+/*
+ * Builds array of search operators from search UI and pass to construct_url
+*/
+function build_url_array() {
+    var arg_list = []
+    //loop through all arguements
+    $('.argValue').each(function(){
+        alert($(this).val());
+        arg_list.push($(this).val());
+    });
+    console.log(arg_list);
+    return arg_list;
 
 }
 
 /*
- * Constructs api query url from UI dropdown select boxes
+ * get values for points from points query
 */
-function construct_url() {
-    var query = "/points?search=";
-    var building = $(".building").val();
-    var device = $(".device").val();
-    var floor = $(".floor").val();
-    var room = $(".room").val();
+function get_values() {
 
-    query += building;
-    if (device != 'all') {
-        query += 'and% = ' + device;
-    } else if (floor != 'all') {
-        query += 'and:floor = ' + floor;
-    } else if (room != 'all') {
-        query += 'and$ = ' + room;
-    }
-    return query;
 }
 
 /*
@@ -104,6 +183,44 @@ function construct_url() {
 function format_data() {
 
 }
+
+/*
+ * Constructs api query url from UI dropdown select boxes
+*/
+function construct_url() {
+    var query = "/points?search=";
+    var args_list = build_url_array();
+    //console.log("args list: " + args_list);
+    for (var index in args_list) {
+        query += args_list[index];
+    }
+    console.log("This is our query: " + query);
+    return query;
+}
+
+
+function query_api(url) {
+    console.log('query_api()')
+    console.log("Query URL: " + url);
+	xmlHttpRequest = new XMLHttpRequest();
+	xmlHttpRequest.open('get', url);
+
+    //empty div
+    $("#results").empty();
+
+	xmlHttpRequest.onreadystatechange = function() {
+		if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200) {
+			var responseText = JSON.parse(xmlHttpRequest.responseText);
+            console.log(responseText)
+            return responseText;
+        } else {
+            console.log("Error retrieving data. Ready State: " + xmlHttpRequest.readyState + " Status: " + xmlHttpRequest.status);
+        }
+    }
+    xmlHttpRequest.send(null);
+}
+
+
 
 
 function test_api() {
