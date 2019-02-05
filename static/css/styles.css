@@ -91,3 +91,15 @@ body {
 
 .border-top { border-top: 1px solid #e5e5e5; }
 .border-bottom { border-bottom: 1px solid #e5e5e5; }
+
+
+.series {
+    margin-right:0 auto;
+    margin-left:0 auto;
+    margin-bottom: 15px;
+}
+
+
+#series-block {
+    margin: 0 auto;
+}
