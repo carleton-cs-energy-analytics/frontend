@@ -158,43 +158,12 @@ $.each(newOptions, function(key,value) {
 
 }
 
-
-/*
- * Builds array of search operators from search UI and pass to construct_url
-*/
-function build_url_array() {
-    /*var arg_list = []
-    //loop through all arguements
-    $('.argValue').each(function(){
-        alert($(this).val());
-        arg_list.push($(this).val());
-    });
-    console.log(arg_list);*/
-    var arg_list = ['@2', 'and', ':floor = 2', 'and','$26']
-    return arg_list;
-
-}
-
-/*
- * get values for points from points query
-*/
-function get_values() {
-
-}
-
-/*
- * Formats return data for d3 visualizations
-*/
-function format_data() {
-
-}
-
 /*
  * Constructs api query url from UI dropdown select boxes
 */
 function construct_url() {
     var query = "";
-    var args_list = build_url_array();
+    var args_list = ['@2', 'and', ':floor = 2', 'and','$26']
     //console.log("args list: " + args_list);
     for (var index in args_list) {
         query += args_list[index];
@@ -220,7 +189,7 @@ function get_points() {
       type     :  'GET',
       success  : function(json)
       {
-         console.log('this is our get_points data')
+         console.log('Points Data: ')
          console.log(json);
          get_values(json)
       }
@@ -232,10 +201,9 @@ function get_points() {
 function get_values(json) {
     console.log('get_values()')
     var data = {
-        point_ids: [40678,40679,40680],
-        start_time: 1543689044,
-        end_time: 1559477844,
-        search: '~> 1 and ~<= 1000'
+        point_ids: [40504,40503],
+        start_time: 1548300800,
+        end_time: 1548568989
   };
 
    $.ajax(
@@ -246,8 +214,9 @@ function get_values(json) {
       type     :  'GET',
       success  : function(json)
       {
-         console.log('this is our json value data')
+         console.log('Value Data: ')
          console.log(json);
+         buildTrendViz(json);
       }
    });
 

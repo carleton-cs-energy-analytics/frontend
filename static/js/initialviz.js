@@ -124,7 +124,9 @@ function showTooltip(d) {
 
 // gets the color for a given line
 function getStroke(d) {
-    return colors[d.key];
+    console.log(d.key, 'd.key');
+    // return colors[d.key];
+    return 'Black';
 }
 
 
@@ -184,8 +186,7 @@ function bringBackColor(selectedLineData) {
 
 
 // loads csv data and calls create axes and create line functions
-
-d3.json('/static/js/dummy-json-values.json', function(jsonData) {
+function buildTrendViz(jsonData) {
     var data = jsonData;
 
     scales = getScales(data);
@@ -193,9 +194,25 @@ d3.json('/static/js/dummy-json-values.json', function(jsonData) {
     yScale = scales[1];
 
     dataByPoint = d3.nest()
-        .key(function(d) { return d.value_id; })
+        .key(function(d) { return d.point_name; })
         .entries(data);
-
+    console.log('dataByPoint', dataByPoint);
     drawLines(dataByPoint, xScale, yScale);
     drawAxis(xScale, yScale);
-});
+
+}
+
+/*d3.json('/static/js/dummy-json-values.json', function(jsonData) {
+    var data = jsonData;
+
+    scales = getScales(data);
+    xScale = scales[0];
+    yScale = scales[1];
+
+    dataByPoint = d3.nest()
+        .key(function(d) { return d.point_name; })
+        .entries(data);
+    console.log('dataByPoint', dataByPoint);
+    drawLines(dataByPoint, xScale, yScale);
+    drawAxis(xScale, yScale);
+});*/
