@@ -39,18 +39,18 @@ function drawAxis(xScale, yScale) {
                .scale(xScale)
                .orient('bottom')
                .ticks(5);
-    
+
     xAxisG = svg.append('g')
                .attr('class', 'axis')
                .attr('transform', 'translate(0,' + (h - xOffset) + ')')
                .call(xAxis)
-    
+
     xLabel = svg.append('text')
               .attr('class','label')
               .attr('x', w/2)
               .attr('y', h - 5)
               .text('Timestamp');
-    
+
     yAxis = d3.svg.axis()
               .scale(yScale)
               .orient('left')
@@ -60,7 +60,7 @@ function drawAxis(xScale, yScale) {
               .attr('class', 'axis')
               .attr('transform', 'translate(' + yOffset + ',0)')
               .call(yAxis)
-      
+
     yLabel = svg.append('text')
               .attr('class','label')
               .attr('x', yOffset/2)
@@ -184,17 +184,18 @@ function bringBackColor(selectedLineData) {
 
 
 // loads csv data and calls create axes and create line functions
-d3.json('dummy-json-values.json', function(jsonData) {
+
+d3.json('/static/js/dummy-json-values.json', function(jsonData) {
     var data = jsonData;
-    
+
     scales = getScales(data);
     xScale = scales[0];
     yScale = scales[1];
-    
+
     dataByPoint = d3.nest()
         .key(function(d) { return d.value_id; })
         .entries(data);
-    
+
     drawLines(dataByPoint, xScale, yScale);
     drawAxis(xScale, yScale);
 });

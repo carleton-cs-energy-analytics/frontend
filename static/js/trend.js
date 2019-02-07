@@ -7,7 +7,8 @@ $(document).ready(function () {
         generateNextSeries().hide().appendTo('#series-block').slideDown('slow');
     })
     $('.addLineBtn').click(function () {
-        var seriesId = '#' + $(this).attr('id').split('-')[0];
+        var seriesId = '#' + $(this).attr('id').split('.')[0];
+        console.log(seriesId);
         generateNewLine().hide().appendTo(seriesId).slideDown('slow');
     })
 });
@@ -22,7 +23,10 @@ $(document).on('change','.argType',function(){
    update_dropdown($(this).attr('id'), $(this).val());
 });
 
+
+
 function generateNewLine() {
+    console.log('generateNewLine()');
     var seriesIndex = $('.series').length - 1;
     //select logical operator
     var logicalOperator = $('<select />', {type: 'text',
@@ -135,7 +139,7 @@ function update_dropdown(id, value) {
     }
 
     queryString = api_base_url + query;
-    response = query_api(queryString);
+    //response = query_api(queryString);
     console.log("this is the response: " + response);
 
 
@@ -159,13 +163,14 @@ $.each(newOptions, function(key,value) {
  * Builds array of search operators from search UI and pass to construct_url
 */
 function build_url_array() {
-    var arg_list = []
+    /*var arg_list = []
     //loop through all arguements
     $('.argValue').each(function(){
         alert($(this).val());
         arg_list.push($(this).val());
     });
-    console.log(arg_list);
+    console.log(arg_list);*/
+    var arg_list = ['@2', 'and', ':floor = 2', 'and','$26']
     return arg_list;
 
 }
@@ -188,7 +193,7 @@ function format_data() {
  * Constructs api query url from UI dropdown select boxes
 */
 function construct_url() {
-    var query = "/points?search=";
+    var query = "";
     var args_list = build_url_array();
     //console.log("args list: " + args_list);
     for (var index in args_list) {
@@ -199,54 +204,51 @@ function construct_url() {
 }
 
 
-function query_api(url) {
-    console.log('query_api()')
+function get_points() {
+    console.log('get_points()')
+    var url = construct_url();
     console.log("Query URL: " + url);
-	xmlHttpRequest = new XMLHttpRequest();
-	xmlHttpRequest.open('get', url);
+    var data = {
+    search: url
+  };
 
-    //empty div
-    $("#results").empty();
-
-	xmlHttpRequest.onreadystatechange = function() {
-		if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200) {
-			var responseText = JSON.parse(xmlHttpRequest.responseText);
-            console.log(responseText)
-            return responseText;
-        } else {
-            console.log("Error retrieving data. Ready State: " + xmlHttpRequest.readyState + " Status: " + xmlHttpRequest.status);
-        }
-    }
-    xmlHttpRequest.send(null);
+   $.ajax(
+   {
+      url      : 'http://localhost:5000/api/points',
+      dataType : 'json',
+      data     :  data,
+      type     :  'GET',
+      success  : function(json)
+      {
+         console.log('this is our get_points data')
+         console.log(json);
+         get_values(json)
+      }
+   });
 }
 
 
 
+function get_values(json) {
+    console.log('get_values()')
+    var data = {
+        point_ids: [40678,40679,40680],
+        start_time: 1543689044,
+        end_time: 1559477844,
+        search: '~> 1 and ~<= 1000'
+  };
 
-function test_api() {
-    var url = api_base_url + construct_url();
-    console.log("Query URL: " + url);
-	xmlHttpRequest = new XMLHttpRequest();
-	xmlHttpRequest.open('get', url);
+   $.ajax(
+   {
+      url      : 'http://localhost:5000/api/values',
+      dataType : 'json',
+      data     :  data,
+      type     :  'GET',
+      success  : function(json)
+      {
+         console.log('this is our json value data')
+         console.log(json);
+      }
+   });
 
-    //empty div
-    $("#results").empty();
-
-	xmlHttpRequest.onreadystatechange = function() {
-		if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200) {
-			var responseText = JSON.parse(xmlHttpRequest.responseText);
-            console.log(responseText);
-            for (var i = 0; i < responseText.length; i++){
-                $("#results").append("<br><br>array index: " + i);
-                var obj = responseText[i];
-                for (var key in obj){
-                    var value = obj[key];
-                    $("#results").append("<br> - " + key + ": " + value);
-                }
-            }
-        } else {
-            console.log("Error retrieving data. Ready State: " + xmlHttpRequest.readyState + " Status: " + xmlHttpRequest.status);
-        }
-    }
-    xmlHttpRequest.send(null);
 }
