@@ -28,6 +28,4 @@ def get_anomalies_page():
 
 
 if __name__ == '__main__':
-    host = 'localhost'
-    port = '8080'
-    app.run(host=host, port=port)
+    app.run()
