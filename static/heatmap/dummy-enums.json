@@ -1,0 +1,200 @@
+[
+  {
+    "value_id": 0,
+    "point_name": "EV.RM107.RT",
+    "timestamp": 0,
+    "value": "ON"
+  },
+  {
+    "value_id": 0,
+    "point_name": "EV.RM107.RT",
+    "timestamp": 1,
+    "value": "ON"
+  },
+  {
+    "value_id": 0,
+    "point_name": "EV.RM107.RT",
+    "timestamp": 2,
+    "value": "OFF"
+  },
+  {
+    "value_id": 0,
+    "point_name": "EV.RM107.RT",
+    "timestamp": 3,
+    "value": "OFF"
+  },
+  {
+    "value_id": 0,
+    "point_name": "EV.RM107.RT",
+    "timestamp": 4,
+    "value": "ON"
+  },
+  {
+    "value_id": 0,
+    "point_name": "EV.RM107.RT",
+    "timestamp": 5,
+    "value": "OFF"
+  },
+  {
+    "value_id": 0,
+    "point_name": "EV.RM107.RT",
+    "timestamp": 6,
+    "value": "OFF"
+  },
+  {
+    "value_id": 0,
+    "point_name": "EV.RM107.RT",
+    "timestamp": 7,
+    "value": "OFF"
+  },
+  {
+    "value_id": 0,
+    "point_name": "EV.RM107.RT",
+    "timestamp": 8,
+    "value": "OFF"
+  },
+  {
+    "value_id": 0,
+    "point_name": "EV.RM107.RT",
+    "timestamp": 9,
+    "value": "ON"
+  },
+  {
+    "value_id": 0,
+    "point_name": "EV.RM107.RT",
+    "timestamp": 10,
+    "value": "ON"
+  },
+  {
+    "value_id": 1,
+    "point_name": "EV.RM108.RT",
+    "timestamp": 0,
+    "value": "ON"
+  },
+  {
+    "value_id": 1,
+    "point_name": "EV.RM108.RT",
+    "timestamp": 1,
+    "value": "OFF"
+  },
+  {
+    "value_id": 1,
+    "point_name": "EV.RM108.RT",
+    "timestamp": 2,
+    "value": "ON"
+  },
+  {
+    "value_id": 1,
+    "point_name": "EV.RM108.RT",
+    "timestamp": 3,
+    "value": "OFF"
+  },
+  {
+    "value_id": 1,
+    "point_name": "EV.RM108.RT",
+    "timestamp": 4,
+    "value": "ON"
+  },
+  {
+    "value_id": 1,
+    "point_name": "EV.RM108.RT",
+    "timestamp": 5,
+    "value": "ON"
+  },
+  {
+    "value_id": 1,
+    "point_name": "EV.RM108.RT",
+    "timestamp": 6,
+    "value": "OFF"
+  },
+  {
+    "value_id": 1,
+    "point_name": "EV.RM108.RT",
+    "timestamp": 7,
+    "value": "OFF"
+  },
+  {
+    "value_id": 1,
+    "point_name": "EV.RM108.RT",
+    "timestamp": 8,
+    "value": "OFF"
+  },
+  {
+    "value_id": 1,
+    "point_name": "EV.RM108.RT",
+    "timestamp": 9,
+    "value": "ON"
+  },
+  {
+    "value_id": 1,
+    "point_name": "EV.RM108.RT",
+    "timestamp": 10,
+    "value": "ON"
+  },
+  {
+    "value_id": 2,
+    "point_name": "EV.RM109.RT",
+    "timestamp": 0,
+    "value": "OFF"
+  },
+  {
+    "value_id": 2,
+    "point_name": "EV.RM109.RT",
+    "timestamp": 1,
+    "value": "ON"
+  },
+  {
+    "value_id": 2,
+    "point_name": "EV.RM109.RT",
+    "timestamp": 2,
+    "value": "OFF"
+  },
+  {
+    "value_id": 2,
+    "point_name": "EV.RM109.RT",
+    "timestamp": 3,
+    "value": "OFF"
+  },
+  {
+    "value_id": 2,
+    "point_name": "EV.RM109.RT",
+    "timestamp": 4,
+    "value": "OFF"
+  },
+  {
+    "value_id": 2,
+    "point_name": "EV.RM109.RT",
+    "timestamp": 5,
+    "value": "OFF"
+  },
+  {
+    "value_id": 2,
+    "point_name": "EV.RM109.RT",
+    "timestamp": 6,
+    "value": "ON"
+  },
+  {
+    "value_id": 2,
+    "point_name": "EV.RM109.RT",
+    "timestamp": 7,
+    "value": "OFF"
+  },
+  {
+    "value_id": 2,
+    "point_name": "EV.RM109.RT",
+    "timestamp": 8,
+    "value": "ON"
+  },
+  {
+    "value_id": 2,
+    "point_name": "EV.RM109.RT",
+    "timestamp": 9,
+    "value": "OFF"
+  },
+  {
+    "value_id": 2,
+    "point_name": "EV.RM109.RT",
+    "timestamp": 10,
+    "value": "OFF"
+  }
+]
