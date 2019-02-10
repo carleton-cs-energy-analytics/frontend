@@ -27,6 +27,11 @@ def get_anomalies_page():
     return flask.render_template('anomalies.html')
 
 
+@app.route('/search')
+def get_search():
+    return flask.render_template('search-engine.html')
+
+
 if __name__ == '__main__':
     host = 'localhost'
     port = '8080'
