@@ -15,7 +15,6 @@
   <!-- Latest compiled JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <!-- js for vis -->
-  <script type="text/javascript" src="../static/js/search_engine.js"></script>
 
   <!-- boostrap-select -->
   <!--<link rel="stylesheet"-->
@@ -27,38 +26,49 @@
 <body>
 <!--<div class="bubble">-->
 <!--<span class="bubble-left" style="width: 150px">-->
-<div class="row">
+<div>
   <form id="series-0" class="series">
-    <div class="col-md-2">
-      <select class="selectpicker building" multiple>
-      </select>
-    </div>
-    <div class="col-md-2">
-      <select class="selectpicker floor" multiple>
-      </select>
-    </div>
-    <div class="col-md-2">
-      <select class="selectpicker room" multiple>
-      </select>
-    </div>
-    <div class="col-md-2">
-      <select class="selectpicker device" multiple>
-      </select>
-    </div>
-    <div class="col-md-2">
-      <select class="selectpicker point" multiple>
-      </select>
-    </div>
+    <select class="selectpicker building" multiple>
+    </select>
+    <select class="selectpicker floor" multiple>
+    </select>
+    <select class="selectpicker room" multiple>
+    </select>
+    <select class="selectpicker device" multiple>
+    </select>
+    <select class="selectpicker point" multiple>
+    </select>
+    <select class="selectpicker tag" multiple>
+    </select>
+    <select class="selectpicker type" multiple>
+    </select>
+    <select class="selectpicker unit" multiple>
+    </select>
+    <select class="selectpicker measurement" multiple>
+    </select>
   </form>
-
 </div>
+<div class="row">
+                <h1>Initial Line Graph</h1>
 
-<!--</span>-->
-<!--<span class="bubble-right">-->
-<!--<select class="select-building">-->
-<!--<option></option>-->
-<!--</select>-->
-<!--</span>-->
-<!--</div>-->
+                <div class="col-md-9 svg" id="linegraph"></div>
+
+
+                <div class="legend">
+                    <div class="legend-title">Key</div>
+                    <ul class="bars">
+                        <li><span style="background:#b2746b"></span>First series</li>
+                        <li><span style="background:#7a91c1"></span>Second series</li>
+                        <li><span style="background:#86b265"></span>Third series</li>
+                    </ul>
+                </div>
+
+            </div>
+
+<button id="submit-search-query">Search</button>
+
 </body>
+<script type="text/javascript" src="../static/js/initialviz.js"></script>
+<script type="text/javascript" src="../static/js/search_engine.js"></script>
+
 </html>

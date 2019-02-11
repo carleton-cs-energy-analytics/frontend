@@ -187,7 +187,7 @@ function bringBackColor(selectedLineData) {
 
 // loads csv data and calls create axes and create line functions
 function buildTrendViz(jsonData) {
-    var data = jsonData;
+    var data = jsonData[0];
 
     scales = getScales(data);
     xScale = scales[0];
