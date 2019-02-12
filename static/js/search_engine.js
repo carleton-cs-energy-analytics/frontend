@@ -1,8 +1,11 @@
 function build_query_string(form_element, selector_list = ["building", "floor", "room", "device",
     "point", "tag", "type", "unit", "measurement"]) {
+    console.log("form element" + form_element);
+    console.log(form_element);
     let disjunctive_clauses = [];
     for (let i = 0; i < selector_list.length; i++) {
         let clauses = form_element.find("select." + selector_list[i]).val();
+        console.log("clauses: " + clauses);
         if (!(clauses.length === 0 || clauses.includes(""))) {
             disjunctive_clauses.push("(" + clauses.join('or') + ")");
         }
@@ -50,7 +53,7 @@ function update_building(form_element) {
             console.log(data);
             let building_select = form_element.find("select.building");
             building_select.empty();
-            building_select.append($("<option>All Buildings</option>"));
+            building_select.append($("<option value=''>All Buildings</option>"));
             for (let i = 0; i < data.length; i++) {
                 building_select
                     .append($("<option value='@" + data[i]["building_id"] + "'>"
@@ -69,7 +72,7 @@ function update_floor(form_element) {
         function (data, status, jqXHR) {
             let floor_select = form_element.find("select.floor");
             floor_select.empty();
-            floor_select.append($("<option>All Floors</option>"));
+            floor_select.append($("<option value=''>All Floors</option>"));
             for (let i = 0; i < data.length; i++) {
                 floor_select
                     .append($("<option value=':floor = " + data[i] + "'>"
@@ -88,7 +91,7 @@ function update_room(form_element) {
             let room_select = form_element.find("select.room");
             console.log(room_select);
             room_select.empty();
-            room_select.append($("<option>All Rooms</option>"));
+            room_select.append($("<option value=''>All Rooms</option>"));
             for (let i = 0; i < data.length; i++) {
                 room_select
                     .append($("<option value='$" + data[i]["room_id"] + "'>"
@@ -106,7 +109,7 @@ function update_device(form_element) {
         function (data, status, jqXHR) {
             let device_select = form_element.find("select.device");
             device_select.empty();
-            device_select.append($("<option>All Devices</option>"));
+            device_select.append($("<option value=''>All Devices</option>"));
             for (let i = 0; i < data.length; i++) {
                 device_select
                     .append($("<option value='%" + data[i]["device_id"] + "'>"
@@ -124,7 +127,7 @@ function update_point(form_element) {
         function (data, status, jqXHR) {
             let point_select = form_element.find("select.point");
             point_select.empty();
-            point_select.append($("<option>All Points</option>"));
+            point_select.append($("<option value=''>All Points</option>"));
             for (let i = 0; i < data.length; i++) {
                 point_select
                     .append($("<option value='*" + data[i]["point_id"] + "'>"
@@ -156,14 +159,16 @@ $(function () {
     });
 
     $("#submit-search-query").on("click", function (event) {
+        console.log("button clicked");
         let point_series = [];
         let forms = $("form.series");
         let formCount = forms.length;
-        forms.forEach(function () {
+        forms.each(function (index, form) {
+            console.log("Ajax fired for: " + $(event.target));
             $.ajax({
                 url: 'http://localhost:5000/api/points/ids',
                 dataType: 'json',
-                data: {search: build_query_string(event.target)},
+                data: {search: build_query_string($(form))},
                 type: 'GET',
                 success: function (data, status, jqXHR) {
                     $.ajax({
@@ -183,6 +188,7 @@ $(function () {
                         },
                         complete: function (jqXHR, status) {
                             if (point_series.length === formCount) {
+                                console.log(point_series);
                                 buildTrendViz(point_series)
                             }
                         }
