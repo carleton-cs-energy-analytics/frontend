@@ -2,7 +2,7 @@ function build_query_string(form_element, selector_list = ["building", "floor", 
     "point", "tag", "type", "unit", "measurement"]) {
     let disjunctive_clauses = [];
     for (let i = 0; i < selector_list.length; i++) {
-        let clauses = form_element.find("select.building").val();
+        let clauses = form_element.find("select." + selector_list[i]).val();
         if (!(clauses.length === 0 || clauses.includes(""))) {
             disjunctive_clauses.push("(" + clauses.join('or') + ")");
         }
