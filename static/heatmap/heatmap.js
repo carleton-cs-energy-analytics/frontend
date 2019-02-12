@@ -1,104 +1,106 @@
-//height of each row in the heatmap
-//width of each column in the heatmap
-var gridSize = 500,
-    h = gridSize,
-    w = gridSize,
-    rectPadding = 60;
+var h = 700;
+var w = 1200;
+var xOffset = 40;		// Space for x-axis labels
+var yOffset = 100;		// Space for y-axis labels
+var margin = 10;		// Margin around visualization
 
 var colorMap = {"ON": 'green', "OFF": 'red'};
 
-//var margin = {top: 20, right: 80, bottom: 30, left: 50},
-//    width = 640 - margin.left - margin.right,
-//    height = 380 - margin.top - margin.bottom;
-
 var svg = d3.select("#heatmap").append("svg")
-    .attr("width", w)
     .attr("height", h)
-//  .append("g")
-//    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    .attr("width", w);
 
 
-function getScales(data) {
-    colorScale = d3.scale.quantize()
-                    .domain(["OFF", "OFF"])
-                    .range(["red", "green"]);
-    
-    xScale = d3.scale.linear()
-				.domain([d3.min(data, function(d) { return parseFloat(d.timestamp); })-1,
-						 d3.max(data, function(d) { return parseFloat(d.timestamp); })+1])
-				.range([rectPadding, w]);
+function getScales(data, numPoints, numValues) {
+    let colorScale = d3.scale.ordinal()
+                    .domain(data.map(function(d) { return d.value; }))
+                    .range(colorbrewer.RdBu[numValues]);
 
-    yScale = d3.scale.ordinal()
+    let xScale = d3.scale.linear()
+				.domain([d3.min(data, function(d) { return parseFloat(d.timestamp); }) - 1,
+						 d3.max(data, function(d) { return parseFloat(d.timestamp); }) + 1])
+				.range([yOffset + margin, w - margin]);
+
+    let yScale = d3.scale.ordinal()
                 .domain(data.map(function(d) { return d.point_name; }))
-				.range([h - rectPadding, rectPadding]);
-    
+				.range(getYRange(numPoints));
+                // .rangeRoundBands([0, w], 0, 1);
+
     return [colorScale, xScale, yScale];
 }
 
 
+function getYRange(numPoints) {
+    let range = [];
+    let startVal = h - xOffset - margin;
+    range.push(startVal);
+    let numToAdd = (startVal - margin) / (numPoints - 1);
+    for (let i = 1; i < numPoints - 1; i++) {
+        range.push(range[i - 1] - numToAdd)
+    }
+    range.push(margin);
+
+    return range;
+}
+
+
 // draws the axis for each year
-function drawAxis(xScale, yScale) {
-    xAxis = d3.svg.axis()
+function drawAxis(xScale, yScale, numPoints) {
+    let xAxis = d3.svg.axis()
                .scale(xScale)
                .orient('bottom')
                .ticks(5);
-    
-    xAxisG = svg.append('g')
+
+    let xAxisG = svg.append('g')
                .attr('class', 'axis')
-               .attr('transform', 'translate(0,' + (h - rectPadding) + ')')
-               .call(xAxis)
-    
-    xLabel = svg.append('text')
+               .attr('transform', 'translate(0,' + (h - xOffset) + ')')
+               .call(xAxis);
+
+    let xLabel = svg.append('text')
               .attr('class','label')
-              .attr('x', w/2)
+              .attr('x', w / 2)
               .attr('y', h - 5)
               .text('Timestamp');
-    
-    yAxis = d3.svg.axis()
+
+    let yAxis = d3.svg.axis()
               .scale(yScale)
               .orient('left')
-              .ticks(5);
+              .ticks(numPoints + 1);
 
-    yAxisG = svg.append('g')
+    let yAxisG = svg.append('g')
               .attr('class', 'axis')
-              .attr('transform', 'translate(' + rectPadding + ',0)')
-              .call(yAxis)
-      
-    yLabel = svg.append('text')
+              .attr('transform', 'translate(' + yOffset + ',0)')
+              .call(yAxis);
+
+    let yLabel = svg.append('text')
               .attr('class','label')
-              .attr('x', rectPadding/2)
-              .attr('y', h/2 - 10)
+              .attr('x', yOffset / 2)
+              .attr('y', h / 2 - 10)
               .text('Point');
 }
 
 
 // draws all the lines
-function drawBoxes(data, colorScale, xScale, yScale) {
+function drawBoxes(data, colorScale, xScale, yScale, numPoints) {
     // displays the state when a line is hovered over
     tooltip = d3.select('body').append('div')
                 .attr('class', 'tooltip')
                 .style('opacity', 0);
 
-    var heatMap = svg.selectAll(".heatmap")
+    let heatMap = svg.selectAll(".heatmap")
                 .data(data)
                 .enter().append("svg:rect")
                 .attr("x", function(d) { return xScale(d.timestamp); })
-                .attr("y", function(d) { return yScale(d.point_name); })
+                .attr("y", function(d) { return (yScale(d.point_name) - (((h - xOffset) / numPoints)) / 2); })
+                // .attr("y", function(d) { return yScale(d.point_name); })
                 .attr("width", function(d) { return 35; }) // Need to find the next timestamp
-                .attr("height", function(d) { return (h - rectPadding)/3; }) //needs to be the number of points
+                .attr("height", function(d) { return (h - xOffset) / numPoints; })
                 .style("fill", function(d) { return colorMap[d.value]; })
                 .on('mouseover', function(d) {
                     showTooltip(d);
                 })
                 .on('mouseout', function(d) {
                     hideTooltip();
-                })
-                .on('click', function(d) {
-                    if (d3.select(this).style('stroke-width') == '1px') { // Clicked on
-                        
-                    } else { // Clicked off
-
-                    }
                 });
 }
 
@@ -116,7 +118,8 @@ function showTooltip(d) {
     tooltip.transition()
             .duration(200)
             .style('opacity', .9); // makes it visible
-    tooltip.html('<p>' + d.point_name + '</p>') // shows the point name
+
+    tooltip.html('<p>' + d.point_name + '<br>' + d.value + '</p>') // shows the point name and value
             .style('left', (d3.event.pageX) + 'px')
             .style('top', (d3.event.pageY - 28) + 'px');
 }
@@ -129,17 +132,23 @@ function getStroke(d) {
 
 // loads csv data and calls create axes and create line functions
 d3.json('dummy-enums.json', function(jsonData) {
-    var data = jsonData;
-    
-    scales = getScales(data);
-    colorScale = scales[0]
-    xScale = scales[1];
-    yScale = scales[2];
-    
-//    dataByPoint = d3.nest()
-//        .key(function(d) { return d.point_name; })
-//        .entries(data);
-//    
-    drawBoxes(data, colorScale, xScale, yScale);
-    drawAxis(xScale, yScale);
+    let data = jsonData;
+
+    let numPoints = d3.nest()
+                   .key(function(d) { return d.point_name; })
+                   .entries(data)
+                    .length;
+
+    let numValues = d3.nest()
+                   .key(function(d) { return d.value; })
+                   .entries(data)
+                    .length;
+
+    let scales = getScales(data, numPoints, numValues);
+    let colorScale = scales[0];
+    let xScale = scales[1];
+    let yScale = scales[2];
+
+    drawBoxes(data, colorScale, xScale, yScale, numPoints);
+    drawAxis(xScale, yScale, numPoints);
 });
