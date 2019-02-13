@@ -1,25 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>title</title>
-    <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="../static/js/trend.js"></script>
-    <!--<link rel="stylesheet" href="../static/css/styles.css">-->
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet"
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+{% extends "layout.html" %}
 
-</head>
-<body>
+{% block body %}
 <div>
     <form id="series-0" class="series">
         <select class="building" multiple>
@@ -59,9 +40,9 @@
 
 </div>
 
+
 <button id="submit-search-query">Search</button>
 
-</body>
 <script type="text/javascript" src="../static/js/initialviz.js"></script>
 <script type="text/javascript" src="../static/js/search_engine.js"></script>
-</html>
+{% endblock %}
