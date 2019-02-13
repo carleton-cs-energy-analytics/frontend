@@ -86,6 +86,12 @@
   {
     "value_id": 1,
     "point_name": "EV.RM108.RT",
+    "timestamp": 5,
+    "value": "ON"
+  },
+  {
+    "value_id": 1,
+    "point_name": "EV.RM108.RT",
     "timestamp": 3,
     "value": "OFF"
   },
@@ -93,12 +99,6 @@
     "value_id": 1,
     "point_name": "EV.RM108.RT",
     "timestamp": 4,
-    "value": "ON"
-  },
-  {
-    "value_id": 1,
-    "point_name": "EV.RM108.RT",
-    "timestamp": 5,
     "value": "ON"
   },
   {

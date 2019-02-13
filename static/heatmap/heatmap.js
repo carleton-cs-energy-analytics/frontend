@@ -4,7 +4,7 @@ var xOffset = 40;		// Space for x-axis labels
 var yOffset = 100;		// Space for y-axis labels
 var margin = 10;		// Margin around visualization
 
-var colorMap = {"ON": 'green', "OFF": 'red'};
+// var colorMap = {"ON": 'green', "OFF": 'red'};
 
 var svg = d3.select("#heatmap").append("svg")
     .attr("height", h)
@@ -13,17 +13,18 @@ var svg = d3.select("#heatmap").append("svg")
 
 function getScales(data, numPoints, numValues) {
     let colorScale = d3.scale.ordinal()
-                    .domain(data.map(function(d) { return d.value; }))
-                    .range(colorbrewer.RdBu[numValues]);
+                .domain(data.map(function(d) { return d.value; }))
+                .range(colorbrewer.Set3[numValues + 1]);
 
     let xScale = d3.scale.linear()
-				.domain([d3.min(data, function(d) { return parseFloat(d.timestamp); }) - 1,
+				.domain([d3.min(data, function(d) { return parseFloat(d.timestamp); }),
 						 d3.max(data, function(d) { return parseFloat(d.timestamp); }) + 1])
 				.range([yOffset + margin, w - margin]);
 
     let yScale = d3.scale.ordinal()
                 .domain(data.map(function(d) { return d.point_name; }))
-				.range(getYRange(numPoints));
+                .rangeRoundBands([margin, h - xOffset - margin], 0, -.075);
+				// .range(getYRange(numPoints));
                 // .rangeRoundBands([0, w], 0, 1);
 
     return [colorScale, xScale, yScale];
@@ -53,13 +54,13 @@ function drawAxis(xScale, yScale, numPoints) {
 
     let xAxisG = svg.append('g')
                .attr('class', 'axis')
-               .attr('transform', 'translate(0,' + (h - xOffset) + ')')
+               .attr('transform', 'translate(0,' + (h - xOffset + 1) + ')')
                .call(xAxis);
 
     let xLabel = svg.append('text')
               .attr('class','label')
               .attr('x', w / 2)
-              .attr('y', h - 5)
+              .attr('y', h)
               .text('Timestamp');
 
     let yAxis = d3.svg.axis()
@@ -69,19 +70,20 @@ function drawAxis(xScale, yScale, numPoints) {
 
     let yAxisG = svg.append('g')
               .attr('class', 'axis')
-              .attr('transform', 'translate(' + yOffset + ',0)')
+              .attr('transform', 'translate(' + (yOffset + 7) + ',0)')
               .call(yAxis);
 
-    let yLabel = svg.append('text')
-              .attr('class','label')
-              .attr('x', yOffset / 2)
-              .attr('y', h / 2 - 10)
-              .text('Point');
+    // let yLabel = svg.append('text')
+    //           // .attr("transform", "rotate(-90)")
+    //           .attr('class','label')
+    //           .attr('x', yOffset / 2)
+    //           .attr('y', h / 2 - 10)
+    //           .text('Point');
 }
 
 
 // draws all the lines
-function drawBoxes(data, colorScale, xScale, yScale, numPoints) {
+function drawBoxes(data, colorScale, xScale, yScale, numPoints, dataByPoint) {
     // displays the state when a line is hovered over
     tooltip = d3.select('body').append('div')
                 .attr('class', 'tooltip')
@@ -91,17 +93,32 @@ function drawBoxes(data, colorScale, xScale, yScale, numPoints) {
                 .data(data)
                 .enter().append("svg:rect")
                 .attr("x", function(d) { return xScale(d.timestamp); })
-                .attr("y", function(d) { return (yScale(d.point_name) - (((h - xOffset) / numPoints)) / 2); })
-                // .attr("y", function(d) { return yScale(d.point_name); })
-                .attr("width", function(d) { return 35; }) // Need to find the next timestamp
+                // .attr("y", function(d) { return (yScale(d.point_name) - (((h - xOffset) / numPoints)) / 2); })
+                .attr("y", function(d) { return yScale(d.point_name); })
+                .attr("width", function(d) { return findBoxWidth(d, dataByPoint, xScale); }) // Need to find the next timestamp
                 .attr("height", function(d) { return (h - xOffset) / numPoints; })
-                .style("fill", function(d) { return colorMap[d.value]; })
+                .style("fill", function(d) { return colorScale(d.value); })
                 .on('mouseover', function(d) {
                     showTooltip(d);
                 })
                 .on('mouseout', function(d) {
                     hideTooltip();
                 });
+}
+
+function findBoxWidth(currentData, dataByPoint, xScale) {
+    for (let i = 0; i < dataByPoint.length; i++) {
+        if (dataByPoint[i].key == currentData.point_name) {
+            for (let j = 0; j < dataByPoint[i].values.length; j++) {
+                if (dataByPoint[i].values[j].timestamp == currentData.timestamp && j + 1 < dataByPoint[i].values.length) {
+                    console.log(xScale(dataByPoint[i].values[j + 1].timestamp) - xScale(currentData.timestamp));
+                    return xScale(dataByPoint[i].values[j + 1].timestamp) - xScale(currentData.timestamp)
+                } else if (dataByPoint[i].values[j].timestamp == currentData.timestamp) {
+                    return 90;
+                }
+            }
+        }
+    }
 }
 
 
@@ -134,10 +151,15 @@ function getStroke(d) {
 d3.json('dummy-enums.json', function(jsonData) {
     let data = jsonData;
 
-    let numPoints = d3.nest()
+    let dataByPoint = d3.nest()
                    .key(function(d) { return d.point_name; })
-                   .entries(data)
-                    .length;
+                   .sortKeys(d3.ascending)
+                   .sortValues(function(a,b) { return parseFloat(a.timestamp) - parseFloat(b.timestamp); })
+                   .entries(data);
+
+    console.log(dataByPoint);
+
+    let numPoints = dataByPoint.length;
 
     let numValues = d3.nest()
                    .key(function(d) { return d.value; })
@@ -149,6 +171,6 @@ d3.json('dummy-enums.json', function(jsonData) {
     let xScale = scales[1];
     let yScale = scales[2];
 
-    drawBoxes(data, colorScale, xScale, yScale, numPoints);
+    drawBoxes(data, colorScale, xScale, yScale, numPoints, dataByPoint);
     drawAxis(xScale, yScale, numPoints);
 });
