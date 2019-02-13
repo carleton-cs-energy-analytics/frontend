@@ -157,12 +157,24 @@ $(function () {
         let series = $(event.target).parent();
         update_point(series);
     });
+    $('input[name="datetimes"]').daterangepicker({
+        timePicker: true,
+        startDate: moment().startOf('hour'),
+        endDate: moment().startOf('hour').add(32, 'hour'),
+        locale: {
+            format: 'M/DD hh:mm A'
+        }
+    });
 
     $("#submit-search-query").on("click", function (event) {
         console.log("button clicked");
         let point_series = [];
         let forms = $("form.series");
         let formCount = forms.length;
+        let drp = $('#daterange').data('daterangepicker');
+        let startDate = drp.startDate._d.valueOf()/1000;
+        let endDate = drp.endDate._d.valueOf()/1000;
+
         forms.each(function (index, form) {
             console.log("Ajax fired for: " + $(event.target));
             $.ajax({
@@ -176,8 +188,8 @@ $(function () {
                         dataType: 'json',
                         data: {
                             point_ids: data,
-                            start_time: 0,
-                            end_time: 1649922140,
+                            start_time: startDate,
+                            end_time: endDate,
                             // search:
                         },
                         success: function (data, status, jqXHR) {
