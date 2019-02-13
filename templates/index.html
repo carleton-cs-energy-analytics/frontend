@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>title</title>
-    <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
+    <script src="http://d3js.org/d3.v4.min.js" charset="utf-8"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="../static/css/styles.css">
     <!-- Latest compiled and minified CSS -->
@@ -125,16 +125,20 @@
                 <h1>Initial Line Graph</h1>
 
                 <div class="col-md-9 svg" id="linegraph"></div>
+                <label id="form" for="show-voronoi">
+                    Show Voronoi
+                    <input type="checkbox" id="show-voronoi" disabled>
+                </label>
 
 
-                <div class="legend">
-                    <div class="legend-title">Key</div>
-                    <ul class="bars">
-                        <li><span style="background:#b2746b"></span>First series</li>
-                        <li><span style="background:#7a91c1"></span>Second series</li>
-                        <li><span style="background:#86b265"></span>Third series</li>
-                    </ul>
-                </div>
+                <!--<div class="legend">-->
+                    <!--<div class="legend-title">Key</div>-->
+                    <!--<ul class="bars">-->
+                        <!--<li><span style="background:#b2746b"></span>First series</li>-->
+                        <!--<li><span style="background:#7a91c1"></span>Second series</li>-->
+                        <!--<li><span style="background:#86b265"></span>Third series</li>-->
+                    <!--</ul>-->
+                <!--</div>-->
 
             </div>
 
@@ -142,8 +146,9 @@
     </div>
 </div>
 
-    <script type="text/javascript" src="../static/js/initialviz.js"></script>
-    <script src="../static/js/trend.js"></script>
+<script src="../static/js/trend.js"></script>
+<script type="text/javascript" src="../static/js/voronoi_line_vis.js"></script>
+
 </body>
 </html>
 
