@@ -4,7 +4,7 @@ var xOffset = 40;		// Space for x-axis labels
 var yOffset = 100;		// Space for y-axis labels
 var margin = 10;		// Margin around visualization
 
-var svg = d3.select("#heatmap").append("svg")
+var svg = d3.select("#visualization").append("svg")
     .attr("height", h)
     .attr("width", w);
 
@@ -92,7 +92,7 @@ function drawBoxes(data, colorScale, xScale, yScale, numPoints, dataByPoint) {
                 .attr('class', 'tooltip')
                 .style('opacity', 0);
 
-    let heatMap = svg.selectAll(".heatmap")
+    let heatMap = svg.selectAll(".visualization")
                 .data(data)
                 .enter().append("svg:rect")
                 .attr("x", function(d) { return xScale(getTime(d.timestamp)); })
@@ -113,7 +113,6 @@ function findBoxWidth(currentData, dataByPoint, xScale) {
         if (dataByPoint[i].key === currentData.point_name) {
             for (let j = 0; j < dataByPoint[i].values.length; j++) {
                 if (dataByPoint[i].values[j].timestamp === currentData.timestamp && j + 1 < dataByPoint[i].values.length) {
-                    console.log(xScale(dataByPoint[i].values[j + 1].timestamp) - xScale(currentData.timestamp));
                     return xScale(getTime(dataByPoint[i].values[j + 1].timestamp)) - xScale(getTime(currentData.timestamp));
                 } else if (dataByPoint[i].values[j].timestamp === currentData.timestamp) { // The last timestamp
                     return w - xScale(getTime(currentData.timestamp));
@@ -152,8 +151,6 @@ function buildHeatmapViz(data) {
                    .sortValues(function(a,b) { return parseFloat(a.timestamp) - parseFloat(b.timestamp); })
                    .entries(data);
 
-    console.log(dataByPoint);
-
     let numPoints = dataByPoint.length;
 
     let numValues = d3.nest()
@@ -168,4 +165,4 @@ function buildHeatmapViz(data) {
 
     drawBoxes(data, colorScale, xScale, yScale, numPoints, dataByPoint);
     drawAxis(xScale, yScale, numPoints);
-});
+}

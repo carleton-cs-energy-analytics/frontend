@@ -5,7 +5,6 @@ function build_query_string(form_element, selector_list = ["building", "floor", 
     let disjunctive_clauses = [];
     for (let i = 0; i < selector_list.length; i++) {
         let clauses = form_element.find("select." + selector_list[i]).val();
-        console.log("clauses: " + clauses);
         if (!(clauses.length === 0 || clauses.includes(""))) {
             disjunctive_clauses.push("(" + clauses.join('or') + ")");
         }
@@ -23,14 +22,14 @@ function update_static(form_element) {
                 let select_el = form_element.find("select." + columns[i]);
                 select_el.empty();
                 if (columns[i] === "type") {
-                    select_el.append($("<option value=':type = 2 or :type = 3'>Numeric</option>"));
+                    select_el.append($("<option value=':type 2 or :type 3' selected>Numeric</option>"));
                 } else {
                     select_el.append($("<option>All " + columns[i].charAt(0).toUpperCase() +
                         columns[i].slice(1) + "s</option>"));
                 }
                 for (let j = 0; j < data.length; j++) {
                     select_el
-                        .append($("<option value=':" + columns[i] + " = " + data[j][columns[i] + "_id"] + "'>"
+                        .append($("<option value=':" + columns[i] + " " + data[j][columns[i] + "_id"] + "'>"
                             + data[j][columns[i] + "_name"] + "</option>"));
                 }
             });
@@ -206,18 +205,15 @@ $(function () {
                         },
                         complete: function (jqXHR, status) {
                             if (point_series.length === formCount) {
-                                console.log(point_series);
-                                if (value_type === ":type = 2 or :type = 3") {
+                                if (value_type[0] === ":type 2 or :type 3") {
                                     buildTrendViz(point_series);
                                 } else {
-                                    buildHeatmapViz(point_series);
+                                    buildHeatmapViz(point_series[0]);
                                 }
                             }
                         }
                     })
                 }
-
-
             });
         })
     })
