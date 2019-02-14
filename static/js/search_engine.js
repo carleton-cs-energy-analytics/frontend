@@ -17,7 +17,7 @@ function update_static(form_element) {
     let columns = ["tag", "type", "unit"];
     for (let i = 0; i < columns.length; i++) {
         console.log("Updating " + columns[i]);
-        $.getJSON("http://localhost:5000/api/" + columns[i] + "s",
+        $.getJSON("http://energycomps.its.carleton.edu:8080/api/" + columns[i] + "s",
             null,
             function (data, status, jqXHR) {
                 let select_el = form_element.find("select." + columns[i]);
@@ -31,7 +31,7 @@ function update_static(form_element) {
                 }
             });
     }
-    $.getJSON("http://localhost:5000/api/measurements",
+    $.getJSON("http://energycomps.its.carleton.edu:8080/api/measurements",
         null,
         function (data, status, jqXHR) {
             let select_el = form_element.find("select.measurement");
@@ -47,7 +47,7 @@ function update_static(form_element) {
 }
 
 function update_building(form_element) {
-    $.getJSON("http://localhost:5000/api/buildings",
+    $.getJSON("http://energycomps.its.carleton.edu:8080/api/buildings",
         null,
         function (data, status, jqXHR) {
             console.log(data);
@@ -67,7 +67,7 @@ function update_building(form_element) {
 function update_floor(form_element) {
     let query = build_query_string(form_element, ["building"]);
 
-    $.getJSON("http://localhost:5000/api/all_floors",
+    $.getJSON("http://energycomps.its.carleton.edu:8080/api/all_floors",
         null,
         function (data, status, jqXHR) {
             let floor_select = form_element.find("select.floor");
@@ -85,7 +85,7 @@ function update_floor(form_element) {
 function update_room(form_element) {
     let query = build_query_string(form_element, ["building", "floor"]);
 
-    $.getJSON("http://localhost:5000/api/rooms",
+    $.getJSON("http://energycomps.its.carleton.edu:8080/api/rooms",
         {search: query},
         function (data, status, jqXHR) {
             let room_select = form_element.find("select.room");
@@ -104,7 +104,7 @@ function update_room(form_element) {
 function update_device(form_element) {
     let query = build_query_string(form_element, ["building", "floor", "room"]);
 
-    $.getJSON("http://localhost:5000/api/devices",
+    $.getJSON("http://energycomps.its.carleton.edu:8080/api/devices",
         {search: query},
         function (data, status, jqXHR) {
             let device_select = form_element.find("select.device");
@@ -122,7 +122,7 @@ function update_device(form_element) {
 function update_point(form_element) {
     let query = build_query_string(form_element, ["building", "floor", "room", "device"]);
 
-    $.getJSON("http://localhost:5000/api/points",
+    $.getJSON("http://energycomps.its.carleton.edu:8080/api/points",
         {search: query},
         function (data, status, jqXHR) {
             let point_select = form_element.find("select.point");
@@ -178,13 +178,13 @@ $(function () {
         forms.each(function (index, form) {
             console.log("Ajax fired for: " + $(event.target));
             $.ajax({
-                url: 'http://localhost:5000/api/points/ids',
+                url: 'http://energycomps.its.carleton.edu:8080/api/points/ids',
                 dataType: 'json',
                 data: {search: build_query_string($(form))},
                 type: 'GET',
                 success: function (data, status, jqXHR) {
                     $.ajax({
-                        url: 'http://localhost:5000/api/values',
+                        url: 'http://energycomps.its.carleton.edu:8080/api/values',
                         dataType: 'json',
                         data: {
                             point_ids: data,
