@@ -152,7 +152,7 @@ div.legend {
 
 h1 {
     position: relative;
-    left: 325;
+    left: 5%;
 }
 
 .svg {
@@ -181,4 +181,10 @@ h1 {
     padding: 3px;
     white-space: normal;
     text-align: center;
+}
+
+#timepicker {
+    position: relative;
+    align-self: center;
+    left: 5%;
 }
