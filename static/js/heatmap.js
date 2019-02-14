@@ -95,7 +95,7 @@ function drawBoxes(data, colorScale, xScale, yScale, numPoints, dataByPoint) {
     let heatMap = svg.selectAll(".heatmap")
                 .data(data)
                 .enter().append("svg:rect")
-                .attr("x", function(d) { return xScale(d.timestamp); })
+                .attr("x", function(d) { return xScale(getTime(d.timestamp)); })
                 .attr("y", function(d) { return yScale(d.point_name); })
                 .attr("width", function(d) { return findBoxWidth(d, dataByPoint, xScale); }) // Need to find the next timestamp
                 .attr("height", function(d) { return (h - xOffset) / numPoints; })
@@ -110,13 +110,13 @@ function drawBoxes(data, colorScale, xScale, yScale, numPoints, dataByPoint) {
 
 function findBoxWidth(currentData, dataByPoint, xScale) {
     for (let i = 0; i < dataByPoint.length; i++) {
-        if (dataByPoint[i].key == currentData.point_name) {
+        if (dataByPoint[i].key === currentData.point_name) {
             for (let j = 0; j < dataByPoint[i].values.length; j++) {
-                if (dataByPoint[i].values[j].timestamp == currentData.timestamp && j + 1 < dataByPoint[i].values.length) {
+                if (dataByPoint[i].values[j].timestamp === currentData.timestamp && j + 1 < dataByPoint[i].values.length) {
                     console.log(xScale(dataByPoint[i].values[j + 1].timestamp) - xScale(currentData.timestamp));
-                    return xScale(dataByPoint[i].values[j + 1].timestamp) - xScale(currentData.timestamp)
-                } else if (dataByPoint[i].values[j].timestamp == currentData.timestamp) { // The last timestamp
-                    return w - xScale(currentData.timestamp);
+                    return xScale(getTime(dataByPoint[i].values[j + 1].timestamp)) - xScale(getTime(currentData.timestamp));
+                } else if (dataByPoint[i].values[j].timestamp === currentData.timestamp) { // The last timestamp
+                    return w - xScale(getTime(currentData.timestamp));
                 }
             }
         }
