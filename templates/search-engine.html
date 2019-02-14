@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<div>
+<div id="container">
     <form id="series-0" class="series">
         <select class="building" multiple>
         </select>
@@ -22,14 +22,14 @@
         <select class="measurement" multiple>
         </select>
     </form>
-    <input type="text" name="datetimes" id="daterange" />
 </div>
-<div class="row">
+<input type="text" name="datetimes" id="daterange"/>
+<div class="row col-md-10">
     <h1>Initial Line Graph</h1>
 
-    <div class="col-md-9 svg" id="linegraph"></div>
+    <div class="col-md-8 svg" id="linegraph"></div>
 
-    <div class="legend">
+    <div class="legend col-md-2">
         <div class="legend-title">Key</div>
         <ul class="bars">
             <li><span style="background:#b2746b"></span>First series</li>
