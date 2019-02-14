@@ -29,6 +29,10 @@
     <h1>Initial Line Graph</h1>
 
     <div class="col-md-9 svg" id="visualization"></div>
+    <label id="form" for="show-voronoi">
+        Show Voronoi
+        <input type="checkbox" id="show-voronoi" disabled>
+    </label>
 
     <div class="legend">
         <div class="legend-title">Key</div>
@@ -44,6 +48,7 @@
 <script type="text/javascript" src="../static/js/initialviz.js"></script>
 <script src="https://d3js.org/colorbrewer.v1.min.js"></script>
 <script src="../static/js/heatmap.js"></script>
+<script type="text/javascript" src="../static/js/initialviz.js"></script>
 <script type="text/javascript" src="../static/js/search_engine.js"></script>
 
 {% endblock %}

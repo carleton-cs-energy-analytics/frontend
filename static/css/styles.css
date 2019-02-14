@@ -155,6 +155,41 @@ h1 {
     left: 325;
 }
 
-.svg {
-    position: relative;
+/*
+ * Line Graph
+ */
+.axis--y path {
+    display: none;
+}
+
+.points {
+    fill: none;
+    stroke: #aaa;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    stroke-width: 1.5px;
+}
+
+.line--hover {
+    stroke: #000;
+}
+
+.focus text {
+    text-anchor: middle;
+    text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+}
+
+.voronoi path {
+    fill: none;
+    pointer-events: all;
+}
+
+.voronoi--show path {
+    stroke: red;
+    stroke-opacity: 0.2;
+}
+
+#form {
+    top: 20px;
+    right: 30px;
 }
