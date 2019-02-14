@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div>
+    <form id="series-0" class="series">
+        <select class="building" multiple>
+        </select>
+        <select class="floor" multiple>
+        </select>
+        <select class="room" multiple>
+        </select>
+        <select class="device" multiple>
+        </select>
+        <select class="point" multiple>
+        </select>
+        <select class="tag" multiple>
+        </select>
+        <select class="type" multiple>
+        </select>
+        <select class="unit" multiple>
+        </select>
+        <select class="measurement" multiple>
+        </select>
+    </form>
+    <input type="text" name="datetimes" id="daterange" />
+</div>
+<div class="row">
+    <h1>Initial Line Graph</h1>
+
+    <div class="col-md-9 svg" id="linegraph"></div>
+
+    <div class="legend">
+        <div class="legend-title">Key</div>
+        <ul class="bars">
+            <li><span style="background:#b2746b"></span>First series</li>
+            <li><span style="background:#7a91c1"></span>Second series</li>
+            <li><span style="background:#86b265"></span>Third series</li>
+        </ul>
+    </div>
+
+</div>
+
+
+<button id="submit-search-query">Search</button>
+
+<script type="text/javascript" src="../static/js/initialviz.js"></script>
+<script type="text/javascript" src="../static/js/search_engine.js"></script>
+{% endblock %}

@@ -4,67 +4,64 @@ $(document).on('click', '.point', function () {
     console.log($(this))
     var point_id = $(this).attr('id').split('_')[1];
     console.log(point_id);
-    visualize_point(point_id)
+    get_values(point_id)
 })
 
-function visualize_point(point_id) {
-    //get attribute data
-    var point_data  = get_point_data(point_id);
-    console.log("Point Data: " + point_data);
-    $('#point-data').append(point_data['point_name']);
-    //get value data
 
-    //visualize data
+function get_values(point_id) {
+    console.log('get_values()');
+    console.log(point_id);
+    var data = {
+        point_ids: [point_id],
+        start_time: 1548300800,
+        end_time: 1548568989
+  };
 
+   $.ajax(
+   {
+      url      : 'http://localhost:5000/api/values',
+      dataType : 'json',
+      data     :  data,
+      type     :  'GET',
+      success  : function(json)
+      {
+         console.log('Value Data: ')
+         console.log(json);
+         buildTrendViz(json);
+      }
+   });
 
 }
-
-function get_point_data(point_id) {
-    var url = api_base_url + "/points?search=*" + point_id;
-    console.log("Point Query URL: " + url);
-	xmlHttpRequest = new XMLHttpRequest();
-	xmlHttpRequest.open('get', url);
-
-	xmlHttpRequest.onreadystatechange = function() {
-		if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200) {
-			var responseText = JSON.parse(xmlHttpRequest.responseText);
-            console.log(responseText);
-            return responseText;
-        } else {
-            console.log("Error retrieving data. Ready State: " + xmlHttpRequest.readyState + " Status: " + xmlHttpRequest.status);
-        }
-    }
-    xmlHttpRequest.send(null);
-}
-
-
 
 function get_points() {
-    var url = api_base_url + $('#query').val();
+    console.log('get_points()')
+    var url = $('#query').val();
     console.log("Query URL: " + url);
-	xmlHttpRequest = new XMLHttpRequest();
-	xmlHttpRequest.open('get', url);
+    var data = {
+    search: url
+  };
 
-    //empty div
-    $("#results").empty();
+   $.ajax(
+   {
+      url      : 'http://localhost:5000/api/points',
+      dataType : 'json',
+      data     :  data,
+      type     :  'GET',
+      success  : function(json)
+      {
+         console.log('Points Data: ')
+         console.log(json);
+         print_points(json);
+      }
+   });
+}
 
-	xmlHttpRequest.onreadystatechange = function() {
-		if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200) {
-			var responseText = JSON.parse(xmlHttpRequest.responseText);
-            console.log(responseText);
-            for (var i = 0; i < responseText.length; i++){
-                var obj = responseText[i];
-                console.log(obj['point_id']);
-                var link = "<br><a class='point' id='point_" +obj['point_id']+"'>"+obj['point_name']+"</a>";
-                /*var pointGrp = $('<div />', {class:'pointGrp',
-                    html: link}).append($('<button>', {type:'button',
-                                           class:'btn btn-primary view-point',
-                                           text:'View Point'}));;*/
-                $('#results').append(link);
-            }
-        } else {
-            console.log("Error retrieving data. Ready State: " + xmlHttpRequest.readyState + " Status: " + xmlHttpRequest.status);
-        }
+function print_points(json) {
+    for (var i = 0; i < json.length; i++) {
+        var obj = json[i];
+        console.log(obj['point_id']);
+        var link = "<br><a class='point' id='point_" + obj['point_id'] + "'>" + obj['point_name'] + "</a>";
+        $('#results').append(link);
     }
-    xmlHttpRequest.send(null);
+
 }

@@ -12,10 +12,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- Latest compiled JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <!-- js for vis -->
-    <!-- <script type="text/javascript" src="../static/js/initialviz.js"></script> -->
-
 </head>
+
 <body>
 <div class="container-fluid">
     <div class="row">
@@ -86,97 +84,13 @@
                 </ul>
             </div>
         </nav>
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-            <h1 style="text-align:center;"> Trend Dashboard </h1>
-            <hr>
-            <div class="row">
-                <div id="series-block">
-                    <div class="form-row series input-group col-md-9" id="series-0">
-                        <div id="series0-line-0" class="form-group row line">
-                            <div class="col-md-2">
-                                <select id="series-0-argType-0" class="argType form-control">
-                                    <option value="" selected disabled hidden>Choose Type</option>
-                                    <option value="building">building</option>
-                                    <option value="device">device</option>
-                                    <option value="floor">floor</option>
-                                    <option value="room">room</option>
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <select id="series-0-argValue-0" class="argValue form-control">
-                                </select>
-                            </div>
-                            <div class="col-md-1">
-                                <button type="button" class="btn btn-primary addLineBtn" id="series-0.btn">Add New Line
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="form-row col-md-9">
-                    <button type="button" onclick="get_points()" name="button" class="btn btn-primary form-control"
-                            style="width:75px">Search
-                    </button>
-                </div>
-            </div>
-            <div class="row">
-                <h1>Initial Line Graph</h1>
-
-                <div class="col-md-9 svg" id="linegraph"></div>
-
-
-                <div class="legend">
-                    <div class="legend-title">Key</div>
-                    <ul class="bars">
-                        <li><span style="background:#b2746b"></span>First series</li>
-                        <li><span style="background:#7a91c1"></span>Second series</li>
-                        <li><span style="background:#86b265"></span>Third series</li>
-                    </ul>
-                </div>
-
-            </div>
-
-        </main>
+        <div class="col-md-10">
+            {% block body %}{% endblock %}
+        </div>
     </div>
 </div>
 
-    <script type="text/javascript" src="../static/js/initialviz.js"></script>
-    <script src="../static/js/trend.js"></script>
+<script type="text/javascript" src="../static/js/initialviz.js"></script>
+<script src="../static/js/trend.js"></script>
 </body>
 </html>
-
-<!-- <div class="form-row series input-group col-md-9" id="series0">
-    <div class="form-group col-md-2">
-        <select class="building form-control">
-            <option value="@2">Evans</option>
-            <option value="@0">Unknown</option>
-        </select>
-    </div>
-    <div class="form-group col-md-2">
-        <select class="device form-control">
-            <option value="all">All Devices</option>
-            <option value="@0">Unknown</option>
-        </select>
-    </div>
-    <div class="form-group col-md-2">
-        <select class="floor form-control">
-            <option value="all">All Floors</option>
-            <option value="1">First</option>
-            <option value="2">Second</option>
-            <option value="3">Third</option>
-            <option value="4">Fourth</option>
-        </select>
-    </div>
-    <div class="form-group col-md-2">
-        <select class="room form-control">
-            <option value="all">All Rooms</option>
-            <option value="@0">Unknown</option>
-        </select>
-    </div>
-    <div class="form-group col-md-1">
-        <button type="button" class="btn btn-primary" id="addSeriesBtn">Add Series</button>
-    </div>
-</div>
-</div> -->

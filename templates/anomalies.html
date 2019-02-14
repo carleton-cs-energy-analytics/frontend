@@ -5,6 +5,7 @@
     <title>title</title>
     <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="../static/js/trend.js"></script>
     <link rel="stylesheet" href="../static/css/styles.css">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -96,10 +97,26 @@
                             <div class="col-md-2">
                                 <select id="series-0-argType-0" class="argType form-control">
                                     <option value="" selected disabled hidden>Choose Type</option>
-                                    <option value="building">building</option>
-                                    <option value="device">device</option>
-                                    <option value="floor">floor</option>
-                                    <option value="room">room</option>
+                                    <optgroup label="operators">
+                                        <option value="and">and</option>
+                                        <option value="or">or</option>
+                                        <option value="not">not</option>
+                                        <option value="(">(</option>
+                                        <option value=")">)</option>
+                                    </optgroup>
+                                    <optgroup label="foobar">
+                                        <option value="building">building</option>
+                                        <option value="device">device</option>
+                                        <option value="room">room</option>
+                                        <option value="tag">tag</option>
+                                        <option value="floor">floor</option>
+                                        <option value="unit">unit</option>
+                                        <option value="type">type</option>
+                                        <option value="measurement">measurement</option>
+                                    </optgroup>
+
+
+
                                 </select>
                             </div>
                             <div class="col-md-2">
@@ -125,7 +142,7 @@
                 <h1>Initial Line Graph</h1>
 
                 <div class="col-md-9 svg" id="linegraph"></div>
-
+                <script type="text/javascript" src="../static/js/initialviz.js"></script>
 
                 <div class="legend">
                     <div class="legend-title">Key</div>
@@ -141,42 +158,5 @@
         </main>
     </div>
 </div>
-
-    <script type="text/javascript" src="../static/js/initialviz.js"></script>
-    <script src="../static/js/trend.js"></script>
 </body>
 </html>
-
-<!-- <div class="form-row series input-group col-md-9" id="series0">
-    <div class="form-group col-md-2">
-        <select class="building form-control">
-            <option value="@2">Evans</option>
-            <option value="@0">Unknown</option>
-        </select>
-    </div>
-    <div class="form-group col-md-2">
-        <select class="device form-control">
-            <option value="all">All Devices</option>
-            <option value="@0">Unknown</option>
-        </select>
-    </div>
-    <div class="form-group col-md-2">
-        <select class="floor form-control">
-            <option value="all">All Floors</option>
-            <option value="1">First</option>
-            <option value="2">Second</option>
-            <option value="3">Third</option>
-            <option value="4">Fourth</option>
-        </select>
-    </div>
-    <div class="form-group col-md-2">
-        <select class="room form-control">
-            <option value="all">All Rooms</option>
-            <option value="@0">Unknown</option>
-        </select>
-    </div>
-    <div class="form-group col-md-1">
-        <button type="button" class="btn btn-primary" id="addSeriesBtn">Add Series</button>
-    </div>
-</div>
-</div> -->

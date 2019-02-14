@@ -39,18 +39,18 @@ function drawAxis(xScale, yScale) {
                .scale(xScale)
                .orient('bottom')
                .ticks(5);
-    
+
     xAxisG = svg.append('g')
                .attr('class', 'axis')
                .attr('transform', 'translate(0,' + (h - xOffset) + ')')
                .call(xAxis)
-    
+
     xLabel = svg.append('text')
               .attr('class','label')
               .attr('x', w/2)
               .attr('y', h - 5)
               .text('Timestamp');
-    
+
     yAxis = d3.svg.axis()
               .scale(yScale)
               .orient('left')
@@ -60,7 +60,7 @@ function drawAxis(xScale, yScale) {
               .attr('class', 'axis')
               .attr('transform', 'translate(' + yOffset + ',0)')
               .call(yAxis)
-      
+
     yLabel = svg.append('text')
               .attr('class','label')
               .attr('x', yOffset/2)
@@ -124,7 +124,9 @@ function showTooltip(d) {
 
 // gets the color for a given line
 function getStroke(d) {
-    return colors[d.key];
+    console.log(d.key, 'd.key');
+    // return colors[d.key];
+    return 'Black';
 }
 
 
@@ -184,17 +186,33 @@ function bringBackColor(selectedLineData) {
 
 
 // loads csv data and calls create axes and create line functions
-d3.json('dummy-json-values.json', function(jsonData) {
-    var data = jsonData;
-    
+function buildTrendViz(jsonData) {
+    var data = jsonData[0];
+
     scales = getScales(data);
     xScale = scales[0];
     yScale = scales[1];
-    
+
     dataByPoint = d3.nest()
-        .key(function(d) { return d.value_id; })
+        .key(function(d) { return d.point_name; })
         .entries(data);
-    
+    console.log('dataByPoint', dataByPoint);
     drawLines(dataByPoint, xScale, yScale);
     drawAxis(xScale, yScale);
-});
+
+}
+
+/*d3.json('/static/js/dummy-json-values.json', function(jsonData) {
+    var data = jsonData;
+
+    scales = getScales(data);
+    xScale = scales[0];
+    yScale = scales[1];
+
+    dataByPoint = d3.nest()
+        .key(function(d) { return d.point_name; })
+        .entries(data);
+    console.log('dataByPoint', dataByPoint);
+    drawLines(dataByPoint, xScale, yScale);
+    drawAxis(xScale, yScale);
+});*/
