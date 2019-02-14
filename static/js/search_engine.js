@@ -22,11 +22,15 @@ function update_static(form_element) {
             function (data, status, jqXHR) {
                 let select_el = form_element.find("select." + columns[i]);
                 select_el.empty();
-                select_el.append($("<option>All " + columns[i].charAt(0).toUpperCase() +
-                    columns[i].slice(1) + "s</option>"));
+                if (columns[i] === "type") {
+                    select_el.append($("<option value=':type = 2 or :type = 3'>Numeric</option>"));
+                } else {
+                    select_el.append($("<option>All " + columns[i].charAt(0).toUpperCase() +
+                        columns[i].slice(1) + "s</option>"));
+                }
                 for (let j = 0; j < data.length; j++) {
                     select_el
-                        .append($("<option value='@" + data[j][columns[i] + "_id"] + "'>"
+                        .append($("<option value=':" + columns[i] + " = " + data[j][columns[i] + "_id"] + "'>"
                             + data[j][columns[i] + "_name"] + "</option>"));
                 }
             });
@@ -172,11 +176,13 @@ $(function () {
         let forms = $("form.series");
         let formCount = forms.length;
         let drp = $('#daterange').data('daterangepicker');
-        let startDate = drp.startDate._d.valueOf()/1000;
-        let endDate = drp.endDate._d.valueOf()/1000;
+        let startDate = drp.startDate._d.valueOf() / 1000;
+        let endDate = drp.endDate._d.valueOf() / 1000;
 
         forms.each(function (index, form) {
             console.log("Ajax fired for: " + $(event.target));
+            let value_type = $(form).find("select.type").val();
+            console.log(value_type);
             $.ajax({
                 url: 'http://localhost:5000/api/points/ids',
                 dataType: 'json',
@@ -201,7 +207,11 @@ $(function () {
                         complete: function (jqXHR, status) {
                             if (point_series.length === formCount) {
                                 console.log(point_series);
-                                buildTrendViz(point_series)
+                                if (value_type === ":type = 2 or :type = 3") {
+                                    buildTrendViz(point_series);
+                                } else {
+                                    buildHeatmapViz(point_series);
+                                }
                             }
                         }
                     })

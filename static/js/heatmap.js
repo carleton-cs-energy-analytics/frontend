@@ -37,7 +37,6 @@ function getTime(unixTimestamp) {
     var min = a.getMinutes();
     var sec = a.getSeconds();
     var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
-    console.log(time)
     return a;
 }
 
@@ -145,15 +144,8 @@ function showTooltip(d) {
 }
 
 
-// gets the color for a given line
-function getStroke(d) {
-    return colors[d.key];
-}
-
 // loads csv data and calls create axes and create line functions
-d3.json('dummy-enums.json', function(jsonData) {
-    let data = jsonData;
-
+function buildHeatmapViz(data) {
     let dataByPoint = d3.nest()
                    .key(function(d) { return d.point_name; })
                    .sortKeys(d3.ascending)
