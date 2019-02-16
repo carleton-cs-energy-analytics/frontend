@@ -28,9 +28,15 @@ function update_static(form_element) {
                         columns[i].slice(1) + "s</option>"));
                 }
                 for (let j = 0; j < data.length; j++) {
-                    select_el
-                        .append($("<option value=':" + columns[i] + " " + data[j][columns[i] + "_id"] + "'>"
-                            + data[j][columns[i] + "_name"] + "</option>"));
+                    if (columns[i] === "tag") {
+                        select_el
+                            .append($("<option value='#" + data[j][columns[i] + "_id"] + "'>"
+                                + data[j][columns[i] + "_name"] + "</option>"));
+                    } else {
+                        select_el
+                            .append($("<option value=':" + columns[i] + " " + data[j][columns[i] + "_id"] + "'>"
+                                + data[j][columns[i] + "_name"] + "</option>"));
+                    }
                 }
             });
     }
