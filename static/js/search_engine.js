@@ -16,7 +16,7 @@ function update_static(form_element) {
     let columns = ["tag", "type", "unit"];
     for (let i = 0; i < columns.length; i++) {
         console.log("Updating " + columns[i]);
-        $.getJSON("http://localhost:5000/api/" + columns[i] + "s",
+        $.getJSON(BACKEND_URL + columns[i] + "s",
             null,
             function (data, status, jqXHR) {
                 let select_el = form_element.find("select." + columns[i]);
@@ -34,7 +34,7 @@ function update_static(form_element) {
                 }
             });
     }
-    $.getJSON("http://localhost:5000/api/measurements",
+    $.getJSON(BACKEND_URL + "measurements",
         null,
         function (data, status, jqXHR) {
             let select_el = form_element.find("select.measurement");
@@ -50,7 +50,7 @@ function update_static(form_element) {
 }
 
 function update_building(form_element) {
-    $.getJSON("http://localhost:5000/api/buildings",
+    $.getJSON(BACKEND_URL + "buildings",
         null,
         function (data, status, jqXHR) {
             console.log(data);
@@ -70,7 +70,7 @@ function update_building(form_element) {
 function update_floor(form_element) {
     let query = build_query_string(form_element, ["building"]);
 
-    $.getJSON("http://localhost:5000/api/all_floors",
+    $.getJSON(BACKEND_URL + "all_floors",
         null,
         function (data, status, jqXHR) {
             let floor_select = form_element.find("select.floor");
@@ -88,7 +88,7 @@ function update_floor(form_element) {
 function update_room(form_element) {
     let query = build_query_string(form_element, ["building", "floor"]);
 
-    $.getJSON("http://localhost:5000/api/rooms",
+    $.getJSON(BACKEND_URL + "rooms",
         {search: query},
         function (data, status, jqXHR) {
             let room_select = form_element.find("select.room");
@@ -107,7 +107,7 @@ function update_room(form_element) {
 function update_device(form_element) {
     let query = build_query_string(form_element, ["building", "floor", "room"]);
 
-    $.getJSON("http://localhost:5000/api/devices",
+    $.getJSON(BACKEND_URL + "devices",
         {search: query},
         function (data, status, jqXHR) {
             let device_select = form_element.find("select.device");
@@ -125,7 +125,7 @@ function update_device(form_element) {
 function update_point(form_element) {
     let query = build_query_string(form_element, ["building", "floor", "room", "device"]);
 
-    $.getJSON("http://localhost:5000/api/points",
+    $.getJSON(BACKEND_URL + "points",
         {search: query},
         function (data, status, jqXHR) {
             let point_select = form_element.find("select.point");
@@ -183,13 +183,13 @@ $(function () {
             let value_type = $(form).find("select.type").val();
             console.log(value_type);
             $.ajax({
-                url: 'http://localhost:5000/api/points/ids',
+                url: BACKEND_URL + 'points/ids',
                 dataType: 'json',
                 data: {search: build_query_string($(form))},
                 type: 'GET',
                 success: function (data, status, jqXHR) {
                     $.ajax({
-                        url: 'http://localhost:5000/api/values',
+                        url: BACKEND_URL + 'values',
                         dataType: 'json',
                         data: {
                             point_ids: data,
