@@ -42,7 +42,7 @@ function update_static(form_element) {
             select_el.append($("<option>All Measurements</option>"));
             for (let j = 0; j < data.length; j++) {
                 select_el
-                    .append($("<option value=':measurement = &quot;" + data[j] + "&quot;'>"
+                    .append($("<option value=':measurement &#39;" + data[j] + "&#39;'>"
                         + data[j] + "   </option>"));
 
             }
@@ -140,6 +140,27 @@ function update_point(form_element) {
 
 }
 
+function update_verification_text(form_element) {
+    $.ajax({
+        url: BACKEND_URL + 'points/verify',
+        dataType: 'json',
+        data: {search: build_query_string($(form_element))},
+        type: 'GET',
+        success: function (data, status, jqXHR) {
+            if (Array.isArray(data)) {
+                let sum = 0;
+                for (let i = 0; i < data.length; i++) {
+                    sum += data[i]["count"];
+                }
+                $(form_element).find('p.verification-text').html(sum + " points found");
+
+            } else {
+                $(form_element).find('p.verification-text').html(data);
+            }
+        }
+    });
+}
+
 $(function () {
     update_building($("#series-0"));
     update_static($("#series-0"));
@@ -167,6 +188,11 @@ $(function () {
         locale: {
             format: 'M/DD hh:mm A'
         }
+    });
+
+    $("select").on("change", function (event) {
+        let series = $(event.target).parent();
+        update_verification_text(series);
     });
 
     $("#submit-search-query").on("click", function (event) {
