@@ -10,18 +10,18 @@ var svg = d3.select("#visualization").append("svg")
 
 
 function getScales(data, numPoints, numValues) {
-    let colorScale = d3.scale.ordinal()
+    let colorScale = d3.scaleOrdinal()
                 .domain(data.map(function(d) { return d.value; }))
                 .range(colorbrewer.Set3[numValues + 1]);
 
-    let xScale = d3.time.scale()
+    let xScale = d3.scaleTime()
 				.domain([getTime(d3.min(data, function(d) { return parseFloat(d.timestamp); })),
 						 getTime(d3.max(data, function(d) { return parseFloat(d.timestamp); }))])
 				.range([yOffset + margin, w - margin]);
 
-    let yScale = d3.scale.ordinal()
+    let yScale = d3.scaleBand()
                 .domain(data.map(function(d) { return d.point_name; }))
-                .rangeRoundBands([margin, h - xOffset - margin], 0, -.075);
+                .rangeRound([margin, h - xOffset - margin], 0, -.075);
 				// .range(getYRange(numPoints));
 
     return [colorScale, xScale, yScale];
@@ -57,9 +57,8 @@ function getYRange(numPoints) {
 
 // draws the axis for each year
 function drawAxis(xScale, yScale, numPoints) {
-    let xAxis = d3.svg.axis()
+    let xAxis = d3.axisBottom(xScale)
                .scale(xScale)
-               .orient('bottom')
                .ticks(5);
 
     let xAxisG = svg.append('g')
@@ -73,9 +72,8 @@ function drawAxis(xScale, yScale, numPoints) {
               .attr('y', h)
               .text('Timestamp');
 
-    let yAxis = d3.svg.axis()
+    let yAxis = d3.axisLeft(yScale)
               .scale(yScale)
-              .orient('left')
               .ticks(numPoints + 1);
 
     let yAxisG = svg.append('g')
