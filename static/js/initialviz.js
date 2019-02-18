@@ -66,6 +66,8 @@ function buildTrendViz(data) {
         .key(function (d) {
             return d.point_name;
         })
+        .sortKeys(d3.ascending)
+        .sortValues(function(a,b) { return parseFloat(a.timestamp) - parseFloat(b.timestamp); })
         .entries(data);
 
 
