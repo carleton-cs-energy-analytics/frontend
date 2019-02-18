@@ -238,8 +238,10 @@ $(function () {
                         complete: function (jqXHR, status) {
                             if (point_series.length === formCount) {
                                 if (value_type[0] === ":type 2 or :type 3") {
+                                    d3.selectAll('svg').remove();
                                     buildTrendViz(point_series);
                                 } else {
+                                    d3.selectAll('svg').remove();
                                     buildHeatmapViz(point_series[0]);
                                 }
                             }

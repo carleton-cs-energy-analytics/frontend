@@ -3,61 +3,61 @@
 // Author: Ethan Cassel-Mace & Eva Grench
 // Date: 2/11/2019
 
-var w = 960,			// Width of our visualization (hacky)
-    h = 500;            // Height of our visualization (hacky)
-
-var svg = d3.select('#visualization')
-    .append('svg:svg')
-    .attr('width', w)
-    .attr('height', h);
-var margin = {top: 20, right: 30, bottom: 30, left: 40},
-    width = svg.attr("width") - margin.left - margin.right,
-    height = svg.attr("height") - margin.top - margin.bottom,
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-console.log('svg', svg)
-console.log('width', svg.attr('width'));
-var xScale = d3.scaleLinear() // @TODO: used to be d3.scaleTime. look into this when switching back to time.
-    .range([0, width]);
-
-var yScale = d3.scaleLinear()
-    .range([height, 0]);
-
-var voronoi = d3.voronoi()
-    .x(function (d) {
-        return xScale(d.timestamp);
-    })
-    .y(function (d) {
-        return yScale(d.value);
-    })
-    .extent([[-margin.left, -margin.top], [width + margin.right, height + margin.bottom]]);
-
-var line = d3.line()
-    .x(function (d) {
-        return xScale(d.timestamp);
-    })
-    .y(function (d) {
-        return yScale(d.value);
-    });
-
-function updateScales(data) {
-    xScale.domain([d3.min(data, function (d) {
-        return parseFloat(d.timestamp);
-    }) - 1,
-        d3.max(data, function (d) {
-            return parseFloat(d.timestamp);
-        }) + 1]);
-
-
-    yScale.domain([d3.min(data, function (d) {
-        return parseFloat(d.value);
-    }) - 1,
-        d3.max(data, function (d) {
-            return parseFloat(d.value);
-        }) + 1]);
-}
 
 function buildTrendViz(data) {
+    var w = 960,			// Width of our visualization (hacky)
+        h = 500;            // Height of our visualization (hacky)
+
+    var svg = d3.select('#visualization')
+        .append('svg')
+        .attr('width', w)
+        .attr('height', h);
+    console.log('svg', svg)
+    var margin = {top: 20, right: 30, bottom: 30, left: 40},
+        width = svg.attr("width") - margin.left - margin.right,
+        height = svg.attr("height") - margin.top - margin.bottom,
+        g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var xScale = d3.scaleLinear() // @TODO: used to be d3.scaleTime. look into this when switching back to time.
+        .range([0, width]);
+
+    var yScale = d3.scaleLinear()
+        .range([height, 0]);
+
+    var voronoi = d3.voronoi()
+        .x(function (d) {
+            return xScale(d.timestamp);
+        })
+        .y(function (d) {
+            return yScale(d.value);
+        })
+        .extent([[-margin.left, -margin.top], [width + margin.right, height + margin.bottom]]);
+
+    var line = d3.line()
+        .x(function (d) {
+            return xScale(d.timestamp);
+        })
+        .y(function (d) {
+            return yScale(d.value);
+        });
+
+    function updateScales(data) {
+        xScale.domain([d3.min(data, function (d) {
+            return parseFloat(d.timestamp);
+        }) - 1,
+            d3.max(data, function (d) {
+                return parseFloat(d.timestamp);
+            }) + 1]);
+
+
+        yScale.domain([d3.min(data, function (d) {
+            return parseFloat(d.value);
+        }) - 1,
+            d3.max(data, function (d) {
+                return parseFloat(d.value);
+            }) + 1]);
+    }
+
     data = data[0]; //@TODO temporary to deal with nested data
     console.log('data', data)
     updateScales(data);
@@ -67,7 +67,9 @@ function buildTrendViz(data) {
             return d.point_name;
         })
         .sortKeys(d3.ascending)
-        .sortValues(function(a,b) { return parseFloat(a.timestamp) - parseFloat(b.timestamp); })
+        .sortValues(function (a, b) {
+            return parseFloat(a.timestamp) - parseFloat(b.timestamp);
+        })
         .entries(data);
 
 
