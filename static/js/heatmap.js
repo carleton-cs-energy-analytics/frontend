@@ -1,18 +1,26 @@
-var h = 700;
-var w = 1200;
-var xOffset = 40;		// Space for x-axis labels
-var yOffset = 100;		// Space for y-axis labels
-var margin = 10;		// Margin around visualization
+let h = 700;
+let w = 1200;
+let xOffset = 40;		// Space for x-axis labels
+let yOffset = 100;		// Space for y-axis labels
+let margin = 10;		// Margin around visualization
 
-var svg = d3.select("#visualization").append("svg")
+let svg = d3.select("#visualization").append("svg")
     .attr("height", h)
     .attr("width", w);
 
 
 function getScales(data, numPoints, numValues) {
-    let colorScale = d3.scaleOrdinal()
+    let colorScale;
+
+    if (numValues <= 2) {
+         colorScale = d3.scaleOrdinal()
                 .domain(data.map(function(d) { return d.value; }))
-                .range(colorbrewer.Set3[numValues + 1]);
+                .range(['#fcee50', '#a78be0']);
+    } else {
+        colorScale = d3.scaleOrdinal()
+                .domain(data.map(function(d) { return d.value; }))
+                .range(colorbrewer.Set3[numValues]);
+    }
 
     let xScale = d3.scaleTime()
 				.domain([getTime(d3.min(data, function(d) { return parseFloat(d.timestamp); })),
@@ -22,36 +30,12 @@ function getScales(data, numPoints, numValues) {
     let yScale = d3.scaleBand()
                 .domain(data.map(function(d) { return d.point_name; }))
                 .rangeRound([margin, h - xOffset - margin], 0, -.075);
-				// .range(getYRange(numPoints));
 
     return [colorScale, xScale, yScale];
 }
 
 function getTime(unixTimestamp) {
-    var a = new Date(unixTimestamp * 1000);
-    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-    var year = a.getFullYear();
-    var month = months[a.getMonth()];
-    var date = a.getDate();
-    var hour = a.getHours();
-    var min = a.getMinutes();
-    var sec = a.getSeconds();
-    var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec;
-    return a;
-}
-
-
-function getYRange(numPoints) {
-    let range = [];
-    let startVal = h - xOffset - margin;
-    range.push(startVal);
-    let numToAdd = (startVal - margin) / (numPoints - 1);
-    for (let i = 1; i < numPoints - 1; i++) {
-        range.push(range[i - 1] - numToAdd)
-    }
-    range.push(margin);
-
-    return range;
+    return new Date(unixTimestamp * 1000);
 }
 
 
@@ -95,7 +79,7 @@ function drawBoxes(data, colorScale, xScale, yScale, numPoints, dataByPoint) {
                 .enter().append("svg:rect")
                 .attr("x", function(d) { return xScale(getTime(d.timestamp)); })
                 .attr("y", function(d) { return yScale(d.point_name); })
-                .attr("width", function(d) { return findBoxWidth(d, dataByPoint, xScale); }) // Need to find the next timestamp
+                .attr("width", function(d) { return findBoxWidth(d, dataByPoint, xScale); })
                 .attr("height", function(d) { return (h - xOffset) / numPoints; })
                 .style("fill", function(d) { return colorScale(d.value); })
                 .on('mouseover', function(d) {
