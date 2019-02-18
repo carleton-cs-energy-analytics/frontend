@@ -1,8 +1,5 @@
-import sys
 import os
 import flask
-import json
-import psycopg2
 
 BACKEND_URL = os.environ.get('BACKEND_URL') or 'http://energycomps.its.carleton.edu:8080/api/'
 
