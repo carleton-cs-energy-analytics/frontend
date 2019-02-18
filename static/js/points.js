@@ -19,7 +19,7 @@ function get_values(point_id) {
 
    $.ajax(
    {
-      url      : 'http://localhost:5000/api/values',
+       url: 'http://energycomps.its.carleton.edu:8080/api/values',
       dataType : 'json',
       data     :  data,
       type     :  'GET',
@@ -43,7 +43,7 @@ function get_points() {
 
    $.ajax(
    {
-      url      : 'http://localhost:5000/api/points',
+       url: 'http://energycomps.its.carleton.edu:8080/api/points',
       dataType : 'json',
       data     :  data,
       type     :  'GET',

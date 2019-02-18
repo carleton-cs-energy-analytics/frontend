@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<div>
+<div id="container">
     <form id="series-0" class="series">
         <select class="building" multiple>
         </select>
@@ -23,16 +23,17 @@
         </select>
         <p class="verification-text"> </p>
     </form>
+</div>
+<div id="timepicker">
     <input type="text" name="datetimes" id="daterange"/>
     <button id="submit-search-query">Search</button>
-
 </div>
-<div class="row">
+
+<div class="row col-md-10">
     <h1>Visualization</h1>
-
-    <div class="col-md-9 svg" id="visualization"></div>
-
-    <div class="legend">
+    <div class="col-md-8 svg" id="visualization"></div>
+    
+    <div class="legend col-md-2">
         <div class="legend-title">Key</div>
         <ul class="bars">
             <li><span style="background:#b2746b"></span>First series</li>

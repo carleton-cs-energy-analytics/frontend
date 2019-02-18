@@ -152,9 +152,39 @@ div.legend {
 
 h1 {
     position: relative;
-    left: 325;
+    left: 5%;
 }
 
 .svg {
     position: relative;
+}
+
+#container {
+    position: relative;
+    height: 9em;
+    width: 90%;
+    margin: 20px auto;
+    background: #f8f9fa;
+    text-align: left;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    vertical-align: middle;
+}
+
+#container select {
+    display: inline-block;
+    width: 14em;
+    height: 6em;
+    margin: 0.5em;
+    border: 1px solid #A9A9A9;
+    padding: 3px;
+    white-space: normal;
+    text-align: center;
+}
+
+#timepicker {
+    position: relative;
+    align-self: center;
+    left: 5%;
 }
