@@ -18,7 +18,12 @@ function buildTrendViz(data) {
         height = svg.attr("height") - margin.top - margin.bottom,
         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    var xScale = d3.scaleLinear() // @TODO: used to be d3.scaleTime. look into this when switching back to time.
+    // var xScale = d3.scaleLinear() // @TODO: used to be d3.scaleTime. look into this when switching back to time.
+    //     .range([0, width]);
+
+    var xScale = d3.scaleTime()
+        .domain([getTime(d3.min(data, function (d) { return d.timestamp; })),
+                getTime(d3.max(data, function (d) { return d.timestamp; }))])
         .range([0, width]);
 
     var yScale = d3.scaleLinear()
@@ -26,7 +31,7 @@ function buildTrendViz(data) {
 
     var voronoi = d3.voronoi()
         .x(function (d) {
-            return xScale(d.timestamp);
+            return xScale(getTime(d.timestamp));
         })
         .y(function (d) {
             return yScale(d.value);
@@ -35,19 +40,19 @@ function buildTrendViz(data) {
 
     var line = d3.line()
         .x(function (d) {
-            return xScale(d.timestamp);
+            return xScale(getTime(d.timestamp));
         })
         .y(function (d) {
             return yScale(d.value);
         });
 
     function updateScales(data) {
-        xScale.domain([d3.min(data, function (d) {
-            return parseFloat(d.timestamp);
-        }) - 1,
-            d3.max(data, function (d) {
-                return parseFloat(d.timestamp);
-            }) + 1]);
+        xScale.domain([getTime(d3.min(data, function (d) {
+            return d.timestamp;
+        }) - 1),
+            getTime(d3.max(data, function (d) {
+                return d.timestamp;
+            }) + 1)]);
 
 
         yScale.domain([d3.min(data, function (d) {
@@ -68,7 +73,7 @@ function buildTrendViz(data) {
         })
         .sortKeys(d3.ascending)
         .sortValues(function (a, b) {
-            return parseFloat(a.timestamp) - parseFloat(b.timestamp);
+            return a.timestamp - b.timestamp;
         })
         .entries(data);
 
@@ -146,7 +151,7 @@ function buildTrendViz(data) {
     function mouseover(d) {
         d3.select(d.data.line).classed("line--hover", true);
         d.data.line.parentNode.appendChild(d.data.line);
-        focus.attr("transform", "translate(" + xScale(d.data.timestamp) + "," + yScale(d.data.value) + ")");
+        focus.attr("transform", "translate(" + xScale(getTime(d.data.timestamp)) + "," + yScale(d.data.value) + ")");
         focus.select("text").text(d.data.point_name + '\n' + d.data.value);
 
     }
@@ -155,4 +160,8 @@ function buildTrendViz(data) {
         d3.select(d.data.line).classed("line--hover", false);
         focus.attr("transform", "translate(-100,-100)");
     }
-};
+
+    function getTime(unixTimestamp) {
+        return new Date(unixTimestamp * 1000);
+    }
+}
