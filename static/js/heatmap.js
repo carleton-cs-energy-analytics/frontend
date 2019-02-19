@@ -51,6 +51,22 @@ function buildHeatmapViz(data) {
         return new Date(unixTimestamp * 1000);
     }
 
+    function getPrettyTime(unixTimestamp) {
+        date = new Date(unixTimestamp * 1000);
+        let day = date.getDate();
+        let month = date.getMonth() + 1;
+        let year = date.getFullYear() % 2000;
+        let minute = date.getMinutes();
+        let hour = date.getHours();
+        if (minute < 10) {
+            minute = '0' + minute;
+        }
+        if (hour < 10) {
+            hour = '0' + hour;
+        }
+        return hour + ':' + minute + ',   ' + month + '/' + day + '/' + year;
+    }
+
 
 // draws the axis for each year
     function drawAxis(xScale, yScale, numPoints) {
@@ -85,7 +101,8 @@ function buildHeatmapViz(data) {
         // displays the state when a line is hovered over
         tooltip = d3.select('body').append('div')
             .attr('class', 'tooltip')
-            .style('opacity', 0);
+            .style('opacity', 0)
+            .style('text-align', 'center');
 
         let heatMap = svg.selectAll(".visualization")
             .data(data)
@@ -142,7 +159,7 @@ function buildHeatmapViz(data) {
             .duration(200)
             .style('opacity', .9); // makes it visible
 
-        tooltip.html('<p>' + d.point_name + '<br>' + d.value + '</p>') // shows the point name and value
+        tooltip.html('<p>' + d.point_name + '<br>' + d.value + '<br>' + getPrettyTime(d.timestamp) + '</p>') // shows the point name, value, and time
             .style('left', (d3.event.pageX) + 'px')
             .style('top', (d3.event.pageY - 28) + 'px');
     }
