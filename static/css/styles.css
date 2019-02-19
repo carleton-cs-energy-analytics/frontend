@@ -223,3 +223,11 @@ h1 {
     align-self: center;
     left: 5%;
 }
+
+/* This is a little hacky but works */
+p.verification-text {
+    position: sticky;
+    left: 0;
+    padding-left: 10px;
+    width: 0;
+}
