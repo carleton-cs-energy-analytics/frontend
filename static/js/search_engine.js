@@ -24,7 +24,7 @@ function update_static(form_element) {
                 if (columns[i] === "type") {
                     select_el.append($("<option value=':type 2 or :type 3' selected>Numeric</option>"));
                 } else {
-                    select_el.append($("<option>All " + columns[i].charAt(0).toUpperCase() +
+                    select_el.append($("<option value=''>All " + columns[i].charAt(0).toUpperCase() +
                         columns[i].slice(1) + "s</option>"));
                 }
                 for (let j = 0; j < data.length; j++) {
@@ -45,7 +45,7 @@ function update_static(form_element) {
         function (data, status, jqXHR) {
             let select_el = form_element.find("select.measurement");
             select_el.empty();
-            select_el.append($("<option>All Measurements</option>"));
+            select_el.append($("<option value=''>All Measurements</option>"));
             for (let j = 0; j < data.length; j++) {
                 select_el
                     .append($("<option value=':measurement &#39;" + data[j] + "&#39;'>"
