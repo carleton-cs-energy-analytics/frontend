@@ -20,7 +20,7 @@ function buildHeatmapViz(data) {
                 .domain(data.map(function (d) {
                     return d.value;
                 }))
-                .range(['#fcee50', '#a78be0']);
+                .range(["rgb(180,221,212)", "rgb(38,73,109)"]);
         } else {
             colorScale = d3.scaleOrdinal()
                 .domain(data.map(function (d) {
@@ -60,7 +60,7 @@ function buildHeatmapViz(data) {
 
         let xAxisG = svg.append('g')
             .attr('class', 'axis')
-            .attr('transform', 'translate(0,' + (h - xOffset + 1) + ')')
+            .attr('transform', 'translate(0,' + (h - xOffset - 7) + ')')
             .call(xAxis);
 
         let xLabel = svg.append('text')
@@ -118,7 +118,7 @@ function buildHeatmapViz(data) {
             if (dataByPoint[i].key === currentData.point_name) {
                 for (let j = 0; j < dataByPoint[i].values.length; j++) {
                     if (dataByPoint[i].values[j].timestamp === currentData.timestamp && j + 1 < dataByPoint[i].values.length) {
-                        return xScale(getTime(dataByPoint[i].values[j + 1].timestamp)) - xScale(getTime(currentData.timestamp));
+                        return xScale(getTime(dataByPoint[i].values[j + 1].timestamp)) - xScale(getTime(currentData.timestamp)) + 1;
                     } else if (dataByPoint[i].values[j].timestamp === currentData.timestamp) { // The last timestamp
                         return w - xScale(getTime(currentData.timestamp));
                     }
