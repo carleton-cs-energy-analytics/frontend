@@ -135,14 +135,6 @@ li {
     padding: 4px;
 }
 
-span {
-    height: 16px;
-    width: 30px;
-    float: left;
-    margin-right: 4px;
-    border: 1px solid black;
-}
-
 div.legend {
     position: relative;
     bottom: 500;
