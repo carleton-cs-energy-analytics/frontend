@@ -1,162 +1,43 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>title</title>
-    <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="../static/js/trend.js"></script>
-    <link rel="stylesheet" href="../static/css/styles.css">
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <!-- jQuery library -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <!-- Latest compiled JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <!-- js for vis -->
-    <!-- <script type="text/javascript" src="../static/js/initialviz.js"></script> -->
+{% extends "layout.html" %}
 
-</head>
-<body>
-<div class="container-fluid">
-    <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar" style="background-color: #f8f9fa">
-            <div class="sidebar-sticky">
-                <h3>Energy Dashboard</h3>
-                <hr>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                 stroke-linejoin="round" class="feather feather-home">
-                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                            </svg>
-                            Home <span class="sr-only">(current)</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                 stroke-linejoin="round" class="feather feather-file">
-                                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-                                <polyline points="13 2 13 9 20 9"></polyline>
-                            </svg>
-                            Trend Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                 stroke-linejoin="round" class="feather feather-shopping-cart">
-                                <circle cx="9" cy="21" r="1"></circle>
-                                <circle cx="20" cy="21" r="1"></circle>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                            </svg>
-                            Anomally Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/points">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                 stroke-linejoin="round" class="feather feather-users">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                            </svg>
-                            Points
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/api-test">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                 stroke-linejoin="round" class="feather feather-bar-chart-2">
-                                <line x1="18" y1="20" x2="18" y2="10"></line>
-                                <line x1="12" y1="20" x2="12" y2="4"></line>
-                                <line x1="6" y1="20" x2="6" y2="14"></line>
-                            </svg>
-                            API Test
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-            <h1 style="text-align:center;"> Trend Dashboard </h1>
-            <hr>
-            <div class="row">
-                <div id="series-block">
-                    <div class="form-row series input-group col-md-9" id="series-0">
-                        <div id="series0-line-0" class="form-group row line">
-                            <div class="col-md-2">
-                                <select id="series-0-argType-0" class="argType form-control">
-                                    <option value="" selected disabled hidden>Choose Type</option>
-                                    <optgroup label="operators">
-                                        <option value="and">and</option>
-                                        <option value="or">or</option>
-                                        <option value="not">not</option>
-                                        <option value="(">(</option>
-                                        <option value=")">)</option>
-                                    </optgroup>
-                                    <optgroup label="foobar">
-                                        <option value="building">building</option>
-                                        <option value="device">device</option>
-                                        <option value="room">room</option>
-                                        <option value="tag">tag</option>
-                                        <option value="floor">floor</option>
-                                        <option value="unit">unit</option>
-                                        <option value="type">type</option>
-                                        <option value="measurement">measurement</option>
-                                    </optgroup>
-
-
-
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <select id="series-0-argValue-0" class="argValue form-control">
-                                </select>
-                            </div>
-                            <div class="col-md-1">
-                                <button type="button" class="btn btn-primary addLineBtn" id="series-0.btn">Add New Line
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="form-row col-md-9">
-                    <button type="button" onclick="get_points()" name="button" class="btn btn-primary form-control"
-                            style="width:75px">Search
-                    </button>
-                </div>
-            </div>
-            <div class="row">
-                <h1>Initial Line Graph</h1>
-
-                <div class="col-md-9 svg" id="linegraph"></div>
-                <script type="text/javascript" src="../static/js/initialviz.js"></script>
-
-                <div class="legend">
-                    <div class="legend-title">Key</div>
-                    <ul class="bars">
-                        <li><span style="background:#b2746b"></span>First series</li>
-                        <li><span style="background:#7a91c1"></span>Second series</li>
-                        <li><span style="background:#86b265"></span>Third series</li>
-                    </ul>
-                </div>
-
-            </div>
-
-        </main>
-    </div>
+{% block body %}
+<div id="container">
+    <form id="series-0" class="series">
+        <select class="building" multiple>
+        </select>
+        <select class="floor" multiple>
+        </select>
+        <select class="room" multiple>
+        </select>
+        <select class="device" multiple>
+        </select>
+        <select class="point" multiple>
+        </select>
+        <select class="tag" multiple>
+        </select>
+        <select class="type" multiple>
+        </select>
+        <select class="unit" multiple>
+        </select>
+        <select class="measurement" multiple>
+        </select>
+        <p class="point-verification-text"></p>
+        <input type="text" class="value-query" placeholder="Value Query"/>
+        <p class="value-verification-text"></p>
+    </form>
 </div>
-</body>
-</html>
+<div id="timepicker">
+    <input type="text" name="datetimes" id="daterange"/>
+    <button id="submit-search-query">Search</button>
+</div>
+
+<div id="result-table">
+    <table class="table">
+        <thead><tr><th>Point Name</th><td>Timestamp</td><td>Value</td></tr></thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script src="../static/js/anomalies.js"></script>
+<script type="text/javascript" src="../static/js/search_engine.js"></script>
+{% endblock %}

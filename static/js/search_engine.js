@@ -146,7 +146,7 @@ function update_point(form_element) {
 
 }
 
-function update_verification_text(form_element) {
+function update_point_verification_text(form_element) {
     $.ajax({
         url: BACKEND_URL + 'points/verify',
         dataType: 'json',
@@ -158,13 +158,55 @@ function update_verification_text(form_element) {
                 for (let i = 0; i < data.length; i++) {
                     sum += data[i]["count"];
                 }
-                $(form_element).find('p.verification-text').html(sum + " points found");
+                $(form_element).find('p.point-verification-text').html(sum + " points found");
 
             } else {
-                $(form_element).find('p.verification-text').html(data);
+                $(form_element).find('p.point-verification-text').html(data);
             }
         }
     });
+}
+
+let update_value_verification_text_timed_out = false;
+function update_value_verification_text() {
+    if (update_value_verification_text_timed_out) {
+        return;
+    }
+    update_value_verification_text_timed_out = true;
+    setTimeout(function () {
+        update_value_verification_text_timed_out = false;
+    }, 500);
+
+    let forms = $("form.series");
+    let formCount = forms.length;
+    let drp = $('#daterange').data('daterangepicker');
+    let startDate = drp.startDate._d.valueOf() / 1000;
+    let endDate = drp.endDate._d.valueOf() / 1000;
+
+    forms.each(function (index, form_element) {
+        console.log("Ajax fired for: " + $(event.target));
+        $.ajax({
+            url: BACKEND_URL + 'points/ids',
+            dataType: 'json',
+            data: {search: build_query_string($(form_element))},
+            type: 'GET',
+            success: function (data, status, jqXHR) {
+                $.ajax({
+                    url: BACKEND_URL + 'values/verify',
+                    data: {
+                        point_ids: data,
+                        start_time: startDate,
+                        end_time: endDate,
+                        search: $(form_element).find("input.value-query").val()
+                    },
+                    success: function (data, status, jqXHR) {
+                        $(form_element).find('p.value-verification-text').html(data);
+                    }
+                })
+            }
+        });
+    })
+
 }
 
 $(function () {
@@ -198,7 +240,7 @@ $(function () {
 
     $("select").on("change", function (event) {
         let series = $(event.target).parent();
-        update_verification_text(series);
+        update_point_verification_text(series);
     });
 
     $("#submit-search-query").on("click", function (event) {
@@ -227,7 +269,7 @@ $(function () {
                             point_ids: data,
                             start_time: startDate,
                             end_time: endDate,
-                            // search:
+                            search: $(form).find("input.value-query").val()
                         },
                         success: function (data, status, jqXHR) {
                             point_series.push(data);
@@ -237,13 +279,7 @@ $(function () {
                         },
                         complete: function (jqXHR, status) {
                             if (point_series.length === formCount) {
-                                if (value_type[0] === ":type 2 or :type 3") {
-                                    d3.selectAll('svg').remove();
-                                    buildTrendViz(point_series);
-                                } else {
-                                    d3.selectAll('svg').remove();
-                                    buildHeatmapViz(point_series[0]);
-                                }
+                                displaySearchResults(point_series[0]);
                             }
                         }
                     })
