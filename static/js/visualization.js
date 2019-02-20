@@ -1,5 +1,5 @@
-function displaySearchResults(values) {
-    if (value_type[0] === ":type 2 or :type 3") {
+function displaySearchResults(type, values) {
+    if (type === ":type 2 or :type 3") {
         d3.selectAll('#visualization svg').remove();
         buildTrendViz([values]);
     } else {

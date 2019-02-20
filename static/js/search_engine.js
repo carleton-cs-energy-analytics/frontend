@@ -243,7 +243,7 @@ $(function () {
         let series = $(event.target).parent();
         console.log("select box has been changed");
         update_point_verification_text(series);
-        update_value_verification_text(series);
+       // update_value_verification_text(series);
     });
 
     $("#submit-search-query").on("click", function (event) {
@@ -282,7 +282,7 @@ $(function () {
                         },
                         complete: function (jqXHR, status) {
                             if (point_series.length === formCount) {
-                                displaySearchResults(point_series[0]);
+                                displaySearchResults(value_type[0], point_series[0])
                             }
                         }
                     })
