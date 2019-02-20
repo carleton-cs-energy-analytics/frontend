@@ -147,6 +147,7 @@ function update_point(form_element) {
 }
 
 function update_point_verification_text(form_element) {
+    console.log("update_point_verification_text");
     $.ajax({
         url: BACKEND_URL + 'points/verify',
         dataType: 'json',
@@ -167,15 +168,15 @@ function update_point_verification_text(form_element) {
     });
 }
 
-let update_value_verification_text_timed_out = false;
+//let update_value_verification_text_timed_out = false;
 function update_value_verification_text() {
-    if (update_value_verification_text_timed_out) {
+    /*if (update_value_verification_text_timed_out) {
         return;
     }
     update_value_verification_text_timed_out = true;
     setTimeout(function () {
         update_value_verification_text_timed_out = false;
-    }, 500);
+    }, 500);*/
 
     let forms = $("form.series");
     let formCount = forms.length;
@@ -240,7 +241,9 @@ $(function () {
 
     $("select").on("change", function (event) {
         let series = $(event.target).parent();
+        console.log("select box has been changed");
         update_point_verification_text(series);
+        update_value_verification_text(series);
     });
 
     $("#submit-search-query").on("click", function (event) {
