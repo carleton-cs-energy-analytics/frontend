@@ -3,7 +3,7 @@ function displaySearchResults(values) {
 
     if (viz_choice === 'graph') {
         d3.selectAll('#visualization svg').remove();
-        $("#anomalous-points").remove();
+        $("#anomalous-points").empty();
         let pointDict = findAnomalyLines(values);
         console.log("this is point dict before it is passed: " )
         console.log(pointDict);
@@ -24,13 +24,12 @@ function buildTable(values) {
 }
 
 function fillAnomalousPoints(pointDict) {
+    $("#anomalous-points").append("<b> Flagged Points </b> <hr>");
     for (let key in pointDict) {
         if (pointDict[key] === true) {
-            
+            $("#anomalous-points").append("<p>"+ key +"</p>");
         }
-
     }
-
 }
 
 function findAnomalyLines(values) {
