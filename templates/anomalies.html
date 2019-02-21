@@ -1,46 +1,57 @@
 {% extends "layout.html" %}
 
-	{% block body %}
-	<div id="container">
-	    <form id="series-0" class="series">
-	        <select class="building" multiple>
-	        </select>
-	        <select class="floor" multiple>
-	        </select>
-	        <select class="room" multiple>
-	        </select>
-	        <select class="device" multiple>
-	        </select>
-	        <select class="point" multiple>
-	        </select>
-	        <select class="tag" multiple>
-	        </select>
-	        <select class="type" multiple>
-	        </select>
-	        <select class="unit" multiple>
-	        </select>
-	        <select class="measurement" multiple>
-	        </select>
-	        <p class="point-verification-text"></p>
-	        <input type="text" class="value-query" placeholder="Value Query"/>
-	        <p class="value-verification-text"></p>
-            <br>
-            <br>
-	    </form>
-	</div>
-	<div id="timepicker">
-	    <input type="text" name="datetimes" id="daterange"/>
-	    <button id="submit-search-query">Search</button>
-	</div>
+{% block body %}
+<div id="container" style="height:200px">
+    <form id="series-0" class="series">
+        <select class="building" multiple>
+        </select>
+        <select class="floor" multiple>
+        </select>
+        <select class="room" multiple>
+        </select>
+        <select class="device" multiple>
+        </select>
+        <select class="point" multiple>
+        </select>
+        <select class="tag" multiple>
+        </select>
+        <select class="type" multiple>
+        </select>
+        <select class="unit" multiple>
+        </select>
+        <select class="measurement" multiple>
+        </select>
+        <p class="point-verification-text"></p>
+        <input type="text" class="value-query" placeholder="Value Query"/>
+        <p class="value-verification-text"></p>
+        <br>
+        <br>
+    </form>
+</div>
+<div id="timepicker">
+    <input type="text" name="datetimes" id="daterange"/>
+    <button id="submit-search-query">Search</button>
+    <input type="radio" name="visualization" value="table" checked> Table<br>
+    <input type="radio" name="visualization" value="graph"> Graph<br>
+</div>
+
+<div class="col-md-8 svg" id="visualization"></div>
 
 
 <div id="result-table">
-	    <table class="table">
-	        <thead><tr><th>Point Name</th><td>Timestamp</td><td>Value</td></tr></thead>
-	        <tbody></tbody>
-	    </table>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Point Name</th>
+            <td>Timestamp</td>
+            <td>Value</td>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 </div>
 
+<script type="text/javascript" src="../static/js/linegraph.js"></script>
 <script src="../static/js/anomalies.js"></script>
 <script type="text/javascript" src="../static/js/search_engine.js"></script>
 {% endblock %}

@@ -147,7 +147,7 @@ function update_point(form_element) {
 }
 
 function update_point_verification_text(form_element) {
-    console.log("update_point_verification_text");
+    console.log("update_point_verification_text()");
     $.ajax({
         url: BACKEND_URL + 'points/verify',
         dataType: 'json',
@@ -170,6 +170,7 @@ function update_point_verification_text(form_element) {
 
 //let update_value_verification_text_timed_out = false;
 function update_value_verification_text() {
+    console.log("update_value_verification_text()");
     /*if (update_value_verification_text_timed_out) {
         return;
     }
@@ -179,17 +180,16 @@ function update_value_verification_text() {
     }, 500);*/
 
     let forms = $("form.series");
-    let formCount = forms.length;
     let drp = $('#daterange').data('daterangepicker');
     let startDate = drp.startDate._d.valueOf() / 1000;
     let endDate = drp.endDate._d.valueOf() / 1000;
 
-    forms.each(function (index, form_element) {
-        console.log("Ajax fired for: " + $(event.target));
+    forms.each(function (index, form) {
+        console.log("Ajax fired for value verification");
         $.ajax({
             url: BACKEND_URL + 'points/ids',
             dataType: 'json',
-            data: {search: build_query_string($(form_element))},
+            data: {search: build_query_string($(form))},
             type: 'GET',
             success: function (data, status, jqXHR) {
                 $.ajax({
@@ -198,10 +198,11 @@ function update_value_verification_text() {
                         point_ids: data,
                         start_time: startDate,
                         end_time: endDate,
-                        search: $(form_element).find("input.value-query").val()
+                        search: $(form).find("input.value-query").val()
                     },
                     success: function (data, status, jqXHR) {
-                        $(form_element).find('p.value-verification-text').html(data);
+                        console.log("data for value verification: " + data);
+                        $(form).find('p.value-verification-text').html(data);
                     }
                 })
             }
@@ -243,7 +244,7 @@ $(function () {
         let series = $(event.target).parent();
         console.log("select box has been changed");
         update_point_verification_text(series);
-       // update_value_verification_text(series);
+        update_value_verification_text(series);
     });
 
     $("#submit-search-query").on("click", function (event) {
@@ -282,7 +283,7 @@ $(function () {
                         },
                         complete: function (jqXHR, status) {
                             if (point_series.length === formCount) {
-                                displaySearchResults(value_type[0], point_series[0])
+                                displaySearchResults(point_series[0], value_type[0])
                             }
                         }
                     })

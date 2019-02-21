@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<div id="container">
+<div id="container" style="height: 150px">
     <form id="series-0" class="series">
         <select class="building" multiple>
         </select>
@@ -22,11 +22,13 @@
         <select class="measurement" multiple>
         </select>
         <p class="point-verification-text"> </p>
+        <p class="value-verification-text"> </p>
     </form>
 </div>
 <div id="timepicker">
     <input type="text" name="datetimes" id="daterange"/>
     <button id="submit-search-query">Search</button>
+
 </div>
 
 <div class="row col-md-10">
