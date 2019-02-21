@@ -4,7 +4,10 @@
 // Date: 2/11/2019
 
 
-function buildTrendViz(data) {
+function buildAnomalyViz(data, pointDict) {
+    console.log("buildAnomalyViz()");
+    console.log("point dict");
+    console.log(pointDict);
     var w = 960,			// Width of our visualization (hacky)
         h = 500;            // Height of our visualization (hacky)
 
@@ -101,12 +104,23 @@ function buildTrendViz(data) {
         .data(data)
         .enter().append("path")
         .style("mix-blend-mode", "multiply")
-        .attr("stroke", "steelblue")
+        .attr("stroke", function(d) {
+            //console.log("d.key: " + d.key);
+            //console.log("pointDict[d.key]: " + pointDict[d.key]);
+            if (pointDict[d.key] === null) {
+               // console.log("turning line blue");
+                return "steelblue"
+            } else if (pointDict[d.key] === true){
+                //console.log("turning line red");
+                return "red"
+            }
+        })
         .attr("d", function (d) {
-            console.log("d3 data: ");
-            console.log(d)
+           // console.log("d3 data: ");
+           // console.log(d)
+           // console.log(pointDict);
             d.line = this;
-            console.log(d.values)
+           // console.log(d.values)
             return line(d.values);
         });
 

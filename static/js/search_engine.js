@@ -190,8 +190,12 @@ function update_value_verification_text() {
             url: BACKEND_URL + 'points/ids',
             dataType: 'json',
             data: {search: build_query_string($(form))},
-            type: 'GET',
+            type: 'POST',
             success: function (data, status, jqXHR) {
+                console.log("this is points data: ");
+                console.log(data);
+                console.log("values query");
+                console.log($(form).find("input.value-query").val());
                 $.ajax({
                     url: BACKEND_URL + 'values/verify',
                     data: {
@@ -208,7 +212,6 @@ function update_value_verification_text() {
             }
         });
     })
-
 }
 
 $(function () {
@@ -244,7 +247,7 @@ $(function () {
         let series = $(event.target).parent();
         console.log("select box has been changed");
         update_point_verification_text(series);
-        update_value_verification_text(series);
+        //update_value_verification_text(series);
     });
 
     $("#submit-search-query").on("click", function (event) {
@@ -283,6 +286,8 @@ $(function () {
                         },
                         complete: function (jqXHR, status) {
                             if (point_series.length === formCount) {
+                                console.log("Values data: ");
+                                console.log(point_series[0]);
                                 displaySearchResults(point_series[0], value_type[0])
                             }
                         }
