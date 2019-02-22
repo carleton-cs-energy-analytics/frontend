@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<div id="container">
+<div id="container" style="height: 150px">
     <form id="series-0" class="series">
         <select class="building" multiple>
         </select>
@@ -21,12 +21,14 @@
         </select>
         <select class="measurement" multiple>
         </select>
-        <p class="verification-text"></p>
+        <p class="point-verification-text"> </p>
+        <p class="value-verification-text"> </p>
     </form>
 </div>
 <div id="timepicker">
     <input type="text" name="datetimes" id="daterange"/>
     <button id="submit-search-query">Search</button>
+
 </div>
 
 <div class="row col-md-10">
@@ -48,9 +50,10 @@
 
 </div>
 
-<script type="text/javascript" src="../static/js/initialviz.js"></script>
+<script type="text/javascript" src="../static/js/linegraph.js"></script>
 <script src="https://d3js.org/colorbrewer.v1.min.js"></script>
 <script src="../static/js/heatmap.js"></script>
+<script type="text/javascript" src="../static/js/visualization.js"></script>
 <script type="text/javascript" src="../static/js/search_engine.js"></script>
 
 {% endblock %}

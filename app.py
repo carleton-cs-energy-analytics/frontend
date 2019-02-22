@@ -21,6 +21,15 @@ def get_search():
     return flask.render_template('search-engine.html', backend_url=BACKEND_URL)
 
 
+@app.route('/rules')
+def get_rules_page():
+    return flask.render_template('rules.html', backend_url=BACKEND_URL)
+
+
+@app.route('/anomalies')
+def get_anomaly_page():
+    return flask.render_template('anomalies.html', backend_url=BACKEND_URL)
+
 if __name__ == '__main__':
     host = 'localhost'
     port = '8080'
