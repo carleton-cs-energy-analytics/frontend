@@ -20,7 +20,7 @@ function buildHeatmapViz(data) {
                 .domain(data.map(function (d) {
                     return d.value;
                 }))
-                .range(["rgb(180,221,212)", "rgb(38,73,109)"]);
+                .range(["rgb(38,73,109)", "rgb(180,221,212)"]);
         } else {
             colorScale = d3.scaleOrdinal()
                 .domain(data.map(function (d) {
