@@ -105,22 +105,14 @@ function buildAnomalyViz(data, pointDict) {
         .enter().append("path")
         .style("mix-blend-mode", "multiply")
         .attr("stroke", function(d) {
-            //console.log("d.key: " + d.key);
-            //console.log("pointDict[d.key]: " + pointDict[d.key]);
             if (pointDict[d.key] === null) {
-               // console.log("turning line blue");
                 return "steelblue"
             } else if (pointDict[d.key] === true){
-                //console.log("turning line red");
                 return "red"
             }
         })
         .attr("d", function (d) {
-           // console.log("d3 data: ");
-           // console.log(d)
-           // console.log(pointDict);
             d.line = this;
-           // console.log(d.values)
             return line(d.values);
         });
 
