@@ -1,5 +1,8 @@
-function build_query_string(form_element, selector_list = ["building", "floor", "room", "device",
-    "point", "tag", "type", "unit", "measurement"]) {
+let SELECTOR_LIST = ["building", "floor", "room", "device",
+    "point", "tag", "type", "unit", "measurement"];
+
+
+function build_query_string(form_element, selector_list = SELECTOR_LIST) {
     console.log("form element" + form_element);
     console.log(form_element);
     let disjunctive_clauses = [];
@@ -12,7 +15,36 @@ function build_query_string(form_element, selector_list = ["building", "floor", 
     return disjunctive_clauses.filter(n => n).join("and");
 }
 
-function update_static(form_element) {
+function build_search_param_string(select_form_element, date_range_picker_element) {
+    let params = {
+        select: {},
+        date_range: {}
+    };
+    SELECTOR_LIST.forEach(function (selector) {
+        let clauses = select_form_element.find("select." + selector).val();
+        params.select[selector] = clauses;
+    });
+    console.log('START DATE', date_range_picker_element.startDate._d);
+    params.date_range['startDate'] = date_range_picker_element.startDate._d;
+    params.date_range['endDate'] = date_range_picker_element.endDate._d;
+    console.log('PARAMS NOW', params)
+
+    return $.param(params); // serializes the params object
+}
+
+
+function apply_search_param_string(selector_state, select_form_element, date_range_picker_element) {
+    let params = {};
+    SELECTOR_LIST.forEach(function (selector) {
+        if (selector in selector_state.select) {
+            select_form_element.find("select." + selector).val(selector_state.select[selector]);
+        }
+    });
+    date_range_picker_element.setStartDate(new Date(selector_state.date_range.startDate));
+    date_range_picker_element.setEndDate(new Date(selector_state.date_range.endDate));
+}
+
+function update_static(form_element, initial_load = false) {
     let columns = ["tag", "type", "unit"];
     for (let i = 0; i < columns.length; i++) {
         console.log("Updating " + columns[i]);
@@ -55,7 +87,7 @@ function update_static(form_element) {
         });
 }
 
-function update_building(form_element) {
+function update_building(form_element, initial_load = false) {
     $.getJSON(BACKEND_URL + "buildings",
         null,
         function (data, status, jqXHR) {
@@ -68,12 +100,12 @@ function update_building(form_element) {
                     .append($("<option value='@" + data[i]["building_id"] + "'>"
                         + data[i]["building_name"] + "</option>"));
             }
-            update_floor(form_element);
+            update_floor(form_element, initial_load);
         }
     );
 }
 
-function update_floor(form_element) {
+function update_floor(form_element, initial_load = false) {
     let query = build_query_string(form_element, ["building"]);
 
     $.getJSON(BACKEND_URL + "all_floors",
@@ -87,11 +119,11 @@ function update_floor(form_element) {
                     .append($("<option value=':floor = " + data[i] + "'>"
                         + data[i] + "</option>"));
             }
-            update_room(form_element);
+            update_room(form_element, initial_load);
         });
 }
 
-function update_room(form_element) {
+function update_room(form_element, initial_load = false) {
     let query = build_query_string(form_element, ["building", "floor"]);
 
     $.getJSON(BACKEND_URL + "rooms",
@@ -106,11 +138,11 @@ function update_room(form_element) {
                     .append($("<option value='$" + data[i]["room_id"] + "'>"
                         + data[i]["room_name"] + "</option>"));
             }
-            update_device(form_element);
+            update_device(form_element, initial_load);
         });
 }
 
-function update_device(form_element) {
+function update_device(form_element, initial_load = false) {
     let query = build_query_string(form_element, ["building", "floor", "room"]);
 
     $.getJSON(BACKEND_URL + "devices",
@@ -124,11 +156,11 @@ function update_device(form_element) {
                     .append($("<option value='%" + data[i]["device_id"] + "'>"
                         + data[i]["device_name"] + "</option>"));
             }
-            update_point(form_element);
+            update_point(form_element, initial_load);
         });
 }
 
-function update_point(form_element) {
+function update_point(form_element, initial_load = false) {
     let query = build_query_string(form_element, ["building", "floor", "room", "device"]);
 
     $.getJSON(BACKEND_URL + "points",
@@ -141,6 +173,9 @@ function update_point(form_element) {
                 point_select
                     .append($("<option value='*" + data[i]["point_id"] + "'>"
                         + data[i]["point_name"] + "</option>"));
+            }
+            if (initial_load) {
+                conditionally_apply_query_state();
             }
         });
 
@@ -166,6 +201,57 @@ function update_point_verification_text(form_element) {
             }
         }
     });
+}
+
+function submit_search(event) {
+
+    let selector_state = build_search_param_string($("#series-0"), $('#daterange').data('daterangepicker'));
+    $.bbq.pushState(selector_state);
+    console.log("button clicked");
+
+    let point_series = [];
+    let forms = $("form.series");
+    let formCount = forms.length;
+    let drp = $('#daterange').data('daterangepicker');
+    let startDate = drp.startDate._d.valueOf() / 1000;
+    let endDate = drp.endDate._d.valueOf() / 1000;
+
+    forms.each(function (index, form) {
+        console.log("Ajax fired for: " + $(event.target));
+        let value_type = $(form).find("select.type").val();
+        console.log(value_type);
+        $.ajax({
+            url: BACKEND_URL + 'points/ids',
+            dataType: 'json',
+            data: {search: build_query_string($(form))},
+            type: 'GET',
+            success: function (data, status, jqXHR) {
+                $.ajax({
+                    url: BACKEND_URL + 'values',
+                    dataType: 'json',
+                    data: {
+                        point_ids: data,
+                        start_time: startDate,
+                        end_time: endDate,
+                        search: $(form).find("input.value-query").val()
+                    },
+                    success: function (data, status, jqXHR) {
+                        point_series.push(data);
+                    },
+                    error: function (jqXHR, status, error) {
+                        point_series.push(null)
+                    },
+                    complete: function (jqXHR, status) {
+                        if (point_series.length === formCount) {
+                            console.log("Values data: ");
+                            console.log(point_series[0]);
+                            displaySearchResults(point_series[0], value_type[0])
+                        }
+                    }
+                })
+            }
+        });
+    })
 }
 
 //let update_value_verification_text_timed_out = false;
@@ -214,9 +300,19 @@ function update_value_verification_text() {
     })
 }
 
+function conditionally_apply_query_state() {
+    query_state = $.bbq.getState();
+    // apply url parameter if there is one
+    if (!$.isEmptyObject(query_state)) {
+        console.log('Applying query state to selectors');
+        apply_search_param_string(query_state, $("#series-0"), $('#daterange').data('daterangepicker'));
+        submit_search();
+    }
+}
+
 $(function () {
-    update_building($("#series-0"));
-    update_static($("#series-0"));
+    update_building($("#series-0"), true);
+    update_static($("#series-0"), true);
     $("select.building").on("change", function (event) {
         let series = $(event.target).parent();
         update_floor(series);
@@ -236,8 +332,8 @@ $(function () {
     });
     $('input[name="datetimes"]').daterangepicker({
         timePicker: true,
-        startDate: moment().startOf('hour'),
-        endDate: moment().startOf('hour').add(32, 'hour'),
+        startDate: moment().startOf('hour').subtract(1, 'day'),
+        endDate: moment().startOf('hour'),
         locale: {
             format: 'M/DD hh:mm A'
         }
@@ -247,53 +343,8 @@ $(function () {
         let series = $(event.target).parent();
         console.log("select box has been changed");
         update_point_verification_text(series);
-        //update_value_verification_text(series);
+        // update_value_verification_text(series);
     });
 
-    $("#submit-search-query").on("click", function (event) {
-        console.log("button clicked");
-        let point_series = [];
-        let forms = $("form.series");
-        let formCount = forms.length;
-        let drp = $('#daterange').data('daterangepicker');
-        let startDate = drp.startDate._d.valueOf() / 1000;
-        let endDate = drp.endDate._d.valueOf() / 1000;
-
-        forms.each(function (index, form) {
-            console.log("Ajax fired for: " + $(event.target));
-            let value_type = $(form).find("select.type").val();
-            console.log(value_type);
-            $.ajax({
-                url: BACKEND_URL + 'points/ids',
-                dataType: 'json',
-                data: {search: build_query_string($(form))},
-                type: 'GET',
-                success: function (data, status, jqXHR) {
-                    $.ajax({
-                        url: BACKEND_URL + 'values',
-                        dataType: 'json',
-                        data: {
-                            point_ids: data,
-                            start_time: startDate,
-                            end_time: endDate,
-                            search: $(form).find("input.value-query").val()
-                        },
-                        success: function (data, status, jqXHR) {
-                            point_series.push(data);
-                        },
-                        error: function (jqXHR, status, error) {
-                            point_series.push(null)
-                        },
-                        complete: function (jqXHR, status) {
-                            if (point_series.length === formCount) {
-                                console.log("Values data: ");
-                                console.log(point_series[0]);
-                                displaySearchResults(point_series[0], value_type[0])
-                            }
-                        }
-                    })
-                }
-            });
-        })
-    })
+    $("#submit-search-query").on("click", submit_search);
 });
