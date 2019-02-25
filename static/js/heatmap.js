@@ -82,7 +82,7 @@ function buildHeatmapViz(data) {
         let xLabel = svg.append('text')
             .attr('class', 'label')
             .attr('x', w / 2)
-            .attr('y', h)
+            .attr('y', h - 3)
             .text('Timestamp');
 
         let yAxis = d3.axisLeft(yScale)
