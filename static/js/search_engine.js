@@ -237,7 +237,7 @@ $(function () {
     $('input[name="datetimes"]').daterangepicker({
         timePicker: true,
         startDate: moment().startOf('week'),
-        endDate: moment().startOf('day'),
+        endDate: moment().startOf('day').subtract(1, 'day'),
         locale: {
             format: 'M/DD hh:mm A'
         }

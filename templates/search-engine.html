@@ -21,18 +21,20 @@
         </select>
         <select class="measurement" multiple>
         </select>
-        <p class="point-verification-text"> </p>
+        <div style="position: absolute">
+            <p class="point-verification-text"> </p>
+        </div>
+
         <p class="value-verification-text"> </p>
     </form>
 </div>
 <div id="timepicker">
     <input type="text" name="datetimes" id="daterange"/>
-    <button id="submit-search-query">Search</button>
+    <button id="submit-search-query">Graph</button>
 
 </div>
 
 <div class="row col-md-10">
-    <h1>Visualization</h1>
     <div class="col-md-8 svg" id="visualization"></div>
     <!--<label id="form" for="show-voronoi">-->
         <!--Show Voronoi-->
