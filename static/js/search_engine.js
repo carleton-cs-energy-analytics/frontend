@@ -40,8 +40,12 @@ function apply_search_param_string(selector_state, select_form_element, date_ran
             select_form_element.find("select." + selector).val(selector_state.select[selector]);
         }
     });
-    date_range_picker_element.setStartDate(new Date(selector_state.date_range.startDate));
-    date_range_picker_element.setEndDate(new Date(selector_state.date_range.endDate));
+    if (selector_state.date_range && selector_state.date_range.startDate) {
+        date_range_picker_element.setStartDate(new Date(selector_state.date_range.startDate));
+    }
+    if (selector_state.date_range && selector_state.date_range.endDate) {
+        date_range_picker_element.setEndDate(new Date(selector_state.date_range.endDate));
+    }
     if (selector_state.value_search) {
         $($("form.series")).find("input.value-query").val(selector_state.value_search);
     }
