@@ -18,23 +18,23 @@ function build_query_string(form_element, selector_list = SELECTOR_LIST) {
 function build_search_param_string(select_form_element, date_range_picker_element) {
     let params = {
         select: {},
-        date_range: {}
+        date_range: {},
     };
     SELECTOR_LIST.forEach(function (selector) {
         let clauses = select_form_element.find("select." + selector).val();
         params.select[selector] = clauses;
     });
-    console.log('START DATE', date_range_picker_element.startDate._d);
+    value_search = $($("form.series")).find("input.value-query").val();
+    if (value_search) {
+        params['value_search'] = value_search;
+    }
     params.date_range['startDate'] = date_range_picker_element.startDate._d;
     params.date_range['endDate'] = date_range_picker_element.endDate._d;
-    console.log('PARAMS NOW', params)
-
     return $.param(params); // serializes the params object
 }
 
 
 function apply_search_param_string(selector_state, select_form_element, date_range_picker_element) {
-    let params = {};
     SELECTOR_LIST.forEach(function (selector) {
         if (selector in selector_state.select) {
             select_form_element.find("select." + selector).val(selector_state.select[selector]);
@@ -42,6 +42,10 @@ function apply_search_param_string(selector_state, select_form_element, date_ran
     });
     date_range_picker_element.setStartDate(new Date(selector_state.date_range.startDate));
     date_range_picker_element.setEndDate(new Date(selector_state.date_range.endDate));
+    if (selector_state.value_search) {
+        $($("form.series")).find("input.value-query").val(selector_state.value_search);
+    }
+
 }
 
 function update_static(form_element, initial_load = false) {
@@ -217,7 +221,6 @@ function submit_search(event) {
     let endDate = drp.endDate._d.valueOf() / 1000;
 
     forms.each(function (index, form) {
-        console.log("Ajax fired for: " + $(event.target));
         let value_type = $(form).find("select.type").val();
         console.log(value_type);
         $.ajax({
