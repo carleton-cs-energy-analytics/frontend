@@ -8,42 +8,67 @@ BACKEND_URL = 'http://energycomps.its.carleton.edu:8080/api/'
 
 
 def get_date():
+    """
+    Calculates what yesterday's date was using today's date (this is under the assumption we are sending it the next
+    morning.
+
+    :return: Yesterday's day as a string in the format year-month-day
+    """
     current_date = datetime.datetime.now().date()
-    timedelta = datetime.timedelta(1)  # We want the date for yesterday because we will be sending this in the morning
+    timedelta = datetime.timedelta(1)  # Change the int timedelta takes in to change how many days we want to subtract
     return str(current_date - timedelta)
 
 
 def get_anomalous_rules():
+    """
+    Gets all the rules and then finds all the rules for which a value flagged that rule and puts it in a list
+
+    :return: The list of rules that were broken yesterday
+    """
     rules = requests.get(BACKEND_URL + 'rules').json()
 
     anomalous_rules = []
     for rule in rules:
-        num_anomalies = requests.get(BACKEND_URL + rule['id'] + '/count').json()[0]
+        response = requests.get(BACKEND_URL + 'rule/' + str(rule['rule_id']) + '/count')
+        if response.status_code == 404:  # This is case where the values haven't been imported into the database yet.
+            exit(1)
+
+        num_anomalies = response.json()
         if num_anomalies > 0:
             rule['num_anomalies'] = num_anomalies
             anomalous_rules.append(rule)
 
-    # For testing purposes if there are no anomalies.
-    # anomalous_rules.append({'name': 'eva\'s rule', 'id': 0, 'num_anomalies': 1000})
     return anomalous_rules
 
 
 def construct_msg_body():
+    """
+    Makes the body of the email sent to facilities. Lists out all the rules, the number of values that broke that rule,
+    and the link to see the rule in greater context.
+
+    :return: A string that will be the body of the email.
+    """
     anomalous_rules = get_anomalous_rules()
 
     # This is the case were no anomalies were sent.
     if len(anomalous_rules) == 0:
         return ''
-
-    msg_body = 'The rules broken yesterday and the number of values that flagged that rule are as follows.\n\n'
+    print(anomalous_rules)
+    msg_body = 'The rules broken yesterday, the number of values that flagged that rule, and the link to view more are as follows.\n\n'
     for rule in anomalous_rules:
-        msg_body += rule['name'] + ': ' + str(rule['num_anomalies']) + '\n'
+        print(str(rule))
+        msg_body += rule['rule_name'] + ': ' + str(rule['num_anomalies']) + ' ' + str(rule['url']) + '\n' # TODO: FIGURE OUT HOW TO GET THE DATE IN HERE
 
-    msg_body += '\nFor more information go to the following address.'  # TODO: FIGURE OUT WHAT THIS SHOULD BE
     return msg_body
 
 
 def send_email(msg_body):
+    """
+    Sends the email if there is something in the body. The email is sent from the energy-comps email and to a google
+    group with relevant people in facilities. (NOT CURRENTLY HOW IT IS DONE)
+
+    :param msg_body: A string that will be the body of the email.
+    """
     # In this case, no anomalies were found, so we should not send the email.
     if msg_body == '':
         return
@@ -58,7 +83,7 @@ def send_email(msg_body):
     # Is this how we want to do it?
     server = smtplib.SMTP('smtp.carleton.edu', 587)
     server.starttls()
-    server.login('grenche@carleton.edu', 'password') # Don't worry. This is not my real password.
+    server.login('grenche@carleton.edu', 'password')  # Don't worry. This is not my real password.
     server.send_message(msg)
 
 
