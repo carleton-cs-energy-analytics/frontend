@@ -51,6 +51,7 @@ function findAnomalyLines(values) {
 }
 
 function postAnomalyRule() {
+    console.log('positng anomoly rule')
     let series = $("#series-0");
     let name = 'New Rule (created ' + moment().format('M/D/YYYY h:m:s A') + ')';
     let urlHash = build_url_param_string(series, $('#daterange').data('daterangepicker'), false);
@@ -63,18 +64,23 @@ function postAnomalyRule() {
         return;
     }
     let data = {name, url, value_search, point_search};
-    console.log('ajax fired for new rule');
     $.ajax({
         url: BACKEND_URL + 'rule/add',
-        dataType: 'json',
         data: data,
         type: 'POST',
-        success: newRuleAdded
+        success: newRuleAdded,
+        error: newRuleErrored
     })
 }
 
+function newRuleErrored(data, status, jqXHR) {
+    alert('There was an error creating your new rule. Status: ' + status);
+}
+
 function newRuleAdded(data, status, jqXHR) {
-    console.log('New anomaly rule created!!');
     alert('your rule has been added to the database');
 }
 
+$(function () {
+    $("#create-rule").on("click", postAnomalyRule);
+});
