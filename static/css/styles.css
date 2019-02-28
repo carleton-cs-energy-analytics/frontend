@@ -98,8 +98,8 @@ body {
 }
 
 .series {
-    margin-right: auto;
-    margin-left: auto;
+    margin-right: 0 auto;
+    margin-left: 0 auto;
     margin-bottom: 100px;
 }
 
@@ -147,10 +147,6 @@ h1 {
     left: 5%;
 }
 
-label {
-    font-weight: normal !important;
-}
-
 /*
  * Line Graph
  */
@@ -190,28 +186,66 @@ label {
     right: 30px;
 }
 
-#container {
+#trend-container {
     position: relative;
-    height: 9em;
+    height: 14em;
     width: 90%;
-    margin: 20px auto;
-    background: #f8f9fa;
+    margin: 30px auto;
+    background: #1967d2;
     text-align: left;
     white-space: nowrap;
     overflow-x: auto;
     overflow-y: hidden;
     vertical-align: middle;
+    border-radius: 15px;
+    padding-top: 10px;
 }
 
-#container select {
+#trend-container select {
     display: inline-block;
     width: 14em;
-    height: 6em;
+    height: 11em;
     margin: 0.5em;
     border: 1px solid #A9A9A9;
     padding: 3px;
     white-space: normal;
     text-align: center;
+    background-color: #5f9aec;
+    color: white;
+    border-radius: 15px;
+
+
+}
+
+#anomaly-container {
+    position: relative;
+    height: 14em;
+    width: 90%;
+    margin: 30px auto;
+    background: #563d7c;
+    text-align: left;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    vertical-align: middle;
+    border-radius: 15px;
+    padding-top: 10px;
+}
+
+#anomaly-container select {
+    display: inline-block;
+    width: 14em;
+    height: 11em;
+    margin: 0.5em;
+    border: 1px solid #A9A9A9;
+    padding: 3px;
+    white-space: normal;
+    text-align: center;
+    background-color: #8465b3;
+    color: white;
+    border-radius: 15px;
+
+
 }
 
 #timepicker {
@@ -220,21 +254,19 @@ label {
     left: 5%;
 }
 
-#container select.device {
-    display: none;
-}
-
 /* This is a little hacky but works */
-div.alert-rule,
-p.point-verification-text {
+p.verification-text {
     position: sticky;
     left: 0;
     padding-left: 10px;
     width: 0;
 }
 
-input.value-query,
-input#daterange,
-button#submit-search-query {
-    margin-right: 7px;
+.navbar-title {
+    color: white;
+    float: left;
+    height: 50px;
+    padding: 15px 15px;
+    font-size: 20px;
+    line-height: 20px;
 }

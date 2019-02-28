@@ -1,53 +1,59 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<div id="container" style="height: 150px">
-    <form id="series-0" class="series">
-        <select class="building" multiple>
-        </select>
-        <select class="floor" multiple>
-        </select>
-        <select class="room" multiple>
-        </select>
-        <select class="device" multiple>
-        </select>
-        <select class="point" multiple>
-        </select>
-        <select class="tag" multiple>
-        </select>
-        <select class="type" multiple>
-        </select>
-        <select class="unit" multiple>
-        </select>
-        <select class="measurement" multiple>
-        </select>
-        <p class="point-verification-text"> </p>
-        <p class="value-verification-text"> </p>
+<h2 style="text-align: center;">
+    Trends
+</h2>
+<hr>
+<h4>
+    Point Selector
+</h4>
+<div id="trend-container">
+    <form id="series-0" class="series"
+    ">
+    <select class="building" multiple>
+    </select>
+    <select class="floor" multiple>
+    </select>
+    <select class="room" multiple>
+    </select>
+    <select class="device" multiple>
+    </select>
+    <select class="point" multiple>
+    </select>
+    <select class="tag" multiple>
+    </select>
+    <select class="type" multiple>
+    </select>
+    <select class="unit" multiple>
+    </select>
+    <select class="measurement" multiple>
+    </select>
+    <p class="value-verification-text"></p>
     </form>
 </div>
-<div id="timepicker">
-    <input type="text" name="datetimes" id="daterange"/>
-    <button id="submit-search-query">Search</button>
-
+<div class="row">
+    <div id="foobar" class="col-md-4 form-inline col-md-offset-4">
+        <div class=" form-group col-md-9">
+            <div id="timepicker" class="input-group" style="width: 100%">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                <input type="text" class="form-control" name="datetimes" id="daterange"
+                       style="background-color: white; cursor: pointer" readonly/>
+            </div>
+        </div>
+        <div class="form-group col-md-2">
+            <button id="submit-search-query" type="button" class="btn btn-primary" style="background-color: #1967d2">Graph</button>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <p id="point-verification-text"></p>
+    </div>
 </div>
+<hr>
 
-<div class="row col-md-10">
-    <h1>Visualization</h1>
-    <div class="col-md-8 svg" id="visualization"></div>
-    <!--<label id="form" for="show-voronoi">-->
-        <!--Show Voronoi-->
-        <!--<input type="checkbox" id="show-voronoi" disabled>-->
-    <!--</label>    -->
-    <!--<div class="legend col-md-2">-->
 
-        <!--<div class="legend-title">Key</div>-->
-        <!--<ul class="bars">-->
-            <!--<li><span style="background:#b2746b"></span>First series</li>-->
-            <!--<li><span style="background:#7a91c1"></span>Second series</li>-->
-            <!--<li><span style="background:#86b265"></span>Third series</li>-->
-        <!--</ul>-->
-    <!--</div>-->
-
+<div class="row col-md-12">
+    <div class="col-md-10 col-md-offset-1 svg" id="visualization"></div>
 </div>
 
 <script type="text/javascript" src="../static/js/linegraph.js"></script>
