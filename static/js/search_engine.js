@@ -67,7 +67,7 @@ function update_static(form_element, initial_load = false) {
                 if (columns[i] === "type") {
                     select_el.append($("<option value=':type 2 or :type 3' selected>Numeric</option>"));
                 } else {
-                    select_el.append($("<option value=''>All " + columns[i].charAt(0).toUpperCase() +
+                    select_el.append($("<option selected value=''>All " + columns[i].charAt(0).toUpperCase() +
                         columns[i].slice(1) + "s</option>"));
                 }
                 for (let j = 0; j < data.length; j++) {
@@ -88,7 +88,7 @@ function update_static(form_element, initial_load = false) {
         function (data, status, jqXHR) {
             let select_el = form_element.find("select.measurement");
             select_el.empty();
-            select_el.append($("<option value=''>All Measurements</option>"));
+            select_el.append($("<option selected value=''>All Measurements</option>"));
             for (let j = 0; j < data.length; j++) {
                 select_el
                     .append($("<option value=':measurement &#39;" + data[j] + "&#39;'>"
@@ -105,7 +105,7 @@ function update_building(form_element, initial_load = false) {
             console.log(data);
             let building_select = form_element.find("select.building");
             building_select.empty();
-            building_select.append($("<option value=''>All Buildings</option>"));
+            building_select.append($("<option selected value=''>All Buildings</option>"));
             for (let i = 0; i < data.length; i++) {
                 building_select
                     .append($("<option value='@" + data[i]["building_id"] + "'>"
@@ -124,7 +124,7 @@ function update_floor(form_element, initial_load = false) {
         function (data, status, jqXHR) {
             let floor_select = form_element.find("select.floor");
             floor_select.empty();
-            floor_select.append($("<option value=''>All Floors</option>"));
+            floor_select.append($("<option selected value=''>All Floors</option>"));
             for (let i = 0; i < data.length; i++) {
                 floor_select
                     .append($("<option value=':floor = " + data[i] + "'>"
@@ -143,7 +143,7 @@ function update_room(form_element, initial_load = false) {
             let room_select = form_element.find("select.room");
             console.log(room_select);
             room_select.empty();
-            room_select.append($("<option value=''>All Rooms</option>"));
+            room_select.append($("<option selected value=''>All Rooms</option>"));
             for (let i = 0; i < data.length; i++) {
                 room_select
                     .append($("<option value='$" + data[i]["room_id"] + "'>"
@@ -161,7 +161,7 @@ function update_device(form_element, initial_load = false) {
         function (data, status, jqXHR) {
             let device_select = form_element.find("select.device");
             device_select.empty();
-            device_select.append($("<option value=''>All Devices</option>"));
+            device_select.append($("<option selected value=''>All Devices</option>"));
             for (let i = 0; i < data.length; i++) {
                 device_select
                     .append($("<option value='%" + data[i]["device_id"] + "'>"
@@ -179,7 +179,7 @@ function update_point(form_element, initial_load = false) {
         function (data, status, jqXHR) {
             let point_select = form_element.find("select.point");
             point_select.empty();
-            point_select.append($("<option value=''>All Points</option>"));
+            point_select.append($("<option selected value=''>All Points</option>"));
             for (let i = 0; i < data.length; i++) {
                 point_select
                     .append($("<option value='*" + data[i]["point_id"] + "'>"
@@ -205,10 +205,12 @@ function update_point_verification_text(form_element) {
                 for (let i = 0; i < data.length; i++) {
                     sum += data[i]["count"];
                 }
-                $(form_element).find('p.point-verification-text').html(sum + " points found");
+                //$(form_element).find('p.point-verification-text').html(sum + " points found");
+                $('#point-verification-text').html(sum + " points found");
 
             } else {
-                $(form_element).find('p.point-verification-text').html(data);
+                //$(form_element).find('p.point-verification-text').html(data);
+                $('#point-verification-text').html(data);
             }
         }
     });
@@ -298,7 +300,7 @@ function update_value_verification_text() {
                         point_ids: data,
                         start_time: startDate,
                         end_time: endDate,
-                        search: $(form).find("input.value-query").val()
+                        search: $("input.value-query").val()
                     },
                     success: function (data, status, jqXHR) {
                         console.log("data for value verification: " + data);
