@@ -15,10 +15,9 @@ function build_query_string(form_element, selector_list = SELECTOR_LIST) {
     return disjunctive_clauses.filter(n => n).join("and");
 }
 
-function build_search_param_string(select_form_element, date_range_picker_element) {
+function build_url_param_string(select_form_element, date_range_picker_element, include_date_range = true) {
     let params = {
         select: {},
-        date_range: {},
     };
     SELECTOR_LIST.forEach(function (selector) {
         let clauses = select_form_element.find("select." + selector).val();
@@ -28,8 +27,12 @@ function build_search_param_string(select_form_element, date_range_picker_elemen
     if (value_search) {
         params['value_search'] = value_search;
     }
-    params.date_range['startDate'] = date_range_picker_element.startDate._d;
-    params.date_range['endDate'] = date_range_picker_element.endDate._d;
+    if (include_date_range) {
+        params['date_range'] = {};
+        params.date_range['startDate'] = date_range_picker_element.startDate._d;
+        params.date_range['endDate'] = date_range_picker_element.endDate._d;
+    }
+
     return $.param(params); // serializes the params object
 }
 
@@ -213,7 +216,7 @@ function update_point_verification_text(form_element) {
 
 function submit_search(event) {
 
-    let selector_state = build_search_param_string($("#series-0"), $('#daterange').data('daterangepicker'));
+    let selector_state = build_url_param_string($("#series-0"), $('#daterange').data('daterangepicker'));
     $.bbq.pushState(selector_state);
     console.log("button clicked");
 
