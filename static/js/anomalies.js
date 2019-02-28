@@ -54,6 +54,9 @@ function postAnomalyRule() {
     console.log('positng anomoly rule')
     let series = $("#series-0");
     let name = prompt('Enter a name for your rule', 'New Rule (created ' + moment().format('M/D/YYYY h:m:s A') + ')');
+    if (name === null) {
+        return;
+    }
     let urlHash = build_url_param_string(series, $('#daterange').data('daterangepicker'), false);
     let url = window.location.pathname + '#' + urlHash;
 
@@ -63,13 +66,26 @@ function postAnomalyRule() {
         alert('Anomaly rule must include a value search');
         return;
     }
-    let data = {name, url, value_search, point_search};
     $.ajax({
-        url: BACKEND_URL + 'rule/add',
-        data: data,
-        type: 'POST',
-        success: newRuleAdded,
-        error: newRuleErrored
+        url: BACKEND_URL + 'values/verify',
+        method: 'POST',
+        data: {search: value_search},
+        success: function (data) {
+            if (data.includes("Invalid")) {
+                alert(data);
+                return;
+            }
+            $.ajax({
+                url: BACKEND_URL + 'rule/add',
+                data: {name, url, value_search, point_search},
+                type: 'POST',
+                success: newRuleAdded,
+                error: newRuleErrored
+            })
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert("Invalid value query???")
+        }
     })
 }
 

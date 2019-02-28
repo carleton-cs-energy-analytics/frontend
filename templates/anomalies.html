@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<div id="container" style="height:200px">
+<div id="container" style="height:175px">
     <form id="series-0" class="series">
         <select class="building" multiple>
         </select>
@@ -22,18 +22,26 @@
         <select class="measurement" multiple>
         </select>
         <p class="point-verification-text"></p>
-        <input type="text" class="value-query" placeholder="Value Query"/>
+        <div class="alert-rule">
+            <input type="text" class="value-query" placeholder="Value Query"/>
+            <button id="create-rule">Create Alert Rule</button>
+        </div>
         <p class="value-verification-text"></p>
         <br>
         <br>
     </form>
 </div>
-<div id="timepicker">
+<div id="timepicker" class="col-md-10">
     <input type="text" name="datetimes" id="daterange"/>
     <button id="submit-search-query">Search</button>
-    <button id="create-rule">Create Alert Rule</button>
-    <input type="radio" name="visualization" value="table" checked> Table<br>
-    <input type="radio" name="visualization" value="graph"> Graph<br>
+    <input type="radio" name="visualization" value="table" id="visualization-mode-table"/>
+    <label for="visualization-mode-table">
+        Table
+    </label>
+    <input type="radio" name="visualization" value="graph" id="visualization-mode-graph"/>
+    <label for="visualization-mode-graph">
+        Graph
+    </label>
 </div>
 
 <div class="col-md-10 svg" id="visualization"></div>

@@ -98,8 +98,8 @@ body {
 }
 
 .series {
-    margin-right: 0 auto;
-    margin-left: 0 auto;
+    margin-right: auto;
+    margin-left: auto;
     margin-bottom: 100px;
 }
 
@@ -145,6 +145,10 @@ div.legend {
 h1 {
     position: relative;
     left: 5%;
+}
+
+label {
+    font-weight: normal !important;
 }
 
 /*
@@ -216,10 +220,21 @@ h1 {
     left: 5%;
 }
 
+#container select.device {
+    display: none;
+}
+
 /* This is a little hacky but works */
-p.verification-text {
+div.alert-rule,
+p.point-verification-text {
     position: sticky;
     left: 0;
     padding-left: 10px;
     width: 0;
+}
+
+input.value-query,
+input#daterange,
+button#submit-search-query {
+    margin-right: 7px;
 }
