@@ -23,7 +23,8 @@ function build_url_param_string(select_form_element, date_range_picker_element, 
         let clauses = select_form_element.find("select." + selector).val();
         params.select[selector] = clauses;
     });
-    value_search = $($("form.series")).find("input.value-query").val();
+    value_search = $("#value-query").val();
+    //value_search = $($("form.series")).find("input.value-query").val();
     if (value_search) {
         params['value_search'] = value_search;
     }
@@ -50,7 +51,8 @@ function apply_search_param_string(selector_state, select_form_element, date_ran
         date_range_picker_element.setEndDate(new Date(selector_state.date_range.endDate));
     }
     if (selector_state.value_search) {
-        $($("form.series")).find("input.value-query").val(selector_state.value_search);
+        //$($("form.series")).find("input.value-query").val(selector_state.value_search);
+        $("#value-query").val(selector_state.value_search);
     }
 
 }
@@ -245,7 +247,8 @@ function submit_search(event) {
                         point_ids: data,
                         start_time: startDate,
                         end_time: endDate,
-                        search: $(form).find("input.value-query").val()
+                        //search: $(form).find("input.value-query").val()
+                        search: $("#value-query").val()
                     },
                     success: function (data, status, jqXHR) {
                         point_series.push(data);

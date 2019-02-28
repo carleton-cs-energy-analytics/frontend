@@ -1,26 +1,12 @@
 function displaySearchResults(values) {
-    let viz_choice = $('input[name=visualization]:checked').val();
+    d3.selectAll('#visualization svg').remove();
+    $("#anomalous-points").empty();
+    let pointDict = findAnomalyLines(values);
+    console.log("this is point dict before it is passed: ");
+    console.log(pointDict);
+    buildAnomalyViz([values], pointDict);
+    fillAnomalousPoints(pointDict);
 
-    if (viz_choice === 'graph') {
-        d3.selectAll('#visualization svg').remove();
-        $("#anomalous-points").empty();
-        let pointDict = findAnomalyLines(values);
-        console.log("this is point dict before it is passed: ");
-        console.log(pointDict);
-        buildAnomalyViz([values], pointDict);
-        fillAnomalousPoints(pointDict);
-    } else {
-        buildTable(values)
-    }
-}
-
-function buildTable(values) {
-    let tbody = $("#result-table > table > tbody");
-    tbody.empty();
-    for (let i = 0; i < values.length; i++) {
-        tbody.append($("<tr><th>" + values[i].point_name + "</th><td>" +
-            values[i].timestamp + "</td><td>" + values[i].value + "</td></tr>"));
-    }
 }
 
 function fillAnomalousPoints(pointDict) {
@@ -51,7 +37,7 @@ function findAnomalyLines(values) {
 }
 
 function postAnomalyRule() {
-    console.log('positng anomoly rule')
+    console.log('postAnomalyRule()');
     let series = $("#series-0");
     let name = prompt('Enter a name for your rule', 'New Rule (created ' + moment().format('M/D/YYYY h:m:s A') + ')');
     if (name === null) {
@@ -60,7 +46,8 @@ function postAnomalyRule() {
     let urlHash = build_url_param_string(series, $('#daterange').data('daterangepicker'), false);
     let url = window.location.pathname + '#' + urlHash;
 
-    let value_search = $($("form.series")).find("input.value-query").val();
+    //let value_search = $($("form.series")).find("input.value-query").val();
+    let value_search = $("#value-query").val();
     let point_search = build_query_string(series);
     if (!value_search) {
         alert('Anomaly rule must include a value search');
