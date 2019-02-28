@@ -53,7 +53,7 @@ function findAnomalyLines(values) {
 function postAnomalyRule() {
     console.log('positng anomoly rule')
     let series = $("#series-0");
-    let name = 'New Rule (created ' + moment().format('M/D/YYYY h:m:s A') + ')';
+    let name = prompt('Enter a name for your rule', 'New Rule (created ' + moment().format('M/D/YYYY h:m:s A') + ')');
     let urlHash = build_url_param_string(series, $('#daterange').data('daterangepicker'), false);
     let url = window.location.pathname + '#' + urlHash;
 
