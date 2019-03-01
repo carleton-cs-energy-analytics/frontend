@@ -1,7 +1,7 @@
 import os
 import flask
 
-BACKEND_URL = os.environ.get('BACKEND_URL') or 'http://energycomps.its.carleton.edu:8080/api/'
+BACKEND_URL = os.environ.get('BACKEND_URL') or 'http://energycomps.its.carleton.edu/api/'
 
 app = flask.Flask(__name__, static_folder='static', template_folder='templates')
 
