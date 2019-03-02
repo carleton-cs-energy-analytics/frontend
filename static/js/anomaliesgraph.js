@@ -8,25 +8,28 @@ function buildAnomalyViz(data, pointDict) {
     console.log("buildAnomalyViz()");
     console.log("point dict");
     console.log(pointDict);
-    var w = 960,			// Width of our visualization (hacky)
-        h = 500;            // Height of our visualization (hacky)
 
-    var svg = d3.select('#visualization')
+    // viewBox and preserveAspectRatio with no height or width would make the svg responsive
+    let svg = d3.select('#visualization')
         .append('svg')
-        .attr('width', w)
-        .attr('height', h);
-    console.log('svg', svg)
-    var margin = {top: 20, right: 30, bottom: 30, left: 40},
-        width = svg.attr("width") - margin.left - margin.right,
-        height = svg.attr("height") - margin.top - margin.bottom,
+        .attr('viewBox', '0 0 850 500')
+        .attr('preserveAspectRatio', 'xMidYMid meet')
+        .classed("svg-content", true);
+    let margin = {top: 20, right: 30, bottom: 30, left: 40},
+        width = 850 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom,
         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     // var xScale = d3.scaleLinear() // @TODO: used to be d3.scaleTime. look into this when switching back to time.
     //     .range([0, width]);
 
     var xScale = d3.scaleTime()
-        .domain([getTime(d3.min(data, function (d) { return d.timestamp; })),
-                getTime(d3.max(data, function (d) { return d.timestamp; }))])
+        .domain([getTime(d3.min(data, function (d) {
+            return d.timestamp;
+        })),
+            getTime(d3.max(data, function (d) {
+                return d.timestamp;
+            }))])
         .range([0, width]);
 
     var yScale = d3.scaleLinear()
@@ -104,10 +107,10 @@ function buildAnomalyViz(data, pointDict) {
         .data(data)
         .enter().append("path")
         .style("mix-blend-mode", "multiply")
-        .attr("stroke", function(d) {
+        .attr("stroke", function (d) {
             if (pointDict[d.key] === null) {
                 return "steelblue"
-            } else if (pointDict[d.key] === true){
+            } else if (pointDict[d.key] === true) {
                 return "red"
             }
         })
