@@ -347,8 +347,8 @@ $(function () {
     });
     $('input[name="datetimes"]').daterangepicker({
         timePicker: true,
-        startDate: moment().startOf('hour').subtract(1, 'day'),
-        endDate: moment().startOf('hour'),
+        startDate: moment().startOf('week'),
+        endDate: moment().startOf('day').subtract(1, 'day'),
         locale: {
             format: 'M/DD hh:mm A'
         }
