@@ -215,7 +215,6 @@ h1 {
     color: white;
     border-radius: 15px;
 
-
 }
 
 #anomaly-container {
@@ -246,7 +245,6 @@ h1 {
     color: white;
     border-radius: 15px;
 
-
 }
 
 #timepicker {
@@ -270,4 +268,20 @@ p.verification-text {
     padding: 15px 15px;
     font-size: 20px;
     line-height: 20px;
+}
+
+#visualization {
+    display: inline-block;
+    position: relative;
+    width: 80%;
+    padding-bottom: 100%;
+    vertical-align: top;
+    overflow: hidden;
+}
+
+.svg-content {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
