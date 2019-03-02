@@ -285,3 +285,15 @@ p.verification-text {
     top: 0;
     left: 0;
 }
+
+div.col-md-3 {
+    padding-right: 0px;
+}
+
+div.form-group.col-md-5 {
+    padding-left: 0px;
+}
+
+div.form-group.col-md-4 {
+    padding-left: 10px;
+}
