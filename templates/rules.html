@@ -1,6 +1,9 @@
 {%extends "layout.html" %}
 
 {% block body %}
+<h2 style="text-align: center;">
+    Rules
+</h2>
 <div>
     <table id="rule-table" class="table table-striped table-dark">
         <thead>
@@ -25,7 +28,10 @@
     </table>
 </div>
 
-
+<script>
+    $("a").removeClass("active");
+    $("#rules-link").addClass("active");
+</script>
 <script type="text/javascript" src="../static/js/rules.js"></script>
 <script src="../static/js/anomalies.js"></script>
 {% endblock %}
