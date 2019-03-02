@@ -12,14 +12,11 @@ function buildTrendViz(data) {
         .append('svg')
         .attr('width', w)
         .attr('height', h);
-    console.log('svg', svg)
+
     var margin = {top: 20, right: 30, bottom: 30, left: 40},
         width = svg.attr("width") - margin.left - margin.right,
         height = svg.attr("height") - margin.top - margin.bottom,
         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-    // var xScale = d3.scaleLinear() // @TODO: used to be d3.scaleTime. look into this when switching back to time.
-    //     .range([0, width]);
 
     var xScale = d3.scaleTime()
         .domain([getTime(d3.min(data, function (d) { return d.timestamp; })),
@@ -103,11 +100,11 @@ function buildTrendViz(data) {
         .style("mix-blend-mode", "multiply")
         .attr("stroke", "steelblue")
         .attr("d", function (d) {
-            console.log("d3 data: ");
-            console.log(d)
             d.line = this;
-            console.log(d.values)
             return line(d.values);
+        })
+        .attr("id", function (d) {
+            return d.values[0]['point_name'];
         });
 
     // This is a hacky solution for getting our data to mirror the example
@@ -150,16 +147,30 @@ function buildTrendViz(data) {
         });
 
     function mouseover(d) {
-        d3.select(d.data.line).classed("line--hover", true);
         d.data.line.parentNode.appendChild(d.data.line);
         focus.attr("transform", "translate(" + xScale(getTime(d.data.timestamp)) + "," + yScale(d.data.value) + ")");
         focus.select("text").text(d.data.point_name + '\n' + d.data.value);
+        changeOtherLineColors(d, '#c2c2c4', '3px', null);
+    }
 
+    // changes the color of a line when hovered over and moused out
+    function changeOtherLineColors(selectedLineData, color, width, blend) {
+        let lines = d3.select('.points').selectAll('path')['_groups'];
+        for (let i = 0; i < lines.length; i++) {
+            for (let j = 0; j < lines[i].length; j++) {
+                if (lines[i][j].id !== selectedLineData.data['point_name']) {
+                    lines[i][j].style.stroke = color;
+                } else {
+                    lines[i][j].style.strokeWidth = width;
+                }
+                lines[i][j].style.mixBlendMode = blend;
+            }
+        }
     }
 
     function mouseout(d) {
-        d3.select(d.data.line).classed("line--hover", false);
         focus.attr("transform", "translate(-100,-100)");
+        changeOtherLineColors(d, 'steelblue', '1px', 'multiply')
     }
 
     function getTime(unixTimestamp) {
