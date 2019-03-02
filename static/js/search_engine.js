@@ -30,8 +30,9 @@ function build_url_param_string(select_form_element, date_range_picker_element, 
     }
     if (include_date_range) {
         params['date_range'] = {};
-        params.date_range['startDate'] = date_range_picker_element.startDate._d;
-        params.date_range['endDate'] = date_range_picker_element.endDate._d;
+        console.log('date', (new Date(date_range_picker_element.startDate._d)).getTime());
+        params.date_range['startDate'] = (new Date(date_range_picker_element.startDate._d)).getTime();
+        params.date_range['endDate'] = (new Date(date_range_picker_element.endDate._d).getTime());
     }
 
     return $.param(params); // serializes the params object
@@ -45,16 +46,15 @@ function apply_search_param_string(selector_state, select_form_element, date_ran
         }
     });
     if (selector_state.date_range && selector_state.date_range.startDate) {
-        date_range_picker_element.setStartDate(new Date(selector_state.date_range.startDate));
+        date_range_picker_element.setStartDate(new Date(parseInt(selector_state.date_range.startDate)));
     }
     if (selector_state.date_range && selector_state.date_range.endDate) {
-        date_range_picker_element.setEndDate(new Date(selector_state.date_range.endDate));
+        date_range_picker_element.setEndDate(new Date(parseInt(selector_state.date_range.endDate)));
     }
     if (selector_state.value_search) {
         //$($("form.series")).find("input.value-query").val(selector_state.value_search);
         $("#value-query").val(selector_state.value_search);
     }
-
 }
 
 function update_static(form_element, initial_load = false) {
@@ -218,10 +218,14 @@ function update_point_verification_text(form_element) {
     });
 }
 
-function submit_search(event) {
+function submit_search(event, pushState = true) {
 
     let selector_state = build_url_param_string($("#series-0"), $('#daterange').data('daterangepicker'));
-    $.bbq.pushState(selector_state);
+    if (pushState) {
+        console.log('PUSHING STATE:', selector_state);
+        $.bbq.pushState(selector_state);
+    }
+
     console.log("button clicked");
 
     let point_series = [];
@@ -321,7 +325,7 @@ function conditionally_apply_query_state() {
     if (!$.isEmptyObject(query_state)) {
         console.log('Applying query state to selectors');
         apply_search_param_string(query_state, $("#series-0"), $('#daterange').data('daterangepicker'));
-        submit_search();
+        submit_search(null, false);
     }
 }
 
