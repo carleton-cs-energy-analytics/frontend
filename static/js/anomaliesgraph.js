@@ -109,14 +109,17 @@ function buildAnomalyViz(data, pointDict) {
         .style("mix-blend-mode", "multiply")
         .attr("stroke", function (d) {
             if (pointDict[d.key] === null) {
-                return "steelblue"
+                return "#cccac9"
             } else if (pointDict[d.key] === true) {
-                return "red"
+                return "#a32716"
             }
         })
         .attr("d", function (d) {
             d.line = this;
             return line(d.values);
+        })
+        .attr("id", function (d) {
+            return d.values[0]['point_name'];
         });
 
     // This is a hacky solution for getting our data to mirror the example
@@ -159,16 +162,47 @@ function buildAnomalyViz(data, pointDict) {
         });
 
     function mouseover(d) {
-        d3.select(d.data.line).classed("line--hover", true);
+        // d3.select(d.data.line).classed("line--hover", true);
         d.data.line.parentNode.appendChild(d.data.line);
         focus.attr("transform", "translate(" + xScale(getTime(d.data.timestamp)) + "," + yScale(d.data.value) + ")");
         focus.select("text").text(d.data.point_name + '\n' + d.data.value);
+        changeOtherLineColors(true, d.data['point_name'], pointDict[d.data['point_name']], '3px', null);
+    }
 
+    // changes the color of a line when hovered over and moused out
+    function changeOtherLineColors(mouseIn, hoveredLineId, hoveredPointIsAnomalous, width, blend) {
+        let lines = d3.select('.points').selectAll('path')['_groups'];
+        for (let i = 0; i < lines.length; i++) {
+            for (let j = 0; j < lines[i].length; j++) {
+                let currentId = lines[i][j].id;
+                let currentPointIsAnomalous = pointDict[lines[i][j].id] === true;
+
+                if (mouseIn && currentId === hoveredLineId && hoveredPointIsAnomalous) {
+                    lines[i][j].style.stroke = '#a32716';
+                    lines[i][j].style.strokeWidth = width;
+                } else if (mouseIn && currentId === hoveredLineId && hoveredPointIsAnomalous === null) {
+                    lines[i][j].style.stroke = '#5e5e5e';
+                    lines[i][j].style.strokeWidth = width;
+                } else if (mouseIn && currentId !== hoveredLineId && currentPointIsAnomalous) {
+                    lines[i][j].style.stroke = '#cc4f4f';
+                } else if (mouseIn && currentId !== hoveredLineId && !currentPointIsAnomalous) {
+                    lines[i][j].style.stroke = '#cccac9';
+                } else if (!mouseIn && currentPointIsAnomalous) {
+                    lines[i][j].style.stroke = '#a32716';
+                    lines[i][j].style.strokeWidth = width;
+                } else if (!mouseIn && !currentPointIsAnomalous) {
+                    lines[i][j].style.stroke = '#cccac9';
+                    lines[i][j].style.strokeWidth = width;
+                }
+                lines[i][j].style.mixBlendMode = blend;
+            }
+        }
     }
 
     function mouseout(d) {
-        d3.select(d.data.line).classed("line--hover", false);
+        // d3.select(d.data.line).classed("line--hover", false);
         focus.attr("transform", "translate(-100,-100)");
+        changeOtherLineColors(false, d.data['point_name'], pointDict[d.data['point_name']], '1px', null)
     }
 
     function getTime(unixTimestamp) {
