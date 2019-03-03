@@ -185,7 +185,7 @@ h1 {
 
 #trend-container {
     position: relative;
-    height: 14em;
+    height: 15em;
     width: 90%;
     margin: 30px auto;
     background: #1967d2;
@@ -215,7 +215,7 @@ h1 {
 
 #anomaly-container {
     position: relative;
-    height: 14em;
+    height: 15em;
     width: 90%;
     margin: 30px auto;
     background: #563d7c;
@@ -232,7 +232,7 @@ h1 {
     display: inline-block;
     width: 14em;
     height: 11em;
-    margin: 0.5em;
+    margin: 0.2em 0.5em 0.5em 0.5em;
     border: 1px solid #A9A9A9;
     padding: 3px;
     white-space: normal;
@@ -292,4 +292,15 @@ div.form-group.col-md-5 {
 
 div.form-group.col-md-4 {
     padding-left: 10px;
+}
+
+label.form-label {
+    display: block;
+    text-align: center;
+    margin-bottom: 0px;
+    color: white;
+}
+
+.form-group {
+    display: inline-block;
 }
