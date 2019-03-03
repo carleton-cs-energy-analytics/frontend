@@ -13,14 +13,22 @@ function buildTrendViz(data) {
         .attr('width', w)
         .attr('height', h);
 
+    let minYValue = d3.min(data, function (d) {
+        return parseFloat(d.value);
+    }) - 1;
+
     var margin = {top: 20, right: 30, bottom: 30, left: 40},
         width = svg.attr("width") - margin.left - margin.right,
         height = svg.attr("height") - margin.top - margin.bottom,
         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     var xScale = d3.scaleTime()
-        .domain([getTime(d3.min(data, function (d) { return d.timestamp; })),
-                getTime(d3.max(data, function (d) { return d.timestamp; }))])
+        .domain([getTime(d3.min(data, function (d) {
+            return d.timestamp;
+        })),
+            getTime(d3.max(data, function (d) {
+                return d.timestamp;
+            }))])
         .range([0, width]);
 
     var yScale = d3.scaleLinear()
@@ -123,7 +131,12 @@ function buildTrendViz(data) {
         .attr("r", 3.5);
 
     focus.append("text")
-        .attr("y", -10);
+    .attr("y", -25);
+    //     .attr("y", yScale(minYValue + 10));
+
+    focus.append("text")
+        .attr('class', 'another')
+        .attr('y', -10);
 
     var voronoiGroup = g.append("g")
         .attr("class", "voronoi");
@@ -149,7 +162,9 @@ function buildTrendViz(data) {
     function mouseover(d) {
         d.data.line.parentNode.appendChild(d.data.line);
         focus.attr("transform", "translate(" + xScale(getTime(d.data.timestamp)) + "," + yScale(d.data.value) + ")");
-        focus.select("text").text(d.data.point_name + '\n' + d.data.value);
+        focus.select("text").text(d.data.point_name + '  -  ' + String(d.data.value));
+        momentDate = moment(d.data.timestamp * 1000);
+        focus.select("text.another").text(momentDate.format('M/D/YYYY h:MM:SS A'));
         changeOtherLineColors(d, '#c2c2c4', '3px', null);
     }
 
