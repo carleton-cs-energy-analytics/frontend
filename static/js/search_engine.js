@@ -333,20 +333,20 @@ $(function () {
     update_building($("#series-0"), true);
     update_static($("#series-0"), true);
     $("select.building").on("change", function (event) {
-        let series = $(event.target).parent();
+        let series = $(event.target).parent().parent();
         update_floor(series);
     });
     $("select.floor").on("change", function (event) {
 
-        let series = $(event.target).parent();
+        let series = $(event.target).parent().parent();
         update_room(series);
     });
     $("select.room").on("change", function (event) {
-        let series = $(event.target).parent();
+        let series = $(event.target).parent().parent();
         update_device(series);
     });
     $("select.device").on("change", function (event) {
-        let series = $(event.target).parent();
+        let series = $(event.target).parent().parent();
         update_point(series);
     });
     $('input[name="datetimes"]').daterangepicker({
@@ -359,7 +359,7 @@ $(function () {
     });
 
     $("select").on("change", function (event) {
-        let series = $(event.target).parent();
+        let series = $(event.target).parent().parent();
         console.log("select box has been changed");
         update_point_verification_text(series);
         // update_value_verification_text(series);
