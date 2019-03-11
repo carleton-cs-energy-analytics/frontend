@@ -11,11 +11,6 @@ def get_main_page():
     return flask.render_template('search-engine.html', backend_url=BACKEND_URL)
 
 
-@application.route('/points')
-def get_points_page():
-    return flask.render_template('points.html', backend_url=BACKEND_URL)
-
-
 @application.route('/search')
 def get_search():
     return flask.render_template('search-engine.html', backend_url=BACKEND_URL)

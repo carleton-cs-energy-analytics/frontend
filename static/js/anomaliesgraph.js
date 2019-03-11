@@ -1,6 +1,7 @@
 // Javascript file for Voronoi style line graph
 // Modified from example online by...
 // Author: Ethan Cassel-Mace & Eva Grench
+// Edited to work for anomalies by Chris Tordi
 // Date: 2/11/2019
 
 
