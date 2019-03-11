@@ -202,7 +202,7 @@ function buildAnomalyViz(data, pointDict) {
     function mouseout(d) {
         // d3.select(d.data.line).classed("line--hover", false);
         focus.attr("transform", "translate(-100,-100)");
-        changeOtherLineColors(false, d.data['point_name'], pointDict[d.data['point_name']], '1px', null)
+        changeOtherLineColors(false, d.data['point_name'], pointDict[d.data['point_name']], '1px', 'multiply')
     }
 
     function getTime(unixTimestamp) {
