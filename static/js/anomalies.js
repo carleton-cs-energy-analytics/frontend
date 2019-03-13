@@ -1,14 +1,29 @@
+/**
+ * Javascript for anomalies
+ * Author: Ethan Cassel-Mace, Chris Tordi
+ * March 13, 2019
+ */
+
+/**
+ * Passes data from point selector to anomalies line graph and anomalous points table
+ * @param {object} values js object with point names and values associated with selected time range
+ */
 function displaySearchResults(values) {
+    console.log("displaySearchResults()");
+    //remove previous viz
     d3.selectAll('#visualization svg').remove();
     $("#anomalous-points").empty();
     let pointDict = findAnomalyLines(values);
-    console.log("this is point dict before it is passed: ");
-    console.log(pointDict);
     buildAnomalyViz([values], pointDict);
     fillAnomalousPoints(pointDict);
 
 }
 
+/**
+ * Populates flagged points UI table with name of points that contain anomalous values
+ * @param {dictionary} pointDict point name is key. Value is bool indicated whether line contains anomalous value
+ *
+ */
 function fillAnomalousPoints(pointDict) {
     $("#anomalous-points").append("<b> Flagged Points </b> <hr>");
     for (let key in pointDict) {
@@ -18,6 +33,12 @@ function fillAnomalousPoints(pointDict) {
     }
 }
 
+/**
+ * Checks each point to see if it has a value that returns true for the value param query
+ * @param {object} values js object with point names and values associated with selected time range
+ *
+ * @return {dictionary} pointDict point name is key. Value is bool indicated whether line contains anomalous value
+ */
 function findAnomalyLines(values) {
     console.log("findAnomalyLines()");
     let pointDict = {}
@@ -36,6 +57,9 @@ function findAnomalyLines(values) {
     return pointDict;
 }
 
+/**
+ * Posts rule to rules table in db
+ */
 function postAnomalyRule() {
     console.log('postAnomalyRule()');
     let series = $("#series-0");
@@ -46,7 +70,7 @@ function postAnomalyRule() {
     let urlHash = build_url_param_string(series, $('#daterange').data('daterangepicker'), false);
     let url = window.location.pathname + '#' + urlHash;
 
-    //let value_search = $($("form.series")).find("input.value-query").val();
+    //let value_search = $($("form.series")).find("input.value-query").val(); -> use for multiple forms
     let value_search = $("#value-query").val();
     let point_search = build_query_string(series);
     if (!value_search) {
@@ -84,6 +108,9 @@ function newRuleAdded(data, status, jqXHR) {
     alert('your rule has been added to the database');
 }
 
+/**
+ * Monitors of create btn being clicked
+ */
 $(function () {
     $("#create-rule").on("click", postAnomalyRule);
 });

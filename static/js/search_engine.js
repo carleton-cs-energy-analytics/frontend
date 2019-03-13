@@ -1,10 +1,22 @@
+/**
+ * Search UI javascript
+ * Authors: Ethan Cassel-Mace, Alex Davis, Chris Tordi
+ * March 13, 2019
+ * javascript for datepicker is used from daterangepicker
+ */
+
+//list of parameters we care about when building a search param for api query
 let SELECTOR_LIST = ["building", "floor", "room", "device",
     "point", "tag", "type", "unit", "measurement"];
 
 
+/**
+ * Builds boolean logic search param for search engine from point selector options
+ * @param  {html element} form_element  html form element for point selector
+ * @param {list} selector_list list of parameters used to build search param
+ */
 function build_query_string(form_element, selector_list = SELECTOR_LIST) {
-    console.log("form element" + form_element);
-    console.log(form_element);
+    console.log("build_query_string");
     let disjunctive_clauses = [];
     for (let i = 0; i < selector_list.length; i++) {
         let clauses = form_element.find("select." + selector_list[i]).val();
@@ -30,7 +42,7 @@ function build_url_param_string(select_form_element, date_range_picker_element, 
     }
     if (include_date_range) {
         params['date_range'] = {};
-        console.log('date', (new Date(date_range_picker_element.startDate._d)).getTime());
+        //console.log('date', (new Date(date_range_picker_element.startDate._d)).getTime());
         params.date_range['startDate'] = (new Date(date_range_picker_element.startDate._d)).getTime();
         params.date_range['endDate'] = (new Date(date_range_picker_element.endDate._d).getTime());
     }
@@ -52,12 +64,18 @@ function apply_search_param_string(selector_state, select_form_element, date_ran
         date_range_picker_element.setEndDate(new Date(parseInt(selector_state.date_range.endDate)));
     }
     if (selector_state.value_search) {
-        //$($("form.series")).find("input.value-query").val(selector_state.value_search);
+        //$($("form.series")).find("input.value-query").val(selector_state.value_search); -> use this for multiple forms
         $("#value-query").val(selector_state.value_search);
     }
 }
 
+/**
+ * Fills options for tags, types, units, measurements filters
+ * The options for these filters come from their respective db tables
+ * @param  {html element} form_element  html form element that is being changed
+ */
 function update_static(form_element, initial_load = false) {
+    console.log("update_static()");
     let columns = ["tag", "type", "unit"];
     for (let i = 0; i < columns.length; i++) {
         console.log("Updating " + columns[i]);
@@ -100,11 +118,15 @@ function update_static(form_element, initial_load = false) {
         });
 }
 
+/**
+ * Fills options for building filter. Options are all buildings from the buildings table in db
+ * @param  {html element} form_element  html form element that is being changed
+ */
 function update_building(form_element, initial_load = false) {
+    console.log("update_building()");
     $.getJSON(BACKEND_URL + "buildings",
         null,
         function (data, status, jqXHR) {
-            console.log(data);
             let building_select = form_element.find("select.building");
             building_select.empty();
             building_select.append($("<option selected value=''>All Buildings</option>"));
@@ -118,7 +140,13 @@ function update_building(form_element, initial_load = false) {
     );
 }
 
+/**
+ * Fills options for floor filter. If all buildings are selected -> options are all floors for all buildings
+ * If options in building filter are selected -> options are floors in selected buildings
+ * @param  {html element} form_element  html form element that is being changed
+ */
 function update_floor(form_element, initial_load = false) {
+    console.log("update_floor()");
     let query = build_query_string(form_element, ["building"]);
 
     $.getJSON(BACKEND_URL + "floors",
@@ -136,14 +164,19 @@ function update_floor(form_element, initial_load = false) {
         });
 }
 
+/**
+ * Fills options for room filter. If all floors are selected -> options are all rooms
+ * If options in upstream  filters are selected -> options are rooms that match upstream filters
+ * @param  {html element} form_element  html form element that is being changed
+ */
 function update_room(form_element, initial_load = false) {
+    console.log("update_room()");
     let query = build_query_string(form_element, ["building", "floor"]);
 
     $.getJSON(BACKEND_URL + "rooms",
         {search: query},
         function (data, status, jqXHR) {
             let room_select = form_element.find("select.room");
-            console.log(room_select);
             room_select.empty();
             room_select.append($("<option selected value=''>All Rooms</option>"));
             for (let i = 0; i < data.length; i++) {
@@ -155,7 +188,13 @@ function update_room(form_element, initial_load = false) {
         });
 }
 
+/**
+ * Fills options for device filter. If no upstream filters are selected -> options are all devices
+ * If options in upstream  filters are selected -> options are devices that match upstream filters
+ * @param  {html element} form_element  html form element that is being changed
+ */
 function update_device(form_element, initial_load = false) {
+    console.log("update_device()");
     let query = build_query_string(form_element, ["building", "floor", "room"]);
 
     $.getJSON(BACKEND_URL + "devices",
@@ -173,8 +212,14 @@ function update_device(form_element, initial_load = false) {
         });
 }
 
+/**
+ * Fills options for device filter. If no upstream filters are selected -> options are all devices
+ * If options in upstream  filters are selected -> options are devices that match upstream filters
+ * @param  {html element} form_element  html form element that is being changed
+ */
 function update_point(form_element, initial_load = false) {
-    let query = build_query_string(form_element, ["building", "floor", "room", "device"]);
+    console.log("update_point()");
+    let query = build_query_string(form_element, ["building", "floor", "room", "device", "tag"]);
 
     $.getJSON(BACKEND_URL + "points",
         {search: query},
@@ -194,6 +239,10 @@ function update_point(form_element, initial_load = false) {
 
 }
 
+/**
+ * Updates UI to show number of points matched by current filter selection.
+ * @param  {html element} form_element  html form element that is being changed
+ */
 function update_point_verification_text(form_element) {
     console.log("update_point_verification_text()");
     $.ajax({
@@ -202,42 +251,48 @@ function update_point_verification_text(form_element) {
         data: {search: build_query_string($(form_element))},
         type: 'GET',
         success: function (data, status, jqXHR) {
+            //sum number of points
             if (Array.isArray(data)) {
                 let sum = 0;
                 for (let i = 0; i < data.length; i++) {
                     sum += data[i]["count"];
                 }
                 //$(form_element).find('p.point-verification-text').html(sum + " points found");
-                $('#point-verification-text').html(sum + " points found");
-
+                $('#point-verification-text').html(sum + " points found"); //success message
             } else {
                 //$(form_element).find('p.point-verification-text').html(data);
-                $('#point-verification-text').html(data);
+                $('#point-verification-text').html(data); //error message
             }
         }
     });
 }
 
+/**
+ * Triggered on press of submit btn. Queries api to get set of points and set of values. Passes data to visualizations
+ * and displays viz
+ * @param  {event} event  javascript event for click of submit btn
+ */
 function submit_search(event, pushState = true) {
+    console.log("submit_search()");
 
     let selector_state = build_url_param_string($("#series-0"), $('#daterange').data('daterangepicker'));
     if (pushState) {
-        console.log('PUSHING STATE:', selector_state);
+       // console.log('PUSHING STATE:', selector_state);
         $.bbq.pushState(selector_state);
     }
-
-    console.log("button clicked");
 
     let point_series = [];
     let forms = $("form.series");
     let formCount = forms.length;
+    // start and end dates for value range
     let drp = $('#daterange').data('daterangepicker');
     let startDate = drp.startDate._d.valueOf() / 1000;
     let endDate = drp.endDate._d.valueOf() / 1000;
 
+    // loop through each form. Right now there is only one form.
     forms.each(function (index, form) {
+        // what type of data we are returning. Determines what viz we display
         let value_type = $(form).find("select.type").val();
-        console.log(value_type);
         $.ajax({
             url: BACKEND_URL + 'points/ids',
             dataType: 'json',
@@ -251,7 +306,7 @@ function submit_search(event, pushState = true) {
                         point_ids: data,
                         start_time: startDate,
                         end_time: endDate,
-                        //search: $(form).find("input.value-query").val()
+                        //search: $(form).find("input.value-query").val() -> use this for multiple forms
                         search: $("#value-query").val()
                     },
                     success: function (data, status, jqXHR) {
@@ -261,6 +316,7 @@ function submit_search(event, pushState = true) {
                         point_series.push(null)
                     },
                     complete: function (jqXHR, status) {
+                        //when ajax call is complete, build viz
                         if (point_series.length === formCount) {
                             console.log("Values data: ");
                             console.log(point_series[0]);
@@ -273,82 +329,53 @@ function submit_search(event, pushState = true) {
     })
 }
 
-//let update_value_verification_text_timed_out = false;
-function update_value_verification_text() {
-    console.log("update_value_verification_text()");
-    /*if (update_value_verification_text_timed_out) {
-        return;
-    }
-    update_value_verification_text_timed_out = true;
-    setTimeout(function () {
-        update_value_verification_text_timed_out = false;
-    }, 500);*/
-
-    let forms = $("form.series");
-    let drp = $('#daterange').data('daterangepicker');
-    let startDate = drp.startDate._d.valueOf() / 1000;
-    let endDate = drp.endDate._d.valueOf() / 1000;
-
-    forms.each(function (index, form) {
-        console.log("Ajax fired for value verification");
-        $.ajax({
-            url: BACKEND_URL + 'points/ids',
-            dataType: 'json',
-            data: {search: build_query_string($(form))},
-            type: 'POST',
-            success: function (data, status, jqXHR) {
-                console.log("this is points data: ");
-                console.log(data);
-                console.log("values query");
-                console.log($(form).find("input.value-query").val());
-                $.ajax({
-                    url: BACKEND_URL + 'values/verify',
-                    data: {
-                        point_ids: data,
-                        start_time: startDate,
-                        end_time: endDate,
-                        search: $("input.value-query").val()
-                    },
-                    success: function (data, status, jqXHR) {
-                        console.log("data for value verification: " + data);
-                        $(form).find('p.value-verification-text').html(data);
-                    }
-                })
-            }
-        });
-    })
-}
 
 function conditionally_apply_query_state() {
+    console.log("conditionally_apply_query_state()");
     query_state = $.bbq.getState();
     // apply url parameter if there is one
     if (!$.isEmptyObject(query_state)) {
-        console.log('Applying query state to selectors');
+        //console.log('Applying query state to selectors');
         apply_search_param_string(query_state, $("#series-0"), $('#daterange').data('daterangepicker'));
         submit_search(null, false);
     }
 }
 
+/**
+ * Monitors for changes in UI on load.
+ */
 $(function () {
+    //update building filter
     update_building($("#series-0"), true);
+    //update tags, units, type, measurement
     update_static($("#series-0"), true);
+    //on change in building filter, update floor filter options
     $("select.building").on("change", function (event) {
         let series = $(event.target).parent().parent();
         update_floor(series);
     });
+    //on change in floor filter, update room filter options
     $("select.floor").on("change", function (event) {
 
         let series = $(event.target).parent().parent();
         update_room(series);
     });
+    //on change in room filter, update device options
     $("select.room").on("change", function (event) {
         let series = $(event.target).parent().parent();
         update_device(series);
     });
+    //on change in device filter, update point filter
     $("select.device").on("change", function (event) {
         let series = $(event.target).parent().parent();
         update_point(series);
     });
+    //on change in tag filter, update point filter
+    $("select.tag").on("change", function (event) {
+        let series = $(event.target).parent().parent();
+        update_point(series);
+    });
+    // datepicker js
     $('input[name="datetimes"]').daterangepicker({
         timePicker: true,
         startDate: moment().startOf('week'),
@@ -357,13 +384,12 @@ $(function () {
             format: 'M/DD hh:mm A'
         }
     });
-
+    //update html showing number of points selected when point selector ui changes
     $("select").on("change", function (event) {
         let series = $(event.target).parent().parent();
-        console.log("select box has been changed");
         update_point_verification_text(series);
-        // update_value_verification_text(series);
     });
 
+    //graph btn is pressed
     $("#submit-search-query").on("click", submit_search);
 });

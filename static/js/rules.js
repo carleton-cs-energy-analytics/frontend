@@ -1,3 +1,10 @@
+/**
+ * Rules page javascript
+ * Authors: Ethan Cassel-Mace, Alex Davis, Miaouye Que
+ * March 13, 2019
+ */
+
+
 $(function () {
     $.getJSON(BACKEND_URL + "rules",
         null,
@@ -8,6 +15,7 @@ $(function () {
                     "<button type=\"button\" class=\"btn btn-danger delete\">Delete</button>\n" +
                     "<a type=\"button\" class=\"btn btn-primary\" href=\""+ data[i]["url"] +"\">View</a></td></tr>"));
             }
+            //renames rule
             $("#rule-table button.rename").on("click", function (event) {
                 let table_row = $(event.target).parents("tr");
                 let rule_id = table_row.data("id");
@@ -27,6 +35,7 @@ $(function () {
                     table_row.find("p.name").html($("<input type='text' value='" + rule_name + "'/>"));
                 }
             });
+            //deletes rule from db
             $("#rule-table button.delete").on("click", function (event) {
                 let table_row = $(event.target).parents("tr");
                 let rule_id = table_row.data("id");
