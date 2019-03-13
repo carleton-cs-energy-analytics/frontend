@@ -277,7 +277,7 @@ function submit_search(event, pushState = true) {
 
     let selector_state = build_url_param_string($("#series-0"), $('#daterange').data('daterangepicker'));
     if (pushState) {
-       // console.log('PUSHING STATE:', selector_state);
+        // console.log('PUSHING STATE:', selector_state);
         $.bbq.pushState(selector_state);
     }
 
@@ -392,4 +392,13 @@ $(function () {
 
     //graph btn is pressed
     $("#submit-search-query").on("click", submit_search);
+
+    //reset form
+    $("#reset-form").on("click", function () {
+        $('#series-0')[0].reset();
+         update_point_verification_text('#series-0');
+    });
+
+    //initial points selected
+    update_point_verification_text('#series-0');
 });
