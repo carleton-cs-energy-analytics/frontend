@@ -121,8 +121,8 @@ function update_building(form_element, initial_load = false) {
 function update_floor(form_element, initial_load = false) {
     let query = build_query_string(form_element, ["building"]);
 
-    $.getJSON(BACKEND_URL + "all_floors",
-        null,
+    $.getJSON(BACKEND_URL + "floors",
+        {search: query},
         function (data, status, jqXHR) {
             let floor_select = form_element.find("select.floor");
             floor_select.empty();
