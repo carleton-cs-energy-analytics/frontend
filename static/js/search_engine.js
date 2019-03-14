@@ -219,7 +219,8 @@ function update_device(form_element, initial_load = false) {
  */
 function update_point(form_element, initial_load = false) {
     console.log("update_point()");
-    let query = build_query_string(form_element, ["building", "floor", "room", "device", "tag"]);
+    //filters that are taken into consideration when updating the points filter options
+    let query = build_query_string(form_element, ["building", "floor", "room", "device", "tag", "type"]);
 
     $.getJSON(BACKEND_URL + "points",
         {search: query},
@@ -372,6 +373,11 @@ $(function () {
     });
     //on change in tag filter, update point filter
     $("select.tag").on("change", function (event) {
+        let series = $(event.target).parent().parent();
+        update_point(series);
+    });
+    //on change in type filter, update point filter
+    $("select.type").on("change", function (event) {
         let series = $(event.target).parent().parent();
         update_point(series);
     });

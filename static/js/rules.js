@@ -3,8 +3,6 @@
  * Authors: Ethan Cassel-Mace, Alex Davis, Miaouye Que
  * March 13, 2019
  */
-
-
 $(function () {
     $.getJSON(BACKEND_URL + "rules",
         null,
