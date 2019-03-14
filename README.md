@@ -16,7 +16,9 @@
 1) Select group of points
    - Use the point selector tool to filter down to the selection of points you would like to plot. Text to the right of the            submit button will show how many points match the current filters
 2) Select date range
-   -
+   - Select a date range over which you would like to plot values for the selected group of points. 
+   - Selecting a date range in the future will cause the graph to show no value for those future days. 
+   - The start and stop time refer to the exact start and end time of the range, not the time range for each day for all days in the range. 
 3) Plot
    - To plot data, press the graph button. A linegraph should appear for points of type numeric, float, or integer. A heatmap will be used for points of all other types. 
    - If the graph button is pressed and no graph appears check the following: 
