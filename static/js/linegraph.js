@@ -20,7 +20,7 @@ function buildTrendViz(data) {
         return parseFloat(d.value);
     }) - 1;
 
-    var margin = {top: 20, right: 30, bottom: 30, left: 40},
+    var margin = {top: 32, right: 30, bottom: 30, left: 40},
         width = svg.attr("width") - margin.left - margin.right,
         height = svg.attr("height") - margin.top - margin.bottom,
         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
