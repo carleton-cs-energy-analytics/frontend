@@ -402,7 +402,11 @@ $(function () {
     //reset form
     $("#reset-form").on("click", function () {
         $('#series-0')[0].reset();
-         update_point_verification_text('#series-0');
+        update_point_verification_text('#series-0');
+        //update building filter
+        update_building($("#series-0"), true);
+        //update tags, units, type, measurement
+        update_static($("#series-0"), true);
     });
 
 
