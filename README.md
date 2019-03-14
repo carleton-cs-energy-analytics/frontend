@@ -13,6 +13,17 @@
    
 ## Using the Trends UI
 
+1) Select group of points
+   - Use the point selector tool to filter down to the selection of points you would like to plot. Text to the right of the            submit button will show how many points match the current filters
+2) Select date range
+   -
+3) Plot
+   - To plot data, press the graph button. A linegraph should appear for points of type numeric, float, or integer. A heatmap will be used for points of all other types. 
+   - If the graph button is pressed and no graph appears check the following: 
+      - If there are zero points that match the point filters, then no graph will appear.
+      - If there are no values for the the date range selected, then no graph will appear. 
+      - If the above two cases are correct and there is still no graph, then there could be a technically issue with reaching the database. 
+
 
 
 ## Using the Anomaly Alerts System
