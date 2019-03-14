@@ -3,11 +3,13 @@
 // Author: Ethan Cassel-Mace & Eva Grench
 // Date: 2/11/2019
 
-
+// This is all in one function so that javascript doesn't start mixing variables between this code and the heatmap...
+// This is what the dashboard calls to make the visualization.
 function buildTrendViz(data) {
     var w = 960,			// Width of our visualization (hacky)
         h = 500;            // Height of our visualization (hacky)
 
+    // The svg element that everything is connected to
     var svg = d3.select('#visualization')
         .append('svg')
         .attr('width', w)
@@ -22,12 +24,13 @@ function buildTrendViz(data) {
         height = svg.attr("height") - margin.top - margin.bottom,
         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+    // Use the built in scaleTime() to make the times looking nice on the x-axis
     var xScale = d3.scaleTime()
         .domain([getTime(d3.min(data, function (d) {
-            return d.timestamp;
+            return d.timestamp; // Start at the earliest timestamp
         })),
             getTime(d3.max(data, function (d) {
-                return d.timestamp;
+                return d.timestamp; // End at the latest timestamp
             }))])
         .range([0, width]);
 
@@ -77,7 +80,7 @@ function buildTrendViz(data) {
             return d.point_name;
         })
         .sortKeys(d3.ascending)
-        .sortValues(function (a, b) {
+        .sortValues(function (a, b) { // sorts the values by time so we don't get lines moving back in time
             return a.timestamp - b.timestamp;
         })
         .entries(data);
@@ -159,6 +162,7 @@ function buildTrendViz(data) {
             voronoiGroup.classed("voronoi--show", this.checked);
         });
 
+    // Show a tooltip, circle, and greying our of other lines on mouseover.
     function mouseover(d) {
         d.data.line.parentNode.appendChild(d.data.line);
         focus.attr("transform", "translate(" + xScale(getTime(d.data.timestamp)) + "," + yScale(d.data.value) + ")");
@@ -168,9 +172,10 @@ function buildTrendViz(data) {
         changeOtherLineColors(d, '#c2c2c4', '3px', null);
     }
 
-    // changes the color of a line when hovered over and moused out
+    // Changes the color of all the lines other than the one being hovered over to grey and thickens the hovered one
     function changeOtherLineColors(selectedLineData, color, width, blend) {
-        let lines = d3.select('.points').selectAll('path')['_groups'];
+        // Finds all the actually relevant lines in the line graph
+        let lines = d3.select('.points').selectAll('path')['_groups']; // still not 100% sure why this works
         for (let i = 0; i < lines.length; i++) {
             for (let j = 0; j < lines[i].length; j++) {
                 if (lines[i][j].id !== selectedLineData.data['point_name']) {
@@ -178,16 +183,18 @@ function buildTrendViz(data) {
                 } else {
                     lines[i][j].style.strokeWidth = width;
                 }
-                lines[i][j].style.mixBlendMode = blend;
+                lines[i][j].style.mixBlendMode = blend; // Get rid of blending for all lines
             }
         }
     }
 
+    // Changes all the colors of the lines back to blue, small in width, and easy to see where they overlap
     function mouseout(d) {
         focus.attr("transform", "translate(-100,-100)");
         changeOtherLineColors(d, 'steelblue', '1px', 'multiply')
     }
 
+    // Converts the timestamp as a unixtimestamp to a date to be understood by scaleTime()
     function getTime(unixTimestamp) {
         return new Date(unixTimestamp * 1000);
     }
