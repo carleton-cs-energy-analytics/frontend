@@ -23,8 +23,9 @@
    - To plot data, press the graph button. A linegraph should appear for points of type numeric, float, or integer. A heatmap will be used for points of all other types. 
    - If the graph button is pressed and no graph appears check the following: 
       - If there are zero points that match the point filters, then no graph will appear.
-      - If there are no values for the the date range selected, then no graph will appear. 
-      - If the above two cases are correct and there is still no graph, then there could be a technically issue with reaching the database. 
+      - If there are no values for the the date range selected, then no graph will appear.
+      - If the selection of points includes numeric types and non-numeric types, then no graph will appear. 
+      - If the above three cases are not relevant and there is still no graph, then there could be a technical issue with reaching the database. 
 
 
 
