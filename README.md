@@ -1,14 +1,35 @@
 # frontend
 
-## Running for development
+## Running for Development
 
 1) Run `pipenv install`
 
 2) To run the server with your own backend, run 
    `BACKEND_URL="http://localhost:5000/api/" pipenv run python3 app.py -p 8080`  
    To run the server with the production backend, run 
-   `BACKEND_URL="http://energycomps.its.carleton.edu:8080/api/" pipenv run python3 app.py -p 8080`  
+   `pipenv run python3 app.py -p 8080`  
    To run the server in debug mode, prepend `FLASK_DEBUG=1`.
+   
+## Running for Production
+
+This repository should be cloned to `/var/www/frontend`
+There is a systemd unit file at `/etc/systemd/system/frontend.service`, which should have the following contents:
+
+    [Unit]
+    Description=Gunicorn instance to serve frontend
+    After=network.target
+    
+    [Service]
+    User=energy
+    Group=energycomps
+    WorkingDirectory=/var/www/frontend
+    ExecStart=/usr/bin/make run
+    
+    [Install]
+    WantedBy=multi-user.target
+    
+To re-deploy the latest version, there's a Make rule which simply does a `git pull`, and then restarts the systemd unit.
+For information about how the frontend is exposed via reverse proxy, see the backend readme.  
    
    
 ## Using the Trends UI
