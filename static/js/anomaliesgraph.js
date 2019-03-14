@@ -5,6 +5,7 @@
 // Date: 2/11/2019
 
 
+// This is what the dashboard calls to make the visualization.
 function buildAnomalyViz(data, pointDict) {
     console.log("buildAnomalyViz()");
     console.log("point dict");
@@ -21,15 +22,13 @@ function buildAnomalyViz(data, pointDict) {
         height = 500 - margin.top - margin.bottom,
         g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    // var xScale = d3.scaleLinear() // @TODO: used to be d3.scaleTime. look into this when switching back to time.
-    //     .range([0, width]);
-
+    // Use the built in scaleTime() to make the times looking nice on the x-axis
     var xScale = d3.scaleTime()
-        .domain([getTime(d3.min(data, function (d) {
-            return d.timestamp;
-        })),
+            .domain([getTime(d3.min(data, function (d) {
+                return d.timestamp; // Start at the earliest timestamp
+            })),
             getTime(d3.max(data, function (d) {
-                return d.timestamp;
+                return d.timestamp; // End at the latest timestamp
             }))])
         .range([0, width]);
 
@@ -162,15 +161,15 @@ function buildAnomalyViz(data, pointDict) {
             voronoiGroup.classed("voronoi--show", this.checked);
         });
 
+    // Show a tooltip, circle, and greying our of other lines on mouseover.
     function mouseover(d) {
-        // d3.select(d.data.line).classed("line--hover", true);
         d.data.line.parentNode.appendChild(d.data.line);
         focus.attr("transform", "translate(" + xScale(getTime(d.data.timestamp)) + "," + yScale(d.data.value) + ")");
         focus.select("text").text(d.data.point_name + '\n' + d.data.value);
         changeOtherLineColors(true, d.data['point_name'], pointDict[d.data['point_name']], '3px', null);
     }
 
-    // changes the color of a line when hovered over and moused out
+    // Changes the color of all the lines other than the one being hovered over to grey and thickens the hovered one
     function changeOtherLineColors(mouseIn, hoveredLineId, hoveredPointIsAnomalous, width, blend) {
         let lines = d3.select('.points').selectAll('path')['_groups'];
         for (let i = 0; i < lines.length; i++) {
@@ -178,6 +177,8 @@ function buildAnomalyViz(data, pointDict) {
                 let currentId = lines[i][j].id;
                 let currentPointIsAnomalous = pointDict[lines[i][j].id] === true;
 
+                // Lots of cases here because the lines all now one of two colors so it changes was should happen when
+                // one is hovered over versus another.
                 if (mouseIn && currentId === hoveredLineId && hoveredPointIsAnomalous) {
                     lines[i][j].style.stroke = '#a32716';
                     lines[i][j].style.strokeWidth = width;
@@ -195,17 +196,18 @@ function buildAnomalyViz(data, pointDict) {
                     lines[i][j].style.stroke = '#cccac9';
                     lines[i][j].style.strokeWidth = width;
                 }
-                lines[i][j].style.mixBlendMode = blend;
+                lines[i][j].style.mixBlendMode = blend; // All lines should stop blending when something is hovered over
             }
         }
     }
 
+    // Changes all the colors of the lines back to red or grey, small in width, and easy to see where they overlap
     function mouseout(d) {
-        // d3.select(d.data.line).classed("line--hover", false);
         focus.attr("transform", "translate(-100,-100)");
         changeOtherLineColors(false, d.data['point_name'], pointDict[d.data['point_name']], '1px', 'multiply')
     }
 
+    // Converts the timestamp as a unixtimestamp to a date to be understood by scaleTime()
     function getTime(unixTimestamp) {
         return new Date(unixTimestamp * 1000);
     }

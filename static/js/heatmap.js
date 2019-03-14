@@ -3,6 +3,7 @@
 // Author: Eva Grench
 // Date: 2/9/2019
 
+
 // This is all in one function so that javascript doesn't start mixing variables between this code and the line graph...
 // This is what the dashboard calls to make the visualization.
 function buildHeatmapViz(data) {

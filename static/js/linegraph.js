@@ -3,6 +3,7 @@
 // Author: Ethan Cassel-Mace & Eva Grench
 // Date: 2/11/2019
 
+
 // This is all in one function so that javascript doesn't start mixing variables between this code and the heatmap...
 // This is what the dashboard calls to make the visualization.
 function buildTrendViz(data) {
@@ -134,7 +135,7 @@ function buildTrendViz(data) {
         .attr("r", 3.5);
 
     focus.append("text")
-    .attr("y", -25);
+        .attr("y", -25);
     //     .attr("y", yScale(minYValue + 10));
 
     focus.append("text")
