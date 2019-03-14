@@ -399,6 +399,5 @@ $(function () {
          update_point_verification_text('#series-0');
     });
 
-    //initial points selected
-    update_point_verification_text('#series-0');
+
 });
