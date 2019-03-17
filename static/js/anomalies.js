@@ -58,7 +58,8 @@ function findAnomalyLines(values) {
 }
 
 /**
- * Posts rule to rules table in db
+ * Posts rule to rules table in db based on the current state of the form elements (not including date picker
+ * since rules are indipendent of date)
  */
 function postAnomalyRule() {
     console.log('postAnomalyRule()');
@@ -100,12 +101,19 @@ function postAnomalyRule() {
     })
 }
 
+/**
+ *
+ * callback for unsuccessful rule adding
+ */
 function newRuleErrored(data, status, jqXHR) {
     alert('There was an error creating your new rule. Status: ' + status);
 }
 
+/**
+ * callback for successful rule adding
+ */
 function newRuleAdded(data, status, jqXHR) {
-    alert('your rule has been added to the database');
+    alert('Your rule has been created.');
 }
 
 /**
