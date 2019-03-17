@@ -27,6 +27,13 @@ function build_query_string(form_element, selector_list = SELECTOR_LIST) {
     return disjunctive_clauses.filter(n => n).join("and");
 }
 
+/**
+ * serializes the page state based on current state of the selector forms, for use in the URL
+ * @param {html element }select_form_element html form element for point selector
+ * @param {html element} date_range_picker_element form element for date picker
+ * @param {boolean} include_date_range whether to include the date range in the url string or not
+ * @returns {string} serialized form of the page state, used for the URL
+ */
 function build_url_param_string(select_form_element, date_range_picker_element, include_date_range = true) {
     let params = {
         select: {},
@@ -50,7 +57,13 @@ function build_url_param_string(select_form_element, date_range_picker_element, 
     return $.param(params); // serializes the params object
 }
 
-
+/**
+ * takes the object version of the serialized page state from the URL, and applies this state to all the
+ * forms.
+ * @param {object} selector_state object form of the desired page state
+ * @param {html element }select_form_element html form element for point selector
+ * @param {html element} date_range_picker_element form element for date picker
+ */
 function apply_search_param_string(selector_state, select_form_element, date_range_picker_element) {
     SELECTOR_LIST.forEach(function (selector) {
         if (selector in selector_state.select) {
@@ -330,10 +343,13 @@ function submit_search(event, pushState = true) {
     })
 }
 
-
+/**
+ * if there is "page state" information stored in the URL, call apply_search_param_string
+ * in order to apply the state stored in the URL to the page.
+ */
 function conditionally_apply_query_state() {
     console.log("conditionally_apply_query_state()");
-    query_state = $.bbq.getState();
+    query_state = $.bbq.getState(); // uses bbq to parse the url into object form (deserialize)
     // apply url parameter if there is one
     if (!$.isEmptyObject(query_state)) {
         //console.log('Applying query state to selectors');
