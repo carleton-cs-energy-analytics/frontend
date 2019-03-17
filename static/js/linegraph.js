@@ -6,8 +6,9 @@
 
 // This is all in one function so that javascript doesn't start mixing variables between this code and the heatmap...
 // This is what the dashboard calls to make the visualization.
+// We stuck all the code in this function @ TODO take all helper functions out!! this should only be the top level
 function buildTrendViz(data) {
-    var w = 960,			// Width of our visualization (hacky)
+    var w = 960,			// Width of our visualization (hacky) @TODO these dimensions should not be hardcoded in JS
         h = 500;            // Height of our visualization (hacky)
 
     // The svg element that everything is connected to
@@ -38,6 +39,7 @@ function buildTrendViz(data) {
     var yScale = d3.scaleLinear()
         .range([height, 0]);
 
+    // helper function to build voronoi
     var voronoi = d3.voronoi()
         .x(function (d) {
             return xScale(getTime(d.timestamp));
@@ -47,6 +49,7 @@ function buildTrendViz(data) {
         })
         .extent([[-margin.left, -margin.top], [width + margin.right, height + margin.bottom]]);
 
+    // helper function to build lines already scaled
     var line = d3.line()
         .x(function (d) {
             return xScale(getTime(d.timestamp));
@@ -55,6 +58,11 @@ function buildTrendViz(data) {
             return yScale(d.value);
         });
 
+    /**
+     * this is for a future where you need to update the scales, for example if adding a second series once the
+     * graph is already created.
+     * @param data version of data to update for
+     */
     function updateScales(data) {
         xScale.domain([getTime(d3.min(data, function (d) {
             return d.timestamp;
@@ -72,10 +80,12 @@ function buildTrendViz(data) {
             }) + 1]);
     }
 
-    data = data[0]; //@TODO temporary to deal with nested data
+    data = data[0]; //@TODO temporary to deal with nested data. IN the future, data would be a list of multiple
+                    // series. Now it is just one series.
     console.log('data', data)
-    updateScales(data);
+    updateScales(data); // creates scales to match the data
 
+    // wrangle data into the format we want
     var data = d3.nest()
         .key(function (d) {
             return d.point_name;
@@ -87,11 +97,13 @@ function buildTrendViz(data) {
         .entries(data);
 
 
+    // x axis
     g.append("g")
         .attr("class", "axis axis--x")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(xScale));
 
+    // y axis
     g.append("g")
         .attr("class", "axis axis--y")
         .call(d3.axisLeft(yScale))
@@ -104,6 +116,7 @@ function buildTrendViz(data) {
         .style("font-weight", "bold")
         .text("Point Value");
 
+    // build trend lines
     g.append("g")
         .attr("class", "points")
         .selectAll("path")

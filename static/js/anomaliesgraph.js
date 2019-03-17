@@ -1,7 +1,8 @@
 // Javascript file for Voronoi style line graph
-// Modified from example online by...
 // Author: Ethan Cassel-Mace & Eva Grench
 // Edited to work for anomalies by Chris Tordi
+// @TODO THIS SHOULD BE COMBINED WITH linegraph.js ASAP!!! REPEATED CODE IS GOING TO BUILD UP AND WILL ONLY
+// GET HARDER TO SEPARATE
 // Date: 2/11/2019
 
 
