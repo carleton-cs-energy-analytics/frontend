@@ -54,3 +54,21 @@ For information about how the frontend is exposed via reverse proxy, see the bac
 
 
 ## Using the Anomaly Alerts System
+
+1) Determine what is anomalous by visualizing from the anomalies tab
+   - Select group of points and date range in the same way as the trends UI.
+   - Add a value query to determine what should be considered anomalous. The syntax for any single query is `~ inequality value` (with no spaces). They can be made more complicated by adding a space, any boolean operator (i.e. `and`, `or`, and `not`), a space, and another query. `(` and `)` can be used to make more complex queries. For example, `(~<=70 or ~=40) and ~>8.3` would be a valid query.
+   - Plot the graph in the same way as the trends UI. Any points that ever had a value that matched the value query will have their line colored red. Their point name will show up to the right of the graph.
+2) Make a rule
+   - Select points and values as described above, but instead of clicking `Graph`, click `Create New Rule`.
+   - Give it a descriptive name.
+   - You will be notified via a daily email if a value ever matches this rule.
+3) Manage rules
+   - Go to the rules tab.
+   - Click `Rename` to change the user-facing name of the rule that is displayed in the rules management page and on the email.
+   - Click `Delete` to delete a rule entirely (you will not be notified about a rule if this is done).
+   - Click `View` to view the results for a given rule
+      - You can "edit" a rule by viewing it, tweaking the point or value query, creating a new rule, and deleting the original rule.
+   
+      
+TODO: You can currently do value queries (and make rules) for non-numeric values, but we don't have functionality yet for visualizing those anomalies. Additionally, the syntax for value queries was never meant to be user facing, so the UI could certainly be improved here in the future. Potentionally, combining the anomalies and trends tab could be good as well.
