@@ -139,7 +139,12 @@ function buildAnomalyViz(data, pointDict) {
         .attr("r", 3.5);
 
     focus.append("text")
-        .attr("y", -10);
+        .attr("y", -25);
+    //     .attr("y", yScale(minYValue + 10));
+
+    focus.append("text")
+        .attr('class', 'another')
+        .attr('y', -10);
 
     var voronoiGroup = g.append("g")
         .attr("class", "voronoi");
@@ -166,7 +171,9 @@ function buildAnomalyViz(data, pointDict) {
     function mouseover(d) {
         d.data.line.parentNode.appendChild(d.data.line);
         focus.attr("transform", "translate(" + xScale(getTime(d.data.timestamp)) + "," + yScale(d.data.value) + ")");
-        focus.select("text").text(d.data.point_name + '\n' + d.data.value);
+        focus.select("text").text(d.data.point_name + '  -  ' + String(d.data.value));
+        momentDate = moment(d.data.timestamp * 1000);
+        focus.select("text.another").text(momentDate.format('M/D/YYYY h:MM:SS A'));
         changeOtherLineColors(true, d.data['point_name'], pointDict[d.data['point_name']], '3px', null);
     }
 
