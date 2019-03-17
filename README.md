@@ -1,5 +1,7 @@
 # frontend
 
+The User-facing website with "dashboards", etc.
+
 ## Running for Development
 
 1) Run `pipenv install`
@@ -28,7 +30,8 @@ There is a systemd unit file at `/etc/systemd/system/frontend.service`, which sh
     [Install]
     WantedBy=multi-user.target
     
-To re-deploy the latest version, there's a Make rule which simply does a `git pull`, and then restarts the systemd unit.
+To re-deploy the latest version, there's a Make rule (`deploy`) which simply does a `git pull`, 
+and then restarts the systemd unit.
 For information about how the frontend is exposed via reverse proxy, see the backend readme.  
    
    
