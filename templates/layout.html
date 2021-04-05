@@ -14,10 +14,28 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 
     <!-- Latest compiled JavaScript -->
+    <script type="text/javascript" src="../static/js/anomaliesgraph.js"></script>
+    <script src="../static/js/anomalies.js"></script>
+    <script type="text/javascript" src="../static/js/search_engine.js"></script>
+    <script src="jquery.js"></script>
+
+
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+    <style>
+        table {
+            border-collapse: collapse;
+            border: 2px black solid;
+            font: 12px sans-serif;
+        }
+
+        td {
+            border: 1px black solid;
+            padding: 5px;
+        }
+    </style>
     <script>BACKEND_URL = "{{ backend_url }}";</script>
 </head>
 
@@ -80,8 +98,9 @@
         </nav>
         <div class="col-md-10">
             {% block body %}{% endblock %}
-        </div>
+        </div> 
     </div>
 </div>
+
 </body>
 </html>

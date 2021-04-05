@@ -4,6 +4,7 @@
 <h2 style="text-align: center;">
     Anomalies
 </h2>
+
 <hr>
 <h4>
     Point Selector
@@ -100,7 +101,11 @@
         </thead>
         <tbody></tbody>
     </table>
-</div>
+</div> 
+
+
+<ol id="dataTable"></ol>
+<div id="error"></div>
 
 <script>
     $("a").removeClass("active");
@@ -110,4 +115,13 @@
 <script type="text/javascript" src="../static/js/anomaliesgraph.js"></script>
 <script src="../static/js/anomalies.js"></script>
 <script type="text/javascript" src="../static/js/search_engine.js"></script>
+<script src="jquery.js"></script> 
+<script> 
+    $("#dataTable").load("../static/csv-files/evans_anom_counts.html",function( response, status, xhr ) {
+  if ( status == "error" ) {
+    var msg = "Sorry but there was an error: ";
+    $( "#error" ).html( msg + xhr.status + " " + xhr.statusText );
+  }
+});
+</script> 
 {% endblock %}
