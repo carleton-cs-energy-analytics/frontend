@@ -4,6 +4,12 @@
  * March 13, 2019
  */
 
+window.onload = initialize;
+
+function initialize() {
+    $("#dataTable").load("evans_anom_counts.html"); 
+}
+
 /**
  * Passes data from point selector to anomalies line graph and anomalous points table
  * @param {object} values js object with point names and values associated with selected time range
@@ -98,6 +104,11 @@ function postAnomalyRule() {
             alert("Invalid value query???")
         }
     })
+}
+
+function loadDataTable(){
+    $("#dataTable").load("evans_anom_counts.html");
+
 }
 
 function newRuleErrored(data, status, jqXHR) {

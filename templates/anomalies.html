@@ -1,11 +1,24 @@
 {% extends "layout.html" %}
 
 {% block body %}
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+
+<!--
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+        crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+-->
+
 <h2 style="text-align: center;">
     Anomalies
 </h2>
 
 <hr>
+<!-- <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding"> -->
+
+<!--
 <h4>
     Point Selector
 </h4>
@@ -101,9 +114,57 @@
         </thead>
         <tbody></tbody>
     </table>
-</div> 
+</div>
+-->
+
+<!-- Github Code from https://github.com/derekeder/csv-to-html-table -->
+
+<div class="container-fluid">
+    <main class ="row">
+        <div class = "col">
+             <div id="table-container"></div>
+        </div>
+    </main>
+    <footer class "row">
+	<div class = "col">
+	</div>
+    </footer>
+</div>
 
 
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename = 'js/jquery.csv.min.js') }}"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<script src="{{ url_for('static', filename = 'js/csv_to_html_table.js') }}"></script>
+
+<script>
+    function format_link(link) {
+	if (link)
+	    return "<a href = anomalies?room=" + link + ">" + link + "</a>";
+	else return "";
+    }
+
+    CsvToHtmlTable.init({
+	csv_path: "{{ url_for('static', filename='csv-files/evans_anom_counts.csv') }}",
+	element: "table-container",
+	allow_download: true,
+	csv_options: {
+	    seperator: ",",
+	    delimiter: '"'
+	},
+	database_options: {
+	    paging: false
+	},
+	custom_formatting: [
+	    [0, format_link]
+	]
+    });
+</script>
+
+<!--
+{#%csv anomalies table%#}
 <ol id="dataTable"></ol>
 <div id="error"></div>
 
@@ -123,5 +184,6 @@
     $( "#error" ).html( msg + xhr.status + " " + xhr.statusText );
   }
 });
-</script> 
+</script>
+--> 
 {% endblock %}
