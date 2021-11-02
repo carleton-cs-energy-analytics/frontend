@@ -15,9 +15,9 @@ def get_main_page():
 def get_search():
     return flask.render_template('search-engine.html', backend_url=BACKEND_URL)
 
-@application.route('/rules')
+@application.route('/about')
 def get_rules_page():
-    return flask.render_template('rules.html', backend_url=BACKEND_URL)
+    return flask.render_template('about.html', backend_url=BACKEND_URL)
 
 @application.route('/anomalies')
 def get_anomaly_page():
