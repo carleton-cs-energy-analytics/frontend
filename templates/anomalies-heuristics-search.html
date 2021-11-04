@@ -1,0 +1,87 @@
+{%extends "layout.html" %}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="../static/anomalies-heuristics-search.js"></script>
+
+{% block body %}
+    <div class="container">
+        <h3>
+            Heuristics Search
+        </h3>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" name="heuristic-button">Heuristic
+                <span class="caret"></span></button>
+                <ul class="dropdown-menu" id="first-dropdown">
+                    <li><a class="dropdown-item" href="#" onclick="changeSelection(this.innerHTML)">Room Temperature/Vent</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="changeSelection(this.innerHTML)">Room Temperature/Set Temperature</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="changeSelection(this.innerHTML)">Current Vent Percentage/Set Vent Percentage</a></li>
+                </ul>
+        </div>
+        <br><br>
+        <div style="display:inline-block;">
+        <div class="dropdown" id="first-new-dropdown" style="display: none;">
+        <p style="display:inline-block;" id="first-param"></p>
+        <button class="btn btn-primary dropdown toggle" type="button" data-toggle="dropdown" name="first-new-button">>
+            <span class="caret"></span></button>
+                <ul class="dropdown-menu" id="second-dropdown">
+                    <li><a class="dropdown-item" href="#">></a></li>
+                    <li><a class="dropdown-item" href="#">=></a></li>
+                    <li><a class="dropdown-item" href="#"><</a></li>
+                    <li><a class="dropdown-item" href="#"><=</a></li>
+            </ul>
+        <form style="display: inline-block;" id="first-num-dropdown">
+            <input type="number" min="1" max="100">
+        </form>
+        </div>
+        <div class="dropdown" id="second-new-dropdown" style="display: none;">
+        <p style="display:inline-block;" id="second-param"></p>
+        <button class="btn btn-primary dropdown toggle" type="button" data-toggle="dropdown" name="second-new-button">>
+            <span class="caret"></span></button>
+            <ul class="dropdown-menu" id ="third-dropdown">
+                <li><a class="dropdown-item" href="#">></a></li>
+                <li><a class="dropdown-item" href="#">=></a></li>
+                <li><a class="dropdown-item" href="#"><</a></li>
+                <li><a class="dropdown-item" href="#"><=</a></li>
+            </ul>
+        <form style="display: inline-block;" id="second-num-dropdown">
+            <input type="number" min="1" max="100">
+            <input onclick="generateTable();" style="float:right;" type="submit" value="Submit">
+        </form>
+    </div>
+    </div>
+    </div>
+
+    <table class="table table-bordered" style="width: 50%; margin-left: auto; margin-right:auto; display: none;" id="results-table">
+        <thead>
+            <tr>
+                <th scope="col">Building</th>
+                <th scope="col">Room Number</th>
+                <th scope="col">Room Temperature</th>
+                <th scope="col">Vent Percentage</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Evans Hall</td>
+                <td>311</td>
+                <td>93</td>
+                <td>91</td>
+            </tr>
+            <tr>
+                <td>Cassat Hall</td>
+                <td>118</td>
+                <td>89</td>
+                <td>89</td>
+            </tr>
+            <tr>
+                <td>Nourse Hall</td>
+                <td>201</td>
+                <td>85</td>
+                <td>87</td>
+            </tr>
+        </tbody>
+    </table>
+
+{% endblock %}
