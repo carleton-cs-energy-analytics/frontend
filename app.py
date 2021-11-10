@@ -28,9 +28,9 @@ def get_anomaly_page():
             for k, v in args.items():
                 return flask.render_template('anomaliesRooms.html', value= v, backend_url=BACKEND_URL)
         else:
-            return flask.render_template('anomalies.html', backend_url=BACKEND_URL)
+            return flask.render_template('anomalies-heuristics-search.html', backend_url=BACKEND_URL)
     else:
-        return flask.render_template('anomalies.html', backend_url=BACKEND_URL)
+        return flask.render_template('anomalies-heuristics-search.html', backend_url=BACKEND_URL)
 
 @application.route('/queryTest')
 def get_rooms_page():
