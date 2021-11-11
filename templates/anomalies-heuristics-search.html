@@ -10,7 +10,7 @@
             Heuristics Search
         </h3>
         <div class="dropdown">
-            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" name="heuristic-button">Heuristic
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" name="heuristic-button" style="width: fit-content; height: 50px; display: inline-block;">Heuristic
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu" id="first-dropdown">
                     <li><a class="dropdown-item" href="#" onclick="changeSelection(this.innerHTML)">Room Temperature/Vent</a></li>
@@ -21,32 +21,32 @@
         <br><br>
         <div style="display:flex;">
         <div class="dropdown" id="first-new-dropdown" style="display: none;">
-        <p style="display:inline-block;" id="first-param"></p>
-        <button class="btn btn-primary dropdown toggle" type="button" data-toggle="dropdown" name="first-new-button">>
+        <p style="display:inline-block; width: fit-content; height: 50px;" id="first-param"></p>
+        <button class="btn btn-primary dropdown toggle" type="button" data-toggle="dropdown" name="first-new-button" style="width: 75px; height: 50px;">>
             <span class="caret"></span></button>
                 <ul class="dropdown-menu" id="second-dropdown">
-                    <li><a class="dropdown-item" href="#">></a></li>
-                    <li><a class="dropdown-item" href="#">=></a></li>
-                    <li><a class="dropdown-item" href="#"><</a></li>
-                    <li><a class="dropdown-item" href="#"><=</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="changeLeftSelection(this.innerHTML)">></a></li>
+                    <li><a class="dropdown-item" href="#" onclick="changeLeftSelection(this.innerHTML)">=></a></li>
+                    <li><a class="dropdown-item" href="#" onclick="changeLeftSelection(this.innerHTML)"><</a></li>
+                    <li><a class="dropdown-item" href="#" onclick="changeLeftSelection(this.innerHTML)"><=</a></li>
             </ul>
         <form style="display: inline-block;" id="first-num-dropdown">
-            <input type="number" min="1" max="100">
+            <input type="number" min="1" max="100" style="width: fit-content; height: 50px; margin-right: 40px;">
         </form>
         </div>
         <div class="dropdown" id="second-new-dropdown" style="display: none;">
-        <p style="display:inline-block;" id="second-param"></p>
-        <button class="btn btn-primary dropdown toggle" type="button" data-toggle="dropdown" name="second-new-button">>
+        <p style="display:inline-block; width: fit-content; height: 50px;" id="second-param"></p>
+        <button class="btn btn-primary dropdown toggle" type="button" data-toggle="dropdown" name="second-new-button" style="width: 75px; height: 50px;">>
             <span class="caret"></span></button>
             <ul class="dropdown-menu" id ="third-dropdown">
-                <li><a class="dropdown-item" href="#">></a></li>
-                <li><a class="dropdown-item" href="#">=></a></li>
-                <li><a class="dropdown-item" href="#"><</a></li>
-                <li><a class="dropdown-item" href="#"><=</a></li>
+                <li><a class="dropdown-item" href="#" onclick="changeRightSelection(this.innerHTML)">></a></li>
+                <li><a class="dropdown-item" href="#" onclick="changeRightSelection(this.innerHTML)">=></a></li>
+                <li><a class="dropdown-item" href="#" onclick="changeRightSelection(this.innerHTML)"><</a></li>
+                <li><a class="dropdown-item" href="#" onclick="changeRightSelection(this.innerHTML)"><=</a></li>
             </ul>
         <form style="display: inline-block;" id="second-num-dropdown">
-            <input type="number" min="1" max="100">
-            <input onclick="generateTable();" style="float:right;" type="submit" value="Submit">
+            <input type="number" min="1" max="100" style="width: fit-content; height: 50px; margin-right: 40px;">
+            <input onclick="generateTable();" style="float:right; width: fit-content; height: 40px; margin-left: auto; margin-right: auto; position: absolute;" type="submit" value="Submit">
         </form>
     </div>
     </div>
