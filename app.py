@@ -9,7 +9,7 @@ application = flask.Flask(__name__, static_folder='static', template_folder='tem
 
 @application.route('/')
 def get_main_page():
-    return flask.render_template('search-engine.html', backend_url=BACKEND_URL)
+    return flask.render_template('dashboard.html', backend_url=BACKEND_URL)
 
 @application.route('/search')
 def get_search():
