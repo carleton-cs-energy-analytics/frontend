@@ -49,5 +49,5 @@ function changeRightSelection(text) {
 }
 
 function generateTable() {
-    document.getElementById("results-table").style.display="block");
+    document.getElementById("results-table").style.display="block";
 }
