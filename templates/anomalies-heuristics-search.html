@@ -31,7 +31,7 @@
                     <li><a class="dropdown-item" href="#" onclick="changeLeftSelection(this.innerHTML)"><=</a></li>
             </ul>
         <form style="display: inline-block;" id="first-num-dropdown">
-            <input type="number" min="1" max="100" style="width: fit-content; height: 50px; margin-right: 40px;" value=93>
+            <input type="number" id="first-num-input" min="1" max="100" style="width: fit-content; height: 50px; margin-right: 40px;" value=93>
         </form>
         </div>
         <div class="dropdown" id="second-new-dropdown" style="display: none;">
@@ -45,7 +45,7 @@
                 <li><a class="dropdown-item" href="#" onclick="changeRightSelection(this.innerHTML)"><=</a></li>
             </ul>
         <form style="display: inline-block;" id="second-num-dropdown">
-            <input type="number" min="1" max="100" style="width: fit-content; height: 50px; margin-right: 40px;" value=93>
+            <input type="number" id="second-num-input" min="1" max="100" style="width: fit-content; height: 50px; margin-right: 40px;" value=93>
             <input onclick="generateTable();" style="float:right; width: fit-content; height: 40px; margin-left: auto; margin-right: auto; position: absolute;" type="button" value="Search">
         </form>
     </div>
