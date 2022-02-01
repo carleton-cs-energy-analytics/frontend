@@ -49,5 +49,14 @@ function changeRightSelection(text) {
 }
 
 function generateTable() {
+    const url = "http://energycomps.its.carleton.edu/api/measurements";
+    const firstUserNum = document.getElementById('first-num-input').value;
+    const secondUserNum = document.getElementById('second-num-input').value;
+    alert(firstUserNum);
+    alert(secondUserNum);
+    $.getJSON({url: url})
+        .done(function(result, status, xhr) {
+            alert(result);
+        });
     document.getElementById("results-table").style.display="block";
 }
