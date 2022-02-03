@@ -4,186 +4,90 @@
 <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
 <meta content="utf-8" http-equiv="encoding">
 
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename = 'js/jquery.csv.min.js') }}"></script>
+
 <!--
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
         crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
 -->
 
-<h2 style="text-align: center;">
-    Energy Dashboard
-</h2>
+<body>
+    <h2 style="text-align: center;">
+        Potential Issues
+    </h2>
+    <div id="points"></div>
+</body>
 
-<hr>
-<!-- <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-<meta content="utf-8" http-equiv="encoding"> -->
+<style>
+.points-row {
+    color: #FFFFFF;
+    width: 100%;
+    height: 10vh;
+    margin-bottom: 30px;
+    background: #364156;
+    text-align: center;
+}
 
-<!--
-<h4>
-    Point Selector
-</h4>
-<div id="anomaly-container">
-    <form id="series-0" class="series">
-        <span class="form-group">
-            <label class="form-label">Building</label>
-            <select class="building" multiple></select>
-        </span>
-        <span class="form-group">
-            <label class="form-label">Floor</label>
-            <select class="floor" multiple></select>
-        </span>
-        <span class="form-group">
-            <label class="form-label">Room</label>
-            <select class="room" multiple>
-            </select>
-        </span>
-        <span class="form-group" style="display: none;">
-            <label class="form-label">Device</label>
-            <select class="device" multiple></select>
-        </span>
-        <span class="form-group">
-            <label class="form-label">Point</label>
-            <select class="point" multiple></select>
-        </span>
-        <span class="form-group">
-            <label class="form-label">Tag</label>
-            <select class="tag" multiple></select>
-        </span>
-        <span class="form-group">
-            <label class="form-label">Type</label>
-            <select class="type" multiple></select>
-        </span>
-        <span class="form-group">
-            <label class="form-label">Unit</label>
-            <select class="unit" multiple></select>
-        </span>
-        <span class="form-group">
-            <label class="form-label">Measurement</label>
-            <select class="measurement" multiple></select>
-        </span>
-        <p class="point-verification-text"></p>
+.points-row:hover {
+    color: #FFFFFF;
+    width: 100%;
+    height: 10vh;
+    margin-bottom: 30px;
+    background: #748dbb;
+    text-align: center;
+    cursor: pointer;
+}
 
-        <p class="value-verification-text"></p>
-        <br>
-        <br>
-    </form>
-</div>
-<div class="row">
-    <div id="foobar" class="col-md-8 form-inline col-md-offset-2">
-        <div class="col-md-3">
-            <input id="value-query" type="text" class="value-query form-control" placeholder="Value Query (E.g: '~< 62')"
-                   style="width: 100%;"/>
-        </div>
-        <div class=" form-group col-md-4">
-            <div id="timepicker" class="input-group" style="width: 100%">
-                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
-                <input type="text" class="form-control" name="datetimes" id="daterange"
-                       style="background-color: white; cursor: pointer" readonly/>
-            </div>
-        </div>
-        <div class="form-group col-md-5">
-            <button type="button" id="submit-search-query" type="button" class="btn btn-primary"
-                    style="background-color: #563d7c">Graph
-            </button>
-            <button type="button" id="create-rule" class="btn btn-secondary">Create Alert Rule</button>
-            <button id="reset-form" type="button" class="btn btn-danger">
-                Reset
-            </button>
-        </div>
-    </div>
-    <div class="col-md-2">
-        <p id="point-verification-text"></p>
-    </div>
-</div>
-<hr>
-
-<div id="graph">
-    <div class="col-md-8 svg" id="visualization"></div>
-    <div class="col-md-2" id="anomalous-points"></div>
-</div>
-
-
-<div id="result-table" hidden>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Point Name</th>
-            <td>Timestamp</td>
-            <td>Value</td>
-        </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-</div>
--->
-
-<!-- Github Code from https://github.com/derekeder/csv-to-html-table -->
-
-<div class="container-fluid">
-    <main class ="row">
-        <div class = "col">
-             <div id="table-container"></div>
-        </div>
-    </main>
-    <footer class "row">
-	<div class = "col">
-	</div>
-    </footer>
-</div>
-
-
-<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
-<script src="{{ url_for('static', filename = 'js/jquery.csv.min.js') }}"></script>
-<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-<script src="{{ url_for('static', filename = 'js/csv_to_html_table.js') }}"></script>
+.show-more {
+    display:none;
+}
+</style>
 
 <script>
-    function format_link(link) {
-	if (link)
-	    return "<a href = anomalies?room=" + link + ">" + link + "</a>";
-	else return "";
+
+$.ajax({
+    type: "GET",
+    url: "http://energycomps.its.carleton.edu/api/points",
+    cache: false,
+    success: function (data) {
+        $.each(JSON.parse(data), function(i, element) {
+            var row = "<div class=\"points-row\">";
+            row += "Point ID: " + element.point_id;
+            row += "<div class=\"show-more\">" 
+            row += "Point Name: " + element.point_name + "<br>";
+            row += "</div>";
+            row += "</div>";
+            $("#points").append(row);
+        });
     }
-
-    CsvToHtmlTable.init({
-	csv_path: "{{ url_for('static', filename='csv-files/evans_anom_counts.csv') }}",
-	element: "table-container",
-	allow_download: true,
-	csv_options: {
-	    seperator: ",",
-	    delimiter: '"'
-	},
-	database_options: {
-	    paging: false
-	},
-	custom_formatting: [
-	    [0, format_link]
-	]
-    });
-</script>
-
-<!--
-{#%csv anomalies table%#}
-<ol id="dataTable"></ol>
-<div id="error"></div>
-
-<script>
-    $("a").removeClass("active");
-    $("#anomalies-link").addClass("active");
-</script>
-
-<script type="text/javascript" src="../static/js/anomaliesgraph.js"></script>
-<script src="../static/js/anomalies.js"></script>
-<script type="text/javascript" src="../static/js/search_engine.js"></script>
-<script src="jquery.js"></script> 
-<script> 
-    $("#dataTable").load("../static/csv-files/evans_anom_counts.html",function( response, status, xhr ) {
-  if ( status == "error" ) {
-    var msg = "Sorry but there was an error: ";
-    $( "#error" ).html( msg + xhr.status + " " + xhr.statusText );
-  }
 });
+
+// $.ajax({
+//     type: "GET",
+//     url: "http://energycomps.its.carleton.edu/api/points?search",
+//     cache: false,
+//     success: function (data) {
+//         $.each(JSON.parse(data), function(i, element) {
+//             var row = "<div class=\"points-row\">";
+//             row += "Point Name: " + element.point_name
+//             row += "<div class=\"show-more\">" 
+//             row += "Building Name: " + element.building_name + "<br>";
+//             row += "Room Name: " + element.room_name + "<br>";
+//             row += "</div>";
+//             row += "</div>";
+//             $("#points").append(row);
+//         });
+//     }
+// });
+
+$(document).on('click', '.points-row', function (){
+    $(this).children().toggle();
+});
+
 </script>
---> 
+
 {% endblock %}
