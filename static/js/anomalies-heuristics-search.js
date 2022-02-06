@@ -84,6 +84,7 @@ function generateTable() {
 
     const selectedBuilding = buildings.get(currentBuilding);
     // alert(selectedBuilding)
+    const resultsTable = document.getElementsById("results-table");
 
     $.getJSON(searchURL + selectedBuilding, function(data) {
         $.each(data, function(key, val) {
