@@ -86,7 +86,7 @@ function generateTable() {
     // alert(selectedBuilding)
 
     $.getJSON(searchURL + selectedBuilding, function(data) {
-        $.each(JSON.parse(data), function(key, val) {
+        $.each(data, function(key, val) {
             const row = resultsTable.insertRow();
             const buildingCell = row.insertCell()
             const building = val.building_name;
