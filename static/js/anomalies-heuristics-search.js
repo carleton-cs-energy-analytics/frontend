@@ -7,9 +7,8 @@ var buildings = new Map([
     ["Townhouses", 5],
     ["Weitz", 6],
     ["Cassat", 7],
+    ["All Buildings", 8],
 ]);
-
-var currentBuilding;
 
 function changeSelection(text) {
     var y = document.getElementsByClassName("btn btn-primary dropdown-toggle");
@@ -54,56 +53,103 @@ function changeSelection(text) {
     //document.body.appendChild(firstForm);
 }
 
-function changeLeftSelection(text) {
-    var dropdown = document.getElementsByName("first-new-button");
+// function changeLeftSelection(text) {
+//     var dropdown = document.getElementsByName("first-new-button");
 
-    var y = dropdown[0].innerHTML = text + ' <span class="caret"></span>';
-} 
+//     var y = dropdown[0].innerHTML = text + ' <span class="caret"></span>';
+// } 
 
-function changeRightSelection(text) {
-    var dropdown = document.getElementsByName("second-new-button");
+// function changeRightSelection(text) {
+//     var dropdown = document.getElementsByName("second-new-button");
 
-    var y = dropdown[0].innerHTML = text + ' <span class="caret"></span>';
-}
+//     var y = dropdown[0].innerHTML = text + ' <span class="caret"></span>';
+//     console.log(dropdown[0].innerHTML);
+// }
 
-function changeBuildingSelection(text) {
-    var dropdown = document.getElementsByName("building-button");
+// function changeBuildingSelection(text) {
+//     var dropdown = document.getElementsByName("building-button");
 
-    var y = dropdown[0].innerHTML = text + ' <span class="caret"></span>';
+//     var y = dropdown[0].innerHTML = text + ' <span class="caret"></span>';
 
-    $("#building-dropdown li").click(function() {
-        currentBuilding = $(this).text();
-        //alert($(this).text()); // gets text contents of clicked li
-    });
+//     $("#building-dropdown li").click(function() {
+//         currentBuilding = $(this).text();
+//         //alert($(this).text()); // gets text contents of clicked li
+//     });
+// }
+
+function dateTimePick() {
+    $("#datepicker").datetimepicker();
+    $("#datepicker1").datetimepicker();
 }
 
 function generateTable() {
-    //const url = "http://energycomps.its.carleton.edu/api/rooms?search=@2";
-    const searchURL = "http://energycomps.its.carleton.edu/api/rooms?search=@";
-    const url2 = "http://energycomps.its.carleton.edu/api/points";
+    const tempThreshold = document.getElementById("first-num-input").value;
+    //const ventThreshold = document.getElementById("second-num-input").value;
+    const tempOperator = document.getElementById("first-threshold").value;
+    $('#results-table tbody tr').remove();
+    $("#results-table").find("tr:not(:first)").remove();
 
+    //const url = "http://energycomps.its.carleton.edu/api/rooms?search=@2";
+    //const searchURL = "http://energycomps.its.carleton.edu/api/points?search=@";
+    const searchURL = "http://energycomps.its.carleton.edu/api/points";
+    const tempURL = "http://energycomps.its.carleton.edu/api/values?point_ids="
+
+    const currentBuilding = document.getElementById("building-selector").value;
     const selectedBuilding = buildings.get(currentBuilding);
-    // alert(selectedBuilding)
+    alert(currentBuilding + selectedBuilding);
     const resultsTable = document.getElementById("results-table");
 
-    $.getJSON(searchURL + selectedBuilding, function(data) {
-        $.each(data, function(key, val) {
-            const row = resultsTable.insertRow();
-            const buildingCell = row.insertCell()
-            const building = val.building_name;
-            buildingCell.innerHTML = building;
-            const roomNumCell = row.insertCell();
-            const roomNum = val.room_name;
-            roomNumCell.innerHTML = roomNum;
-            const roomTempCell = row.insertCell();
-            const roomTemp = 50;
-            roomTempCell.innerHTML = roomTemp;
-            const ventPercentCell = row.insertCell();
-            const ventPercent = 70;
-            ventPercentCell.innerHTML = ventPercent;
+    // retrieve data for all buildings
+    if (selectedBuilding == 8) {
+        $.getJSON(searchURL, function(data) {
+            $.each(data, function(key, val) {
+                const currentPointID = val.point_id;
+                if (val.value_type.value_type_id == 3) {
+                    const building = val.building_name;
+                    $.getJSON(tempURL + currentPointID + "&start_time=1550460000&end_time=1550469000", function(data) {
+                        $.each(data, function(key, val) {
+                            if (eval(val.value + tempOperator + tempThreshold)) {
+                                const row = resultsTable.insertRow();
+                                const buildingCell = row.insertCell()
+                                buildingCell.innerHTML = building;
+                                const roomNumCell = row.insertCell();
+                                roomNumCell.innerHTML = val.point_name;
+                                const roomTempCell = row.insertCell();
+                                roomTempCell.innerHTML = val.value;
+                                const ventPercentCell = row.insertCell();
+                                ventPercentCell.innerHTML = val.value;
+                            }
+                        });
+                    })
+                }
+            });
+        })
+    }
 
-        });
-    })
-    
+    // retrieve data for single building specified by user
+    else {
+        $.getJSON(searchURL + "?search=@" + selectedBuilding, function(data) {
+            $.each(data, function(key, val) {
+                const currentPointID = val.point_id;
+                if (val.value_type.value_type_id == 3) {
+                    $.getJSON(tempURL + currentPointID + "&start_time=1550460000&end_time=1550469000", function(data) {
+                        $.each(data, function(key, val) {
+                            if (eval(val.value + tempOperator + tempThreshold)) {
+                                const row = resultsTable.insertRow();
+                                const buildingCell = row.insertCell()
+                                buildingCell.innerHTML = currentBuilding;
+                                const roomNumCell = row.insertCell();
+                                roomNumCell.innerHTML = val.point_name;
+                                const roomTempCell = row.insertCell();
+                                roomTempCell.innerHTML = val.value;
+                                const ventPercentCell = row.insertCell();
+                                ventPercentCell.innerHTML = val.value;
+                            }
+                        });
+                    })
+                }
+            });
+        })
+    }
     document.getElementById("results-table").style.display="block";
 }
