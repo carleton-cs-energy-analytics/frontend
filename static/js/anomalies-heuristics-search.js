@@ -105,6 +105,7 @@ function generateTable() {
             $.each(data, function(key, val) {
                 const currentPointID = val.point_id;
                 if (val.value_type.value_type_id == 3) {
+                    const roomName = val.room_name;
                     const building = val.building_name;
                     $.getJSON(tempURL + currentPointID + "&start_time=1550460000&end_time=1550469000", function(data) {
                         $.each(data, function(key, val) {
@@ -113,7 +114,7 @@ function generateTable() {
                                 const buildingCell = row.insertCell()
                                 buildingCell.innerHTML = building;
                                 const roomNumCell = row.insertCell();
-                                roomNumCell.innerHTML = val.point_name;
+                                roomNumCell.innerHTML = roomName;
                                 const roomTempCell = row.insertCell();
                                 roomTempCell.innerHTML = val.value;
                                 const ventPercentCell = row.insertCell();
@@ -132,6 +133,9 @@ function generateTable() {
             $.each(data, function(key, val) {
                 const currentPointID = val.point_id;
                 if (val.value_type.value_type_id == 3) {
+                    //console.log(roomName);
+                    const roomName = val.room_name;
+                    const building = val.building_name;
                     $.getJSON(tempURL + currentPointID + "&start_time=1550460000&end_time=1550469000", function(data) {
                         $.each(data, function(key, val) {
                             if (eval(val.value + tempOperator + tempThreshold)) {
@@ -139,7 +143,7 @@ function generateTable() {
                                 const buildingCell = row.insertCell()
                                 buildingCell.innerHTML = currentBuilding;
                                 const roomNumCell = row.insertCell();
-                                roomNumCell.innerHTML = val.point_name;
+                                roomNumCell.innerHTML = roomName;
                                 const roomTempCell = row.insertCell();
                                 roomTempCell.innerHTML = val.value;
                                 const ventPercentCell = row.insertCell();
