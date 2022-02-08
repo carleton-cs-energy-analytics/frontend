@@ -3,6 +3,11 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+
+
 
 {% block body %}
     <div class="container">
@@ -22,28 +27,34 @@
         <div style="display:flex;">
         <div class="dropdown" id="first-new-dropdown" style="display: none;">
         <p style="display:inline-block; width: fit-content; height: 50px;" id="first-param"></p>
-        <button class="btn btn-primary dropdown toggle" type="button" data-toggle="dropdown" name="first-new-button" style="width: 75px; height: 50px;">>
-            <span class="caret"></span></button>
-                <ul class="dropdown-menu" id="second-dropdown">
-                    <li><a class="dropdown-item" href="#" onclick="changeLeftSelection(this.innerHTML)">></a></li>
-                    <li><a class="dropdown-item" href="#" onclick="changeLeftSelection(this.innerHTML)">=></a></li>
-                    <li><a class="dropdown-item" href="#" onclick="changeLeftSelection(this.innerHTML)"><</a></li>
-                    <li><a class="dropdown-item" href="#" onclick="changeLeftSelection(this.innerHTML)"><=</a></li>
-            </ul>
+        <select style="display: inline-block; width: fit-content; height: 50px;" id="first-threshold" name="first-operators">
+            <option value=">">></option>
+            <option value="<"><</option>
+            <!-- malformed arrow function . . . look into this -->
+            <!-- <option value="=>"><</option>
+            <option value="<="><=</option> -->
+        </select>
         <form style="display: inline-block;" id="first-num-dropdown">
             <input type="number" id="first-num-input" min="1" max="100" style="width: fit-content; height: 50px; margin-right: 40px;" value=93>
         </form>
         </div>
         <div class="dropdown" id="second-new-dropdown" style="display: none;">
         <p style="display:inline-block; width: fit-content; height: 50px;" id="second-param"></p>
-        <button class="btn btn-primary dropdown toggle" type="button" data-toggle="dropdown" name="second-new-button" style="width: 75px; height: 50px;">>
+        <!-- <button class="btn btn-primary dropdown toggle" type="button" data-toggle="dropdown" name="second-new-button" style="width: 75px; height: 50px;">>
             <span class="caret"></span></button>
             <ul class="dropdown-menu" id ="third-dropdown">
                 <li><a class="dropdown-item" href="#" onclick="changeRightSelection(this.innerHTML)">></a></li>
                 <li><a class="dropdown-item" href="#" onclick="changeRightSelection(this.innerHTML)">=></a></li>
                 <li><a class="dropdown-item" href="#" onclick="changeRightSelection(this.innerHTML)"><</a></li>
                 <li><a class="dropdown-item" href="#" onclick="changeRightSelection(this.innerHTML)"><=</a></li>
-            </ul>
+            </ul> -->
+        <select style="display: inline-block; width: fit-content; height: 50px;" id="second-threshold" name="second-operators">
+            <option value=">">></option>
+            <option value="<"><</option>
+            <!-- malformed arrow function . . . look into this -->
+            <!-- <option value="=>"><</option>
+            <option value="<="><=</option> -->
+        </select>
         <form style="display: inline-block;" id="second-num-dropdown">
             <input type="number" id="second-num-input" min="1" max="100" style="width: fit-content; height: 50px; margin-right: 40px;" value=93>
             <!-- <input onclick="generateTable();" style="float:right; width: fit-content; height: 40px; margin-left: auto; margin-right: auto; position: absolute;" type="button" value="Search"> -->
@@ -51,9 +62,9 @@
     </div>
     <div class="dropdown" id="third-new-dropdown" style="display: none;">
     <p style="display: inline-block; width: fit-content; height: 50px;" id="building-param"></p>
-    <button class="btn btn-primary dropdown toggle" type="button" data-toggle="dropdown" name="building-button" style="width: fit-content; height: 50px; margin-right: 40px;">All Buildings
-        <span class="caret"></span></button>
-        <ul class="dropdown-menu" id="building-dropdown">
+    <!-- <button class="btn btn-primary dropdown toggle" type="button" data-toggle="dropdown" name="building-button" style="width: fit-content; height: 50px; margin-right: 40px;">All Buildings
+        <span class="caret"></span></button> -->
+        <!-- <ul class="dropdown-menu" id="building-dropdown">
             <li><a class="dropdown-item" href="#" onclick="changeBuildingSelection(this.innerHTML)">All Buildings</a></li>
             <li><a class="dropdown-item" href="#" onclick="changeBuildingSelection(this.innerHTML)">Evans</a></li>
             <li><a class="dropdown-item" href="#" onclick="changeBuildingSelection(this.innerHTML)">Hulings</a></li>
@@ -61,11 +72,39 @@
             <li><a class="dropdown-item" href="#" onclick="changeBuildingSelection(this.innerHTML)">Weitz</a></li>
             <li><a class="dropdown-item" href="#" onclick="changeBuildingSelection(this.innerHTML)">Cassat</a></li>
             <li><a class="dropdown-item" href="#" onclick="changeBuildingSelection(this.innerHTML)">Boliou</a></li>
-        </ul>
+        </ul> -->
+        <select style="display: inline-block; width: fit-content; height: 50px; margin-right: 40px;" id="building-selector" name="buildings" value="All Buildings">
+            <option value="All Buildings">All Buildings</option>
+            <option value="Evans">Evans</option>
+            <option value="Hulings">Hulings</option>
+            <option value="Townhouses">Townhouses</option>
+            <option value="Weitz">Weitz</option>
+            <option value="Cassat">Cassat</option>
+            <option value="Boliou">Boliou</option>
+        </select>
         <!-- <form style="display: inline-block;" id="second-num-dropdown"> -->
         <input onclick="generateTable();" style="float:right; width: fit-content; height: 40px; margin-left: auto; margin-right: auto; position: absolute;" type="button" value="Search">
         <!-- </form> -->
     </div>
+    </div>
+    <!-- adding date/time picker -->
+    <section  class="col-sm-6" style="display: block; margin-left: auto; margin-right: auto;">
+        <div class="form-group">
+            <div class="input-group" id="datepicker" onclick="dateTimePick();" style="float: left"> Start Date/Time
+                <input type="text" class="form-control">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+            <br><br><br>
+            <div class="input-group" id="datepicker1" onclick="dateTimePick();" style="float: right"> End Date/Time
+                <input type="text" class="form-control">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        </div>
+    </section>
     </div>
     <table class="table table-bordered" style="width: fit-content; margin-left: auto; margin-right:auto; display: none;" id="results-table">
         <thead>
@@ -77,24 +116,6 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Evans Hall</td>
-                <td>311</td>
-                <td>93</td>
-                <td>91</td>
-            </tr>
-            <tr>
-                <td>Cassat Hall</td>
-                <td>118</td>
-                <td>89</td>
-                <td>89</td>
-            </tr>
-            <tr>
-                <td>Nourse Hall</td>
-                <td>201</td>
-                <td>85</td>
-                <td>87</td>
-            </tr>
         </tbody>
     </table>
     </div>
