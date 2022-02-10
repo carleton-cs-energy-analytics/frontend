@@ -31,7 +31,7 @@
                     <li><a class="dropdown-item" href="#" onclick="changeLeftSelection(this.innerHTML)"><=</a></li>
             </ul>
         <form style="display: inline-block;" id="first-num-dropdown">
-            <input type="number" id="first-num-input" min="1" max="100" style="width: fit-content; height: 50px; margin-right: 40px;" value=93>
+            <input type="number" id="first-num-input" min="1" max="100" style="width: fit-content; height: 50px; margin-right: 40px;" value=65>
         </form>
         </div>
         <div class="dropdown" id="second-new-dropdown" style="display: none;">
@@ -45,7 +45,7 @@
                 <li><a class="dropdown-item" href="#" onclick="changeRightSelection(this.innerHTML)"><=</a></li>
             </ul>
         <form style="display: inline-block;" id="second-num-dropdown">
-            <input type="number" id="second-num-input" min="1" max="100" style="width: fit-content; height: 50px; margin-right: 40px;" value=93>
+            <input type="number" id="second-num-input" min="1" max="100" style="width: fit-content; height: 50px; margin-right: 40px;" value=50>
             <!-- <input onclick="generateTable();" style="float:right; width: fit-content; height: 40px; margin-left: auto; margin-right: auto; position: absolute;" type="button" value="Search"> -->
         </form>
     </div>
@@ -64,10 +64,12 @@
         </ul>
         <!-- <form style="display: inline-block;" id="second-num-dropdown"> -->
         <input onclick="generateTable();" style="float:right; width: fit-content; height: 40px; margin-left: auto; margin-right: auto; position: absolute;" type="button" value="Search">
+        <!-- resets table. TODO: write function to clear table -->
+        <input onclick="resetTable();" style="float:right; width: fit-content; height: 40px; margin-left: auto; margin-right: auto; position: absolute;" type="button" value="Reset">
         <!-- </form> -->
     </div>
     </div>
-    <table class="table table-bordered" style="width: fit-content; margin-left: auto; margin-right:auto; display: none;" id="results-table">
+    <!-- <table class="table table-bordered" style="width: fit-content; margin-left: auto; margin-right:auto; display: none;" id="results-table">
         <thead>
             <tr>
                 <th scope="col">Building</th>
@@ -96,7 +98,7 @@
                 <td>87</td>
             </tr>
         </tbody>
-    </table>
+    </table> -->
     </div>
 
 <script src="../static/js/anomalies-heuristics-search.js"></script>

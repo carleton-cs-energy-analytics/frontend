@@ -107,3 +107,7 @@ function generateTable() {
     
     document.getElementById("results-table").style.display="block";
 }
+
+function resetTable() {
+    resultsTable = {};   
+}
