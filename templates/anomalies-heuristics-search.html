@@ -30,9 +30,6 @@
         <select style="display: inline-block; width: fit-content; height: 50px;" id="first-threshold" name="first-operators">
             <option value=">">></option>
             <option value="<"><</option>
-            <!-- malformed arrow function . . . look into this -->
-            <!-- <option value="=>"><</option>
-            <option value="<="><=</option> -->
         </select>
         <form style="display: inline-block;" id="first-num-dropdown">
             <input type="number" id="first-num-input" min="1" max="100" style="width: fit-content; height: 50px; margin-right: 40px;" value=93>
@@ -40,39 +37,16 @@
         </div>
         <div class="dropdown" id="second-new-dropdown" style="display: none;">
         <p style="display:inline-block; width: fit-content; height: 50px;" id="second-param"></p>
-        <!-- <button class="btn btn-primary dropdown toggle" type="button" data-toggle="dropdown" name="second-new-button" style="width: 75px; height: 50px;">>
-            <span class="caret"></span></button>
-            <ul class="dropdown-menu" id ="third-dropdown">
-                <li><a class="dropdown-item" href="#" onclick="changeRightSelection(this.innerHTML)">></a></li>
-                <li><a class="dropdown-item" href="#" onclick="changeRightSelection(this.innerHTML)">=></a></li>
-                <li><a class="dropdown-item" href="#" onclick="changeRightSelection(this.innerHTML)"><</a></li>
-                <li><a class="dropdown-item" href="#" onclick="changeRightSelection(this.innerHTML)"><=</a></li>
-            </ul> -->
         <select style="display: inline-block; width: fit-content; height: 50px;" id="second-threshold" name="second-operators">
             <option value=">">></option>
             <option value="<"><</option>
-            <!-- malformed arrow function . . . look into this -->
-            <!-- <option value="=>"><</option>
-            <option value="<="><=</option> -->
         </select>
         <form style="display: inline-block;" id="second-num-dropdown">
             <input type="number" id="second-num-input" min="1" max="100" style="width: fit-content; height: 50px; margin-right: 40px;" value=93>
-            <!-- <input onclick="generateTable();" style="float:right; width: fit-content; height: 40px; margin-left: auto; margin-right: auto; position: absolute;" type="button" value="Search"> -->
         </form>
     </div>
     <div class="dropdown" id="third-new-dropdown" style="display: none;">
     <p style="display: inline-block; width: fit-content; height: 50px;" id="building-param"></p>
-    <!-- <button class="btn btn-primary dropdown toggle" type="button" data-toggle="dropdown" name="building-button" style="width: fit-content; height: 50px; margin-right: 40px;">All Buildings
-        <span class="caret"></span></button> -->
-        <!-- <ul class="dropdown-menu" id="building-dropdown">
-            <li><a class="dropdown-item" href="#" onclick="changeBuildingSelection(this.innerHTML)">All Buildings</a></li>
-            <li><a class="dropdown-item" href="#" onclick="changeBuildingSelection(this.innerHTML)">Evans</a></li>
-            <li><a class="dropdown-item" href="#" onclick="changeBuildingSelection(this.innerHTML)">Hulings</a></li>
-            <li><a class="dropdown-item" href="#" onclick="changeBuildingSelection(this.innerHTML)">Townhouses</a></li>
-            <li><a class="dropdown-item" href="#" onclick="changeBuildingSelection(this.innerHTML)">Weitz</a></li>
-            <li><a class="dropdown-item" href="#" onclick="changeBuildingSelection(this.innerHTML)">Cassat</a></li>
-            <li><a class="dropdown-item" href="#" onclick="changeBuildingSelection(this.innerHTML)">Boliou</a></li>
-        </ul> -->
         <select style="display: inline-block; width: fit-content; height: 50px; margin-right: 40px;" id="building-selector" name="buildings" value="All Buildings">
             <option value="All Buildings">All Buildings</option>
             <option value="Evans">Evans</option>
@@ -82,9 +56,7 @@
             <option value="Cassat">Cassat</option>
             <option value="Boliou">Boliou</option>
         </select>
-        <!-- <form style="display: inline-block;" id="second-num-dropdown"> -->
         <input onclick="generateTable();" style="float:right; width: fit-content; height: 40px; margin-left: auto; margin-right: auto; position: absolute;" type="button" value="Search">
-        <!-- </form> -->
     </div>
     </div>
     <!-- adding date/time picker -->
@@ -109,16 +81,15 @@
     <table class="table table-bordered" style="width: fit-content; margin-left: auto; margin-right:auto; display: none;" id="results-table">
         <thead>
             <tr>
-                <th scope="col">Building</th>
-                <th scope="col">Room Number</th>
+                <th scope="col">Building & Room</th>
                 <th scope="col">Room Temperature</th>
-                <th scope="col">Vent Percentage</th>
+                <th scope="col">Damper Percentage</th>
+                <th scope="col">Date & Time</th>
             </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
     </div>
-
 <script src="../static/js/anomalies-heuristics-search.js"></script>
 {% endblock %}
