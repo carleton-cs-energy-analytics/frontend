@@ -53,107 +53,64 @@ function changeSelection(text) {
     //document.body.appendChild(firstForm);
 }
 
-// function changeLeftSelection(text) {
-//     var dropdown = document.getElementsByName("first-new-button");
+// TODO: create reset button?
 
-//     var y = dropdown[0].innerHTML = text + ' <span class="caret"></span>';
-// } 
-
-// function changeRightSelection(text) {
-//     var dropdown = document.getElementsByName("second-new-button");
-
-//     var y = dropdown[0].innerHTML = text + ' <span class="caret"></span>';
-//     console.log(dropdown[0].innerHTML);
-// }
-
-// function changeBuildingSelection(text) {
-//     var dropdown = document.getElementsByName("building-button");
-
-//     var y = dropdown[0].innerHTML = text + ' <span class="caret"></span>';
-
-//     $("#building-dropdown li").click(function() {
-//         currentBuilding = $(this).text();
-//         //alert($(this).text()); // gets text contents of clicked li
-//     });
-// }
-
-function dateTimePick() {
-    $("#datepicker").datetimepicker();
-    $("#datepicker1").datetimepicker();
-}
+// TODO: implement calendar functionality to set start/end times
 
 function generateTable() {
-    const tempThreshold = document.getElementById("first-num-input").value;
-    //const ventThreshold = document.getElementById("second-num-input").value;
-    const tempOperator = document.getElementById("first-threshold").value;
+    var temp = (document.getElementById("first-num-input").value).toString();
+    var vent = (document.getElementById("second-num-input").value).toString();
+    var start_time = "1636478378";
+    var end_time = "1636564778";
+    var api_url = "http://energycomps.its.carleton.edu/api/anomalies/vent-and-temp";
+    api_url = api_url + "?start_time=" + start_time;
+    api_url = api_url + "&end_time=" + end_time;
+    api_url = api_url + "&vent=" + vent;
+    api_url = api_url + "&temp=" + temp;
     $('#results-table tbody tr').remove();
     $("#results-table").find("tr:not(:first)").remove();
 
-    //const url = "http://energycomps.its.carleton.edu/api/rooms?search=@2";
-    //const searchURL = "http://energycomps.its.carleton.edu/api/points?search=@";
-    const searchURL = "http://energycomps.its.carleton.edu/api/points";
-    const tempURL = "http://energycomps.its.carleton.edu/api/values?point_ids="
-
     const currentBuilding = document.getElementById("building-selector").value;
     const selectedBuilding = buildings.get(currentBuilding);
-    alert(currentBuilding + selectedBuilding);
     const resultsTable = document.getElementById("results-table");
 
     // retrieve data for all buildings
     if (selectedBuilding == 8) {
-        $.getJSON(searchURL, function(data) {
+        $.getJSON(api_url, function(data) {
             $.each(data, function(key, val) {
-                const currentPointID = val.point_id;
-                if (val.value_type.value_type_id == 3) {
-                    const roomName = val.room_name;
-                    const building = val.building_name;
-                    $.getJSON(tempURL + currentPointID + "&start_time=1550460000&end_time=1550469000", function(data) {
-                        $.each(data, function(key, val) {
-                            if (eval(val.value + tempOperator + tempThreshold)) {
-                                const row = resultsTable.insertRow();
-                                const buildingCell = row.insertCell()
-                                buildingCell.innerHTML = building;
-                                const roomNumCell = row.insertCell();
-                                roomNumCell.innerHTML = roomName;
-                                const roomTempCell = row.insertCell();
-                                roomTempCell.innerHTML = val.value;
-                                const ventPercentCell = row.insertCell();
-                                ventPercentCell.innerHTML = val.value;
-                            }
-                        });
-                    })
-                }
+                const row = resultsTable.insertRow();
+                const buildingRoomCell = row.insertCell();
+                buildingRoomCell.innerHTML = key;
+                const tempCell = row.insertCell();
+                tempCell.innerHTML = Math.max.apply(Math, val.values.temp);
+                const damperCell = row.insertCell();
+                damperCell.innerHTML = Math.max.apply(Math, val.values.vent);
+                const dateTimeCell = row.insertCell();
+                const dateStamp = Math.min.apply(Math, val.values.timestamp)
+                dateTimeCell.innerHTML = new Date(dateStamp * 1000);
             });
         })
     }
 
     // retrieve data for single building specified by user
     else {
-        $.getJSON(searchURL + "?search=@" + selectedBuilding, function(data) {
+        $.getJSON(api_url, function(data) {
             $.each(data, function(key, val) {
-                const currentPointID = val.point_id;
-                if (val.value_type.value_type_id == 3) {
-                    //console.log(roomName);
-                    const roomName = val.room_name;
-                    const building = val.building_name;
-                    $.getJSON(tempURL + currentPointID + "&start_time=1550460000&end_time=1550469000", function(data) {
-                        $.each(data, function(key, val) {
-                            if (eval(val.value + tempOperator + tempThreshold)) {
-                                const row = resultsTable.insertRow();
-                                const buildingCell = row.insertCell()
-                                buildingCell.innerHTML = currentBuilding;
-                                const roomNumCell = row.insertCell();
-                                roomNumCell.innerHTML = roomName;
-                                const roomTempCell = row.insertCell();
-                                roomTempCell.innerHTML = val.value;
-                                const ventPercentCell = row.insertCell();
-                                ventPercentCell.innerHTML = val.value;
-                            }
-                        });
-                    })
+                if (key.includes(currentBuilding)) {
+                    const row = resultsTable.insertRow();
+                    const buildingRoomCell = row.insertCell();
+                    buildingRoomCell.innerHTML = key;
+                    const tempCell = row.insertCell();
+                    tempCell.innerHTML = Math.max.apply(Math, val.values.temp);
+                    const damperCell = row.insertCell();
+                    damperCell.innerHTML = Math.max.apply(Math, val.values.vent);
+                    const dateTimeCell = row.insertCell();
+                    const dateStamp = Math.min.apply(Math, val.values.timestamp)
+                    dateTimeCell.innerHTML = new Date(dateStamp * 1000);
                 }
             });
         })
     }
+
     document.getElementById("results-table").style.display="block";
 }
