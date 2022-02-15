@@ -29,20 +29,18 @@
         <p style="display:inline-block; width: fit-content; height: 50px;" id="first-param"></p>
         <select style="display: inline-block; width: fit-content; height: 50px;" id="first-threshold" name="first-operators">
             <option value=">">></option>
-            <option value="<"><</option>
         </select>
         <form style="display: inline-block;" id="first-num-dropdown">
-            <input type="number" id="first-num-input" min="1" max="100" style="width: fit-content; height: 50px; margin-right: 40px;" value=93>
+            <input type="number" id="first-num-input" min="1" max="100" style="width: fit-content; height: 50px; margin-right: 40px;" value=68>
         </form>
         </div>
         <div class="dropdown" id="second-new-dropdown" style="display: none;">
         <p style="display:inline-block; width: fit-content; height: 50px;" id="second-param"></p>
         <select style="display: inline-block; width: fit-content; height: 50px;" id="second-threshold" name="second-operators">
-            <option value=">">></option>
             <option value="<"><</option>
         </select>
         <form style="display: inline-block;" id="second-num-dropdown">
-            <input type="number" id="second-num-input" min="1" max="100" style="width: fit-content; height: 50px; margin-right: 40px;" value=93>
+            <input type="number" id="second-num-input" min="1" max="100" style="width: fit-content; height: 50px; margin-right: 40px;" value=50>
         </form>
     </div>
     <div class="dropdown" id="third-new-dropdown" style="display: none;">
@@ -60,23 +58,22 @@
     </div>
     </div>
     <!-- adding date/time picker -->
-    <section  class="col-sm-6" style="display: block; margin-left: auto; margin-right: auto;">
+    <section  class="col-6" id="datetimepicker" style="none">
         <div class="form-group">
-            <div class="input-group" id="datepicker" onclick="dateTimePick();" style="float: left"> Start Date/Time
-                <input type="text" class="form-control">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
-            </div>
-            <br><br><br>
-            <div class="input-group" id="datepicker1" onclick="dateTimePick();" style="float: right"> End Date/Time
-                <input type="text" class="form-control">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
+            
+    <div id="foobar" class="col-md-6 form-inline col-md-offset-3">
+        <div class=" form-group col-md-7">
+            <div id="timepicker" class="input-group" style="width: 100%">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                <input type="text" class="form-control" name="datetimes" id="daterange"
+                       style="background-color: white; cursor: pointer" readonly/>
             </div>
         </div>
-    </section>
+
+    </div>
+
+        </div>
+    </section> 
     </div>
     <table class="table table-bordered" style="width: fit-content; margin-left: auto; margin-right:auto; display: none;" id="results-table">
         <thead>

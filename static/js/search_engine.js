@@ -16,11 +16,11 @@ let SELECTOR_LIST = ["building", "floor", "room", "device",
  * @param {list} selector_list list of parameters used to build search param
  */
 function build_query_string(form_element, selector_list = SELECTOR_LIST) {
-    console.log("build_query_string");
+    // console.log("build_query_string");
     let disjunctive_clauses = [];
     for (let i = 0; i < selector_list.length; i++) {
         let clauses = form_element.find("select." + selector_list[i]).val();
-        if (!(clauses.length === 0 || clauses.includes(""))) {
+        if (!(clauses.length == 0 || clauses.includes(""))) {
             disjunctive_clauses.push("(" + clauses.join('or') + ")");
         }
     }

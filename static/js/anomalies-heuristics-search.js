@@ -16,7 +16,7 @@ function changeSelection(text) {
 
     if (text == "Room Temperature/Vent") {
        var firstDropdownVal = "Room Temperature";
-       var secondDropwdownVal = "Vent Angle %";
+       var secondDropwdownVal = "Damper %";
     }
     else if (text == "Room Temperature/Set Temperature") {
         var firstDropdownVal = "Room Temperature";
@@ -32,7 +32,8 @@ function changeSelection(text) {
     firstParam = document.getElementById("first-param");
     secondParam = document.getElementById("second-param");
     thirdParam = document.getElementById("building-param");
-
+    
+    
     firstParam.innerHTML = firstDropdownVal;
     secondParam.innerHTML = secondDropwdownVal;
     thirdParam.innerHTML = "Building";
@@ -46,11 +47,16 @@ function changeSelection(text) {
     var buildingParam = document.getElementById("third-new-dropdown");
     buildingParam.style.display = "inline-block";
 
+    var datetimeParam = document.getElementById("datetimepicker");
+    datetimeParam.style.display = "block";
+    
     var firstForm = document.createElement("form");
     firstForm.setAttribute("type", "number");
     firstForm.setAttribute("min", "1");
     firstForm.setAttribute("max", "100");
     //document.body.appendChild(firstForm);
+    
+    
 }
 
 // TODO: create reset button?
@@ -62,6 +68,28 @@ function generateTable() {
     var vent = (document.getElementById("second-num-input").value).toString();
     var start_time = "1636478378";
     var end_time = "1636564778";
+    console.log("start time: " + start_time);
+
+    // default hardcoded start time
+    // params['date_range'] = {};
+    // console.log('date', (new Date(date_range_picker_element.startDate._d)).getTime());
+    // params.date_range['startDate'] = (new Date(date_range_picker_element.startDate._d)).getTime();
+    // params.date_range['endDate'] = (new Date(date_range_picker_element.endDate._d).getTime());    
+    /* else {
+        var end_time = Date.now();
+        var start_time = end_time - 604800000;
+    } */   
+
+    // start and end dates for value range
+    var drp = $('#daterange').data('daterangepicker');
+    var startDate = drp.startDate._d.valueOf() / 1000;
+    var endDate = drp.endDate._d.valueOf() / 1000; 
+    
+    start_time = startDate;
+    end_time = endDate;
+    
+    console.log("start time: " + startDate);
+    
     var api_url = "http://energycomps.its.carleton.edu/api/anomalies/vent-and-temp";
     api_url = api_url + "?start_time=" + start_time;
     api_url = api_url + "&end_time=" + end_time;
