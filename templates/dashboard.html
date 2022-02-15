@@ -42,9 +42,21 @@
 
 <body>
     <h2 style="text-align: center;">
-        Potential Issues
+        Potential Problems
     </h2>
-    <div class="points"></div>
+    <p>Temp/Vent Mismatches (T > 75°, V < 30%)</p>
+    <table class="table table-bordered" id="dashboard-table">
+        <thead>
+            <tr>
+                <th scope="col">Room</th>
+                <th scope="col">Date & Time</th>
+                <th scope="col">Room Temperature</th>
+                <th scope="col">Damper Percentage</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
 </body>
 
 {% endblock %}
