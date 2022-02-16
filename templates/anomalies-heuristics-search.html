@@ -57,23 +57,24 @@
         <input onclick="generateTable();" style="float:right; width: fit-content; height: 40px; margin-left: auto; margin-right: auto; position: absolute;" type="button" value="Search">
     </div>
     </div>
-    <!-- adding date/time picker -->
+    <!-- adding date/time picker 
     <section  class="col-6" id="datetimepicker" style="none">
-        <div class="form-group">
+        <div class="form-group"> -->
             
-    <div id="foobar" class="col-md-6 form-inline col-md-offset-3">
+    <div class="col-md-6 form-inline col-md-offset-3" id="datetimepicker" style="display: none;">
         <div class=" form-group col-md-7">
             <div id="timepicker" class="input-group" style="width: 100%">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                 <input type="text" class="form-control" name="datetimes" id="daterange"
-                       style="background-color: white; cursor: pointer" readonly/>
+                       style="background-color: white; cursor: pointer; width: 250px" readonly/>
             </div>
         </div>
 
     </div>
 
-        </div>
-    </section> 
+    <!--    </div>
+    </section> -->
+    <br><br><br>
     </div>
     <table class="table table-bordered" style="width: fit-content; margin-left: auto; margin-right:auto; display: none;" id="results-table">
         <thead>

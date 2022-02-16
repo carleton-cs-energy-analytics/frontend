@@ -48,7 +48,8 @@ function changeSelection(text) {
     buildingParam.style.display = "inline-block";
 
     var datetimeParam = document.getElementById("datetimepicker");
-    datetimeParam.style.display = "block";
+    datetimeParam.style.display = "block";    
+    datetimeParam.style.float = "left";
     
     var firstForm = document.createElement("form");
     firstForm.setAttribute("type", "number");
@@ -85,10 +86,13 @@ function generateTable() {
     var startDate = drp.startDate._d.valueOf() / 1000;
     var endDate = drp.endDate._d.valueOf() / 1000; 
     
-    start_time = startDate;
-    end_time = endDate;
+    console.log("startDate type: " + typeof(startDate));
+    start_time = startDate.toString();
+    end_time = endDate.toString();
     
     console.log("start time: " + startDate);
+    console.log("start type: " + typeof(start_time));
+    
     
     var api_url = "http://energycomps.its.carleton.edu/api/anomalies/vent-and-temp";
     api_url = api_url + "?start_time=" + start_time;
@@ -97,10 +101,14 @@ function generateTable() {
     api_url = api_url + "&temp=" + temp;
     $('#results-table tbody tr').remove();
     $("#results-table").find("tr:not(:first)").remove();
-
+    
+    console.log("backend query: " + api_url);
     const currentBuilding = document.getElementById("building-selector").value;
     const selectedBuilding = buildings.get(currentBuilding);
     const resultsTable = document.getElementById("results-table");
+
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+   
 
     // retrieve data for all buildings
     if (selectedBuilding == 8) {
@@ -115,7 +123,17 @@ function generateTable() {
                 damperCell.innerHTML = Math.max.apply(Math, val.values.vent);
                 const dateTimeCell = row.insertCell();
                 const dateStamp = Math.min.apply(Math, val.values.timestamp)
-                dateTimeCell.innerHTML = new Date(dateStamp * 1000);
+                const d = new Date(dateStamp * 1000);
+                /* code to convert date to AMPM found here: https://stackoverflow.com/questions/8888491/how-do-you-display-javascript-datetime-in-12-hour-am-pm-format */
+                var hours = d.getHours() % 12;
+                  hours = hours ? hours : 12;
+                var date = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][(d.getMonth() + 1)] + " " + 
+                    ("00" + d.getDate()).slice(-2) + " " + 
+                    d.getFullYear() + " " + 
+                    ("00" + hours).slice(-2) + ":" + 
+                    ("00" + d.getMinutes()).slice(-2) + ' ' + (d.getHours() >= 12 ? 'PM' : 'AM'); 
+                dateTimeCell.innerHTML = date;
+                
             });
         })
     }
@@ -134,8 +152,16 @@ function generateTable() {
                     damperCell.innerHTML = Math.max.apply(Math, val.values.vent);
                     const dateTimeCell = row.insertCell();
                     const dateStamp = Math.min.apply(Math, val.values.timestamp)
-                    dateTimeCell.innerHTML = new Date(dateStamp * 1000);
-                }
+                    const d = new Date(dateStamp * 1000);
+                    var hours = d.getHours() % 12;
+                      hours = hours ? hours : 12;
+                    var date = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][(d.getMonth() + 1)] + " " + 
+                        ("00" + d.getDate()).slice(-2) + " " + 
+                        d.getFullYear() + " " + 
+                        ("00" + hours).slice(-2) + ":" + 
+                        ("00" + d.getMinutes()).slice(-2) + ' ' + (d.getHours() >= 12 ? 'PM' : 'AM'); 
+                    dateTimeCell.innerHTML = date;
+                    }
             });
         })
     }
